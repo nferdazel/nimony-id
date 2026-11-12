@@ -1,0 +1,10 @@
+---
+title: "Nimony"
+---
+
+Nimony is the Nim 3 line: a new implementation of Nim built on a NIF pipeline, with plugins instead of
+macros. This book teaches it against one fixed commit, `4ba90a781b0b` of `nim-lang/nimony`, reported by the
+compiler as `0.6.3`.
+
+Every code sample in this book is compiled and run by `tools/verify-samples.sh` at that pin. A sample that
+runs on another compiler version does not count.

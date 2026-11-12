@@ -61,7 +61,10 @@ stage_book() {
   stage="$ROOT/.build/$lang"
   rm -rf "$stage"
   mkdir -p "$stage/chapters"
-  cp "$ROOT/index.qmd" "$stage/index.qmd"
+  # The preface follows the edition; index.qmd stays the fallback.
+  preface="$ROOT/index.$lang.qmd"
+  [ -f "$preface" ] || preface="$ROOT/index.qmd"
+  cp "$preface" "$stage/index.qmd"
   # Same chapter list for both editions, retargeted at this language.
   sed -e "s|/en\.md\$|/$lang.md|" \
       -e "s|^lang: en\$|lang: $lang|" \

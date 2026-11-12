@@ -1,0 +1,10 @@
+---
+title: "Nimony"
+---
+
+Nimony adalah garis Nim 3: implementasi baru Nim yang dibangun di atas pipeline NIF, dengan plugin alih-alih
+makro. Buku ini mengajarkannya terhadap satu commit tetap, `4ba90a781b0b` dari `nim-lang/nimony`, yang
+dilaporkan kompilator sebagai `0.6.3`.
+
+Setiap contoh kode di buku ini dikompilasi dan dijalankan oleh `tools/verify-samples.sh` pada pin itu. Contoh
+yang jalan di versi kompilator lain tidak dihitung.
