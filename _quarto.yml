@@ -5,8 +5,8 @@ project:
   output-dir: _book
 
 book:
-  title: "Nimony"
-  subtitle: "A pinned guide to the Nimony language"
+  title: "Nimony: A Pinned Guide"
+  subtitle: "Learning the language against one fixed commit"
   author: "Fredianto"
   date: "2026-11-12"
   language: en
