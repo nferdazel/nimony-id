@@ -75,6 +75,8 @@ build() {
   q=$(quarto_bin)
   stage_book
   ( cd "$stage" && "$q" render )
+  mkdir -p "$ROOT/_book"
+  cp -R "$stage/_book/." "$ROOT/_book/"
 }
 
 case "${1:-help}" in
