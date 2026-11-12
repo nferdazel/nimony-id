@@ -22,19 +22,21 @@ lives in `_quarto.yml` as `book.title` and `book.subtitle`.
 | `SECURITY.md` | What counts as a security report in a book repository, and what to send to Nimony instead. |
 | `LICENSE`, `LICENSE-CODE` | Book text is CC BY-SA 4.0; samples, `task` and `tools/` are MIT. |
 | `VERSION` | The book's version. `./task release` bumps it and tags the commit; CI refuses a tag that does not match it. |
-| `site/` | The published site's root page: it offers the two editions. Copied to `_book/index.html` at deploy. |
-| `.github/` | Two workflows (the CI gate, the Pages deploy), Dependabot for the action pins, a pull-request checklist, and two issue forms: errata and chapter proposal. |
+| `site/` | The published site's root page: it offers the two editions. Copied into the release root at deploy. |
+| `.github/` | The CI workflow, Dependabot for the action pins, a pull-request checklist, and two issue forms: errata and chapter proposal. |
 
 ## The published site
 
-Both editions are served from Cloudflare at <https://nimony.qouver.com>, deployed from `main` by
-`.github/workflows/pages.yml` with GitHub Pages as the origin. `/en/` is the English edition, `/id/` the
-Indonesian, and `/` is `site/index.html`. A pull request cannot reach the deploy workflow.
+Both editions are served from Cloudflare at <https://nimony.qouver.com>. The origin is the VPS, not GitHub
+Pages: a webhook on push to `main` calls `ops/scripts/deploy-static.sh`, which renders both editions and
+publishes them to `/srv/qouver/apps/nimony-id/releases/<sha>` with a `web` symlink that Caddy reads. `/en/` is
+the English edition, `/id/` the Indonesian, and `/` is `site/index.html`, copied into the release root. A pull
+request cannot reach the deploy script.
 
 Anything published there is a render of `main`. The deploy runs `./task build` — both editions, and it fails
 closed on an unpaired chapter. The sample gate is the separate `ci.yml`, which runs on every pull request and
-push. The custom domain is written to `_book/CNAME` at deploy time; the DNS record points at Pages, so nothing
-in this repository touches DNS.
+push. The DNS A record already points at the VPS; the Caddy block is mirrored in
+`ops/caddy/Caddyfile.nimony-id.example`, so nothing in this repository touches DNS.
 
 ## Where the rules come from
 

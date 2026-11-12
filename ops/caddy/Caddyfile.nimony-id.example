@@ -1,0 +1,53 @@
+# Caddyfile.nim-id.example — blok Caddy untuk situs buku di nim.qouver.com.
+#
+# Ini CERMIN dari blok yang hidup di /etc/caddy/Caddyfile (sumber kebenaran di server).
+# Kalau blok di server berubah, ubah berkas ini di commit yang sama.
+#
+# Situs ini statis saja: tidak ada container, tidak ada image, tidak ada tag :local/:prev.
+# Yang dipakai dari kontrak deploy: ref-guard fail-closed, flock, fetch/reset, health check.
+
+nimony.qouver.com {
+	log {
+		import log_access
+	}
+
+	encode zstd gzip
+	import base_security_headers
+	import block_dotfiles
+
+	# Quarto memakai <style>/<script> inline untuk tema dan pencarian.
+	header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+
+	# Hasil render Quarto. `deploy-static.sh` yang mengisi direktori ini.
+	root * /srv/qouver/apps/nimony-id/web
+	try_files {path} {path}.html
+	file_server
+
+	# Halaman 404 yang bisa dibaca. Tanpa blok ini, alamat yang salah dibalas
+	# badan kosong: pembaca tidak tahu apa yang terjadi dan tidak punya jalan pulang.
+	handle_errors {
+		@notfound expression {http.error.status_code} == 404
+		rewrite @notfound /404.html
+		file_server
+	}
+
+	# Font dan gambar jarang berubah: cache panjang.
+	@font path /fonts/* *.woff2
+	header @font Cache-Control "public, max-age=2592000, immutable"
+	@gambar path *.svg *.png *.jpg *.webp
+	header @gambar Cache-Control "public, max-age=604800"
+
+	# CSS dan JS memakai nama berkas tetap (Quarto tidak memberi hash), jadi jangan
+	# di-cache lama: tanpa ini, Cloudflare menyajikan CSS lama sampai 30 hari setelah deploy
+	# dan tampilan Indonesia tertinggal dari English.
+	@skrip path *.css *.js
+	header @skrip Cache-Control "public, max-age=300, must-revalidate"
+
+	# HTML selalu revalidasi.
+	@lain not path /fonts/* *.woff2 *.css *.js *.svg *.png *.jpg *.webp *.pdf
+	header @lain Cache-Control "no-cache"
+
+	# PDF rilis: jangan di-cache lama, supaya versi baru langsung terlihat.
+	@pdf path *.pdf
+	header @pdf Cache-Control "public, max-age=300"
+}
