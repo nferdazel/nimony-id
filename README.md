@@ -47,7 +47,7 @@ push. The DNS A record already points at the VPS; the Caddy block is mirrored in
 
 ## Status
 
-Seven chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
+Eight chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
 
 - Chapter 1, `chapters/01-what-nimony-is/` — draft 2026-11-12, tech_review Momo 2026-11-12,
   editorial_pass 2026-11-12. No code samples; the compile gate does not apply.
@@ -68,8 +68,7 @@ Seven chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` a
   as its fallback, side effects included — a defect at the pin, so the chapter requires `else` on every string
   `case` expression. The `elif`-in-`case` rejection also produces a third error line with an ordinal selector.
 
-The verifier prints `SUMMARY 7/7 passed, 0 failed` in this folder (samples 02–08); the repo prints `6/6` until
-Chapter 8's sample is synced.
+The verifier prints `SUMMARY 7/7 passed, 0 failed` (samples 02–08).
 
 - Chapter 7, `chapters/07-loops-ranges/` — draft 2026-11-12, tech_review Momo 2026-11-12, editorial_pass
   2026-11-12. With `samples/07-loops-ranges/loops.nim`. Its review corrected two claims: `countup` takes
@@ -79,21 +78,18 @@ Chapter 8's sample is synced.
   slice is not loop-iterable, and an `in 0..9` guard does not prove a `range` on a procedure parameter while two
   comparisons do.
 
+- Chapter 8, `chapters/08-procedures/` — draft 2026-11-12, tech_review Momo 2026-11-12, editorial_pass
+  2026-11-12. With `samples/08-procedures/procedures.nim`. Its review held 27 of 30 claims: one was wrong as
+  written (reading an `out` parameter returns the caller's current value, not a zero value) and two were
+  narrowed. Five findings of record live in `ERRATA.md`: the `[Bug]` on a default that names an earlier
+  parameter, an `out` parameter readable before it is written, the rejection of a module-level `var` from a
+  plain `proc`, `invalid indentation` for the two-argument command form, and named arguments that no doc
+  section describes.
+
 ## Drafting
 
-- Chapter 8, `chapters/08-procedures/` — **drafting**, `en.md` only, and not in this repo yet: it lives in the book
-  folder until the chapter freezes and syncs (2,371 words of prose, 18 sections; 2,854 with code). With
-  `samples/08-procedures/procedures.nim`, proven by `tools/verify-samples.sh` (`7/7`). Thirty claims probed at the
-  pin; tech review requested from Momo 2026-11-12. `review.md` carries five findings of record: a default written
-  in terms of an earlier parameter dies in the backend with `[Bug] could not find symbol: x.0`; an `out`
-  parameter may be read before it is written although the guide says otherwise; a `proc` touching a module-level
-  `var` is rejected as unsynchronized access; the two-argument command form in an expression reports `invalid
-  indentation` where the guide predicts `too many arguments`; and named arguments work but are documented
-  nowhere in `doc/language.md`. `id.md` is not written yet — it is written in the
-  same editorial pass as the verdict.
-
-Chapter 9 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
-without one may.
+Nothing is drafting. Chapter 9 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md`
+does not draft; a chapter without one may.
 
 ## License and contributions
 

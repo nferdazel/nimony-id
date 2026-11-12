@@ -95,10 +95,10 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Job:** Define `proc` and `func`, return through `result`, pass by `var` and `sink`, and use default and named arguments.
 - **Prerequisites:** 7
 - **Nim 2 delta:** no
-- **Status:** drafting — draft 2026-11-12 (Aksara), 30 claims probed at the pin,
-  `samples/08-procedures/procedures.nim` passes (`7/7` in the book verifier); tech review requested from Momo
-  2026-11-12. Five findings of record in `ERRATA.md`: a default that names an earlier parameter dies in the
-  backend with `[Bug] could not find symbol: x.0`, an `out` parameter may be read before it is written (the guide
+- **Status:** frozen — draft 2026-11-12 (Aksara), tech review Momo 2026-11-12 (27 of 30 claims held, one corrected,
+  two narrowed), editorial pass 2026-11-12. `samples/08-procedures/procedures.nim` passes (`7/7`). Five findings
+  of record in `ERRATA.md`: a default that names an earlier parameter dies in the backend with `[Bug] could not
+  find symbol: x.0` (defect candidate, to file), an `out` parameter may be read before it is written (the guide
   says it may not), a `proc` that touches a module-level `var` is rejected as unsynchronized access, the
   two-argument command form reports `invalid indentation` where the guide predicts `too many arguments`, and
   named arguments are undocumented.

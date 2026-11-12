@@ -44,7 +44,11 @@ both. CI runs the same command, so a green local run is the whole gate.
 5. Provenance is part of the sentence. A claim about behaviour cites the Nimony file and line at the pin, or it
    is marked as design intent. "The documentation says so" is not proof of pin behaviour — the documentation
    has been wrong before, and `ERRATA.md` records where.
-6. Technical truth is not the author's call. A chapter reaches `frozen` only with a named technical review
+6. Module-level mutable state is a constraint, not a term. A plain `proc` that reads or writes a module-level
+   `var` is rejected at the pin (`unsynchronized access to global variable …; pass it to a .sync routine or use
+   {.cast(assumeSync).}`); `ERRATA.md` records it. A chapter that shows module-level mutable state states that
+   rule at first use, and no chapter teaches a global counter as if it were free.
+7. Technical truth is not the author's call. A chapter reaches `frozen` only with a named technical review
    recorded in its frontmatter and in `review.md` beside it.
 
 ## Repository sanity
@@ -88,6 +92,11 @@ a reviewer should never need two commits to see one chapter.
 
 Do not push to `main` directly. Open a pull request and let CI run `./task check`. A pull request that changes
 prose states which chapters it touches and whether any frontmatter `status:` line moves.
+
+That rule is a convention, not a server-side gate. `main` carries the "Basic Branch Guardrail" ruleset, which
+refuses branch deletion and force-push only — ordinary pushes are still accepted, which is what lets
+`./task release` commit the version bump and tag on `main` directly. A rejected `git push --force` is the ruleset
+working; it is not a sign that the branch is broken.
 
 ## Contribution license
 

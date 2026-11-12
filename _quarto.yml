@@ -19,6 +19,7 @@ book:
     - chapters/05-strings/en.md
     - chapters/06-branching/en.md
     - chapters/07-loops-ranges/en.md
+    - chapters/08-procedures/en.md
   search: true
 
 format:
