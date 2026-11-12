@@ -37,14 +37,15 @@ ours to fix. It does have a chapter that may need an errata row, and we will add
 
 ## How the repository is set up against that
 
-- Workflows are read-only by default (`permissions: contents: read`); only the Pages job takes `pages: write`
-  and `id-token: write`, for the one deploy it exists to do.
+- Workflows are read-only by default (`permissions: contents: read`); no workflow holds a write permission or a
+  token it does not need.
 - Every action is pinned by commit SHA and Dependabot proposes the bumps, so a moved `@v4` tag cannot change
   what runs here.
 - The gate compiles the pinned toolchain from `nim-lang/nimony` at the pin and runs `nimony c` inside the
   repository. No step downloads and executes an artefact that is not named in the workflow.
-- The site publishes from `main` only, through `.github/workflows/pages.yml`. A pull request cannot reach the
-  deploy job, and the deploy writes nothing back to the repository.
+- The site publishes from `main` only, and not through Actions: a webhook on push to `main` calls
+  `ops/scripts/deploy-static.sh` on the VPS, which checks the ref before it does anything. A pull request cannot
+  reach that script, and it writes to the server, never back to the repository.
 - No secret is stored in the repository and none is needed by the site. A report that a real credential
   appeared in a file or a sample is the highest-priority kind of report here.
 
