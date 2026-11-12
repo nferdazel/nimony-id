@@ -173,7 +173,7 @@ if x != nil:
 
 Dua jebakan mengikuti desain yang sama, dan keduanya memakan satu sore kalau lo bertemu tanpa persiapan.
 
-**Meng-assign nilai yang pasti not-nil tidak memperhalus variabelnya.** Nilability-nya ada di tipe, jadi ia
+**Meng-assign nilai yang pasti not-nil tidak memperbaiki faktanya.** Nilability-nya ada di tipe, jadi ia
 bertahan melewati assignment:
 
 ```nim
@@ -211,7 +211,7 @@ proc boxedNotNil(v: int): ref int =
 ```
 
 Tidak ada yang perlu dijaga di sini. `tmp` adalah `ref int` sebelum panggilan dan `ref int` terisi sesudahnya,
-jadi pengembaliannya diterima tanpa pemeriksaan. Yang tidak bisa lo lakukan adalah berubah pikiran sesudahnya:
+jadi `return` menerimanya tanpa pemeriksaan. Yang tidak bisa lo lakukan adalah berubah pikiran sesudahnya:
 `tmp = nil` ditolak dengan `expected non-nil value`, dan `tmp == nil` dievaluasi jadi `false`.
 
 Deklarasi not-nil di module level adalah kegagalan yang lain, dan itu bukan soal `new`: `var x: ref int` di
@@ -228,7 +228,7 @@ proc boxed(v: int): ref int =
   tmp
 ```
 
-Dengan tujuan nullable, `new` tidak membangun apa pun sendiri: mesin fakta belajar dari perbandingan, bukan
+Dengan tujuan nullable, `new` tidak membangun fakta apa pun sendiri: mesin fakta belajar dari perbandingan, bukan
 dari pemanggilan, jadi `result = tmp` tepat setelah `new(tmp)` ditolak dengan `cannot prove expression is not
 nil: tmp`, di setiap pemakaian `tmp`. Guard-nya menanggung beban, bukan hiasan; `quit` di cabang nil memuaskan
 kedua analisis sekaligus, karena cabang itu tidak berlanjut dan `result` di-assign di satu-satunya jalur yang
