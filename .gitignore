@@ -5,6 +5,7 @@ tools/verify-samples.log
 
 # Quarto render output and cache.
 _book/
+public/
 .quarto/
 .build/
 

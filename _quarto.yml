@@ -3,6 +3,8 @@ lang: en
 project:
   type: book
   output-dir: _book
+  resources:
+    - assets/ku.css
 
 book:
   title: "Nimony: A Pinned Guide"
@@ -21,10 +23,32 @@ book:
     - chapters/07-loops-ranges/en.md
     - chapters/08-procedures/en.md
   search: true
+  sidebar:
+    style: docked
+    collapse-level: 1
+    tools:
+      - text: "Bahasa Indonesia"
+        href: "https://nimony.qouver.com/"
+  page-footer:
+    left: "CC BY-SA 4.0 · code samples MIT"
+    right: "[PDF](https://nimony.qouver.com/en/Nimony-A-Pinned-Guide.pdf) · [Bahasa Indonesia](https://nimony.qouver.com/)"
 
 format:
   html:
+    lang: en
+    css: assets/ku.css
     toc: true
     toc-depth: 2
+    toc-title: "On this page"
     code-copy: true
     code-overflow: wrap
+    include-before-body: assets/skip-link.html
+    fig-cap-location: bottom
+  typst:
+    filters:
+      - ../../tools/typst-links.lua
+    toc-depth: 1
+    lang: en
+    template-partials:
+      - assets/typst/typst-show.typ
+    number-sections: true

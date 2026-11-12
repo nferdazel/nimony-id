@@ -67,19 +67,19 @@ git reset --hard origin/main
 REV="$(git rev-parse --short HEAD)"
 log "==> konten di $REV"
 
-# 4. Render kedua bahasa. `./task build` menghasilkan _book/en/ dan _book/id/.
+# 4. Render kedua edisi + PDF. `./task build` menghasilkan public/: Indonesia
+#    di akar situs, English di /en/.
 QUARTO="$QUARTO" ./task build 2>&1 | tee -a "$LOG" || die "render gagal"
-[ -f "_book/en/index.html" ] || die "hasil render tidak berisi _book/en/index.html"
-[ -f "_book/id/index.html" ] || die "hasil render tidak berisi _book/id/index.html"
-[ -f "site/index.html" ] || die "halaman root site/index.html tidak ada"
+[ -f "public/index.html" ] || die "hasil render tidak berisi public/index.html"
+[ -f "public/en/index.html" ] || die "hasil render tidak berisi public/en/index.html"
+[ -f "public/Nimony-A-Pinned-Guide.pdf" ] || die "PDF Indonesia tidak ada"
+[ -f "public/en/Nimony-A-Pinned-Guide.pdf" ] || die "PDF English tidak ada"
 
 # 5. Pasang ke direktori rilis, lalu swap symlink.
 BARU="$RILIS_DIR/$REV"
 rm -rf "$BARU"
 mkdir -p "$BARU"
-rsync -a --delete _book/ "$BARU/"
-# _book hanya berisi /en/ dan /id/; halaman root dipasang terpisah.
-install -m 644 site/index.html "$BARU/index.html"
+rsync -a --delete public/ "$BARU/"
 restorecon -RF "$BARU" 2>/dev/null || log "WARN: restorecon dilewati (bukan root?)"
 
 if [ -L "$WEB_LINK" ]; then
@@ -91,24 +91,32 @@ log "==> symlink web -> $BARU"
 
 # 6. Health check: routing Caddy + isi rilis di disk, dengan retry.
 # Gagal berarti kembalikan symlink lama.
+# Yang diuji lewat nama publik: kedua halaman edisi dan kedua PDF.
+http_code() {
+  curl -sS -o /dev/null -w '%{http_code}' --max-time 15 "$1" 2>/dev/null || echo "000"
+}
+
+BASE="${HEALTH_URL%/}"
 sehat=0
 for i in 1 2 3 4 5; do
-  kode=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 \
-           "$HEALTH_URL" || echo "000")
-  if { [ "$kode" = "200" ] || [ "$kode" = "308" ]; } \
+  kode_akar=$(http_code "$HEALTH_URL")
+  kode_en=$(http_code "$BASE/en/")
+  kode_pdf_id=$(http_code "$BASE/Nimony-A-Pinned-Guide.pdf")
+  kode_pdf_en=$(http_code "$BASE/en/Nimony-A-Pinned-Guide.pdf")
+  if [ "$kode_akar" = "200" ] && [ "$kode_en" = "200" ] \
+      && [ "$kode_pdf_id" = "200" ] && [ "$kode_pdf_en" = "200" ] \
       && grep -q "Nimony: A Pinned Guide" "$BARU/index.html" \
-      && grep -q "Nimony is" "$BARU/en/index.html" \
-      && grep -q "Nimony adalah" "$BARU/id/index.html"; then
+      && grep -q "Nimony adalah" "$BARU/index.html" \
+      && grep -q "Nimony is" "$BARU/en/index.html"; then
     sehat=1
     break
   fi
-  log "health check percobaan $i gagal (HTTP $kode), ulangi 2 detik"
+  log "health check percobaan $i gagal (HTTP / $kode_akar, /en/ $kode_en, pdf-id $kode_pdf_id, pdf-en $kode_pdf_en), ulangi 2 detik"
   sleep 2
 done
 
 if [ "$sehat" -ne 1 ]; then
-  kode=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 "$HEALTH_URL" || echo "000")
-  log "Health check GAGAL di $HEALTH_URL (kode $kode)"
+  log "Health check GAGAL di $HEALTH_URL (kode / $kode_akar, /en/ $kode_en, pdf-id $kode_pdf_id, pdf-en $kode_pdf_en)"
   if [ -e "$APP_DIR/.previous" ]; then
     ln -sfn "$(readlink -f "$APP_DIR/.previous")" "$WEB_LINK"
     log "Rollback: symlink web dipulihkan"

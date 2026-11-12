@@ -19,6 +19,9 @@ jobs:
     name: "Book: verify samples and render"
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    # Only the tag run creates a release; branch and pull request runs stay read-only.
+    permissions:
+      contents: write
     steps:
       # Actions are pinned by commit SHA; Dependabot opens the bump. A tag such as
       # @v4 can be moved by its owner, a SHA cannot.
@@ -85,10 +88,34 @@ jobs:
             exit 1
           fi
 
-      - name: "Upload the rendered book"
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: "Upload site (both languages)"
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: nimony-id-${{ github.ref_name }}
-          path: _book
+          name: situs
+          path: public
+          retention-days: 7
+
+      - name: "Upload PDFs"
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: pdf
+          path: public/**/*.pdf
           retention-days: 30
+
+      # Same commit and the same Quarto version the VPS uses, so these attach
+      # the same PDFs the site serves. Re-running a failed tag build uploads the
+      # assets again instead of failing on an existing release.
+      - name: "Publish GitHub release"
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -- \
+            "public/Nimony-A-Pinned-Guide.pdf#Nimony - A Pinned Guide (ID).pdf" \
+            "public/en/Nimony-A-Pinned-Guide.pdf#Nimony - A Pinned Guide (EN).pdf"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$@" --clobber
+          else
+            gh release create "$TAG" "$@" --title "$TAG" --generate-notes
+          fi
