@@ -41,9 +41,10 @@ push. The DNS A record already points at the VPS; the Caddy block is mirrored in
 ## Release
 
 `./task release` bumps `VERSION` and tags the commit; a `v*` tag makes CI assert that the tag equals `VERSION`
-and then attach both PDFs to a GitHub release. The first release cut this way, `v0.1.1` on 2026-11-12, published
-a GitHub release with `Nimony - A Pinned Guide (ID).pdf` and `Nimony - A Pinned Guide (EN).pdf` attached.
-`v0.1.0` predates the workflow and has no GitHub release.
+and then attach both PDFs to a GitHub release. The first published release is `v0.1.2` on 2026-11-12, with
+`Nimony - A Pinned Guide (ID).pdf` and `Nimony - A Pinned Guide (EN).pdf` attached. `v0.1.1` was tagged but its
+publish run failed: both PDFs share one file name, and a release cannot hold two assets with the same name, so
+the workflow now copies them to the names above. `v0.1.0` predates the workflow and has no GitHub release.
 
 ## Where the rules come from
 
