@@ -3,6 +3,10 @@
 Editorial home of the Nimony book. This folder is the book's plan and manuscript; it is never inside a
 project repository, and no chapter work happens outside it.
 
+**Title:** *Nimony: A Pinned Guide* — *Learning the language against one fixed commit*. Decided 2026-11-12 by
+the editor on the owner's delegation. The title stays English in both editions (it is a label, not prose); it
+lives in `_quarto.yml` as `book.title` and `book.subtitle`.
+
 ## Files
 
 | File | What it is |
@@ -23,7 +27,7 @@ project repository, and no chapter work happens outside it.
 
 ## Status
 
-Four chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
+Five chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
 
 - Chapter 1, `chapters/01-what-nimony-is/` — draft 2026-11-12, tech_review Momo 2026-11-12,
   editorial_pass 2026-11-12. No code samples; the compile gate does not apply.
@@ -36,7 +40,11 @@ Four chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` an
   `samples/04-numbers-types-conversion/numbers.nim`. Its review corrected the `toInt`/`toFloat` claim (they exist
   only for `Rational[T]` at the pin) and recorded signed narrowing as intended, documented as a guide gap.
 
-The verifier prints `SUMMARY 3/3 passed, 0 failed` because chapters 2, 3 and 4 each own a sample.
+- Chapter 5, `chapters/05-strings/` — same dates, with `samples/05-strings/strings.nim`. Its review corrected the
+  rune claim (the pin does ship `std/unicode`'s `runes` and `runeLen`), tightened four citations, restored the
+  `ensureTerminatingZero` excerpt verbatim, and recorded the `$c`-needs-`strutils` gap as a guide gap.
 
-Chapters 5 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
+The verifier prints `SUMMARY 4/4 passed, 0 failed` because chapters 2, 3, 4 and 5 each own a sample.
+
+Chapter 6 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
 without one may.

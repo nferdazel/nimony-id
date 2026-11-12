@@ -1,3 +1,6 @@
+title: Nimony: A Pinned Guide
+subtitle: Learning the language against one fixed commit
+title decided: 2026-11-12 by the editor, on the owner's delegation; carried in `_quarto.yml` only, the preface heading stays "Nimony" in both editions
 pin: nimony 0.6.3 @ commit 4ba90a781b0b22d0821efaa153c129c37cef6143 (2026-11-12)
 pin decided: 2026-11-12 by Engineering (Momo, verified; Raka re-verified); book scope gated by Wira
 pin source build: official Nim 2.4.0 tarball, sha256 93a1e638289077b972b684e6e71cb11b2029602ccac4f8fd8dfa70f193fac7df — never Homebrew Nim
@@ -60,7 +63,9 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Job:** Treat `string` as an ordinary value with no null terminator: build, index, slice, and compare it, and know where `cstring` still appears.
 - **Prerequisites:** 4
 - **Nim 2 delta:** yes — no null terminator, so C-string habits break.
-- **Status:** planned
+- **Status:** frozen — draft 2026-11-12 (Aksara); tech_review Momo 2026-11-12 (18/18 hold);
+  editorial_pass 2026-11-12; `samples/05-strings/strings.nim` passes at the pin. Its review added the rune
+  iterator (`std/unicode`, `runes`, `runeLen`) after the draft had assumed none existed.
 
 ### Chapter 6: Branching That Returns a Value
 - **Job:** Use `if`, `case` and `when` as expressions, rely on exhaustive `case`, and label `break` because unlabelled `break` only leaves the innermost loop.
