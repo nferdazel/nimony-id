@@ -6,9 +6,9 @@ nimony_version: 0.6.3
 nimony_commit: 4ba90a781b0b22d0821efaa153c129c37cef6143
 toolchain: /Users/sachiel/.local/opt/nimony/4ba90a7
 host_compiler: /Users/sachiel/.local/opt/nim-2.4.0
-status: drafting
-tech_review:
-editorial_pass:
+status: frozen
+tech_review: Momo 2026-11-12
+editorial_pass: 2026-11-12
 samples: ["samples/02-pinned-toolchain/hello.nim"]
 glossary_added: ["pinned toolchain"]
 ---
@@ -68,7 +68,7 @@ export PATH=/path/to/nim-2.4.0/bin:$PATH
 nim c -r src/hastur/hastur build all
 ```
 
-`build all` takes about a minute on an Apple silicon laptop. Exit `0` fills `bin/` with the pipeline:
+`build all` took 1m02s on the macOS arm64 machine this book was pinned on. Exit `0` fills `bin/` with the pipeline:
 `nifler`, `nimsem`, `lengc`, `nifmake`, `niflink`, `nimony`, `hastur` and the rest. The names come back in
 Chapter 1's mental model — NIF in, NIF out, stage by stage — and you now have one of each on disk.
 
@@ -96,7 +96,8 @@ The cause is packaging, not a version mismatch. `nifler` imports `ast2nif.nim` f
 module needs a sibling `dist/checksums` tree. Homebrew's formula does not ship it; the official tarball does,
 along with a vendored `dist/nimony`.
 
-Why this matters more than it looks: without `nifler` the compiler cannot parse a file at all. The build looks
+Why this matters more than it looks: `build all` stops at the first failing tool, and the fallback parser
+`nifler2` is built last, so a build that dies at `nifler` has no parser at all. The build looks
 almost complete — you have a `nimony` executable and it answers `--version` — and every compile still dies in
 the front end. If you see `FAILURE: nifler --portablePaths --deps parse hello.nim`, you have this problem, and
 the fix is the tarball, not a flag.
@@ -107,12 +108,11 @@ Nimony is documented with two backends, and it is easy to assume the native one 
 commit it does not exist. The build tells you so, in passing, and it is worth reading rather than skimming:
 
 ```
-../nativenif not found — skipping arkham + nifasm;
-'nimony n' and a native boot need it (clone nim-lang/nativenif next to this repo)
+[build] ../nativenif not found — skipping arkham + nifasm; `nimony n` and a native boot need it (clone nim-lang/nativenif next to this repo)
 ```
 
-`nativenif` is a separate repository. Without it there is no native backend to invoke, and running `nimony n`
-gets you this, not a compiler diagnostic:
+The backends those names belong to live in that other repository. Without it there is no native backend to
+invoke, and running `nimony n` gets you this, not a compiler diagnostic:
 
 ```
 /bin/sh: arkham: command not found
@@ -120,8 +120,8 @@ nifmake: command failed (exit code 127): arkham --os:MacOSX --cpu:arm64 -o:…as
 FAILURE: …/bin/nifmake --rerun -j run --progress:50:100 nimcache/….final.build.nif
 ```
 
-`arkham` is the missing native backend. The C backend was never involved, so there is nothing to fix on your
-side.
+`arkham` is the native code generator, and it ships in the separate `nim-lang/nativenif` repository. The C
+backend was never involved, so there is nothing to fix on your side.
 
 So: every sample in this book goes through `nimony c`, the C backend, which needs `nifler` and a C compiler and
 nothing else. `nimony n` appears in this book zero times as an instruction. When the native backend ships and
@@ -187,4 +187,4 @@ teaches observable output, the chapter states the expected output and the check 
 
 ## Chapter checklist
 
-draft 2026-11-12 · tech_review · editorial_pass · frozen
+draft 2026-11-12 · tech_review Momo 2026-11-12 · editorial_pass 2026-11-12 · frozen 2026-11-12

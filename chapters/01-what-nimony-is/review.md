@@ -38,8 +38,12 @@ Knock-on edits outside the chapter, so the book does not hold two versions of th
 `GLOSSARY.md` (macro and multi-methods state columns), `OUTLINE.md` (What this book is not; Chapters 18 and 19
 delta lines), `ERRATA.md` (two watch-list rows: Future-versus-Present sourcing, and the design page's tense).
 
-## Still open before freeze
+## Closed before freeze — 2026-11-12
 
-- Gate 4: editorial pass — dated, after `id.md` exists so one pass covers both languages.
-- Gate 5: `id.md` does not exist yet.
-- Gate 6 applies only after both of the above.
+- Gate 5, both languages: `id.md` written 2026-11-12 with the same frontmatter and the same (empty) sample
+  list, mirroring `en.md` including the Nim 2 delta box.
+- Gate 4, editorial pass 2026-11-12: the five introduced terms (NIF, plugin, passive proc, polymorphic
+  accessor, `ErrorCode`) are all in `GLOSSARY.md`; the delta box is present because `OUTLINE.md` marks this
+  chapter `Nim 2 delta: yes`, and it uses the fixed shape; no reference to nim-id anywhere in the chapter; the
+  Indonesian address form "kamu" is recorded in `DEVIATIONS.md` #6.
+- Chapter frozen 2026-11-12. A break found on a newer pin goes to `ERRATA.md`; the text is not rewritten.

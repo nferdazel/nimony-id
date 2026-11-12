@@ -4,9 +4,9 @@ title: What Nimony Is
 job: Give the reader a working mental model — Nimony is the Nim 3 line, built on a NIF pipeline, with plugins instead of macros — so later rules read as design choices rather than surprises.
 nimony_version: 0.6.3
 nimony_commit: 4ba90a781b0b22d0821efaa153c129c37cef6143
-status: drafting
+status: frozen
 tech_review: Momo 2026-11-12 (10 claims at 4ba90a7: 8 PASS, 2 corrected in text)
-editorial_pass:
+editorial_pass: 2026-11-12
 samples: []
 glossary_added: [NIF, plugin, passive proc, polymorphic accessor, ErrorCode]
 ---
@@ -99,6 +99,14 @@ bring back the Nim 2 behaviour for the module that uses them. The `string` chang
 signed `+`, `-` or `*` that wrapped, so that you can detect the wrap you just had. Detection is not restoration.
 The book teaches the default in all four cases (Chapters 3, 4, 5 and 6).
 
+> **Nim 2 delta — this is not a drop-in replacement**
+>
+> *What Nim 2 did* → one toolchain, `nim c`, and a set of habits that carry across versions.
+> *What Nimony does* → a separate implementation at one pinned commit, where `string`, integer overflow, the
+> effect system and the macro system all behave differently from the Nim 2 you may know.
+> *What breaks if you keep the habit* → pasting Nim 2 snippets and expecting them to compile unchanged, building
+> with a package manager's Nim, or reading today's documentation as if it described this pin.
+
 ## What is missing at this pin, and why that is a boundary
 
 At the commit this book is written against, Nimony lacks (`doc/differences.md`):
@@ -159,4 +167,4 @@ because a book about a compiler that cannot compile is a very long opinion.
 
 ---
 
-`draft 2026-11-12 · tech_review Momo 2026-11-12 · editorial_pass · frozen`
+`draft 2026-11-12 · tech_review Momo 2026-11-12 · editorial_pass 2026-11-12 · frozen 2026-11-12`

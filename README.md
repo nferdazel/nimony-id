@@ -22,6 +22,11 @@ project repository, and no chapter work happens outside it.
 
 ## Status
 
-Chapter 1 (`chapters/01-what-nimony-is/`) is drafting in English. It has no code samples, so the compile gate
-does not apply yet; `tech_review` and `editorial_pass` are empty, which means it is open. The Indonesian mirror
-`id.md` does not exist yet and must exist before the chapter can freeze.
+Two chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
+
+- Chapter 1, `chapters/01-what-nimony-is/` — draft 2026-11-12, tech_review Momo 2026-11-12,
+  editorial_pass 2026-11-12. No code samples; the compile gate does not apply.
+- Chapter 2, `chapters/02-the-pinned-toolchain/` — same dates, with `samples/02-pinned-toolchain/hello.nim`
+  proven by `tools/verify-samples.sh` (`SUMMARY 1/1 passed, 0 failed`).
+
+Chapter 3 onwards: `planned`. No chapter opens until its outline **Proof gate** line is closed.

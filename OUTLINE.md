@@ -30,13 +30,14 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Job:** Give the reader a working mental model — Nimony is the Nim 3 line, built on a NIF pipeline, with plugins instead of macros — so later rules read as design choices rather than surprises.
 - **Prerequisites:** none
 - **Nim 2 delta:** yes — Nimony is not a drop-in replacement.
-- **Status:** drafting
+- **Status:** frozen — draft 2026-11-12, tech_review Momo 2026-11-12, editorial_pass 2026-11-12
 
 ### Chapter 2: The Pinned Toolchain
 - **Job:** Build the pinned commit from source with the official Nim 2.4.0 tarball, compile and run a first program with `nimony c`, and recognize why Homebrew Nim and `nimony n` are both dead ends here.
 - **Prerequisites:** 1
 - **Nim 2 delta:** no
-- **Status:** drafting — opened 2026-11-12 once `tools/verify-samples.sh` existed at a fixed install path
+- **Status:** frozen — draft 2026-11-12, tech_review Momo 2026-11-12, editorial_pass 2026-11-12;
+  `id.md` written and dated in the same pass
 
 ## Part II — The Core Language
 
