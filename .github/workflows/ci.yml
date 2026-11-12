@@ -19,7 +19,8 @@ jobs:
     name: "Book: verify samples and render"
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-    # Only the tag run creates a release; branch and pull request runs stay read-only.
+    # Branch and pull request runs of this job carry the write token too; only
+    # publishing is gated behind a v* tag.
     permissions:
       contents: write
     steps:
