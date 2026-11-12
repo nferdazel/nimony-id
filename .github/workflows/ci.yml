@@ -104,7 +104,9 @@ jobs:
           retention-days: 30
 
       # Same commit and the same Quarto version the VPS uses, so these attach
-      # the same PDFs the site serves. Re-running a failed tag build uploads the
+      # the same PDFs the site serves. Both renders share one file name, and a
+      # release cannot hold two assets with the same name, so each copy gets
+      # the name the release lists. Re-running a failed tag build uploads the
       # assets again instead of failing on an existing release.
       - name: "Publish GitHub release"
         if: startsWith(github.ref, 'refs/tags/v')
@@ -112,9 +114,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
         run: |
+          cp public/Nimony-A-Pinned-Guide.pdf "public/Nimony - A Pinned Guide (ID).pdf"
+          cp public/en/Nimony-A-Pinned-Guide.pdf "public/Nimony - A Pinned Guide (EN).pdf"
           set -- \
-            "public/Nimony-A-Pinned-Guide.pdf#Nimony - A Pinned Guide (ID).pdf" \
-            "public/en/Nimony-A-Pinned-Guide.pdf#Nimony - A Pinned Guide (EN).pdf"
+            "public/Nimony - A Pinned Guide (ID).pdf" \
+            "public/Nimony - A Pinned Guide (EN).pdf"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$@" --clobber
           else
