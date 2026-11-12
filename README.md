@@ -27,7 +27,7 @@ lives in `_quarto.yml` as `book.title` and `book.subtitle`.
 
 ## Status
 
-Six chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
+Seven chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
 
 - Chapter 1, `chapters/01-what-nimony-is/` — draft 2026-11-12, tech_review Momo 2026-11-12,
   editorial_pass 2026-11-12. No code samples; the compile gate does not apply.
@@ -48,7 +48,16 @@ Six chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and
   as its fallback, side effects included — a defect at the pin, so the chapter requires `else` on every string
   `case` expression. The `elif`-in-`case` rejection also produces a third error line with an ordinal selector.
 
-The verifier prints `SUMMARY 5/5 passed, 0 failed` because chapters 2, 3, 4, 5 and 6 each own a sample.
+The verifier prints `SUMMARY 6/6 passed, 0 failed` in this folder (samples 02–07); the repo prints `5/5` until
+this chapter's sample is synced.
 
-Chapter 7 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
+- Chapter 7, `chapters/07-loops-ranges/` — draft 2026-11-12, tech_review Momo 2026-11-12, editorial_pass
+  2026-11-12. With `samples/07-loops-ranges/loops.nim`. Its review corrected two claims: `countup` takes
+  `step: Positive` while `countdown` takes an unconstrained ordinal step (a negative step climbs away from `b`),
+  and `n + 0` after a guard needs no new proof — `n + 1` does, because it outruns the guard's bound. Three
+  findings of record live in `ERRATA.md`: the loop variable is writable and moves the counter, a stored `0..3`
+  slice is not loop-iterable, and an `in 0..9` guard does not prove a `range` on a procedure parameter while two
+  comparisons do.
+
+Chapter 8 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
 without one may.

@@ -79,8 +79,15 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 ### Chapter 7: Loops and Ranges
 - **Job:** Iterate ordinals with `for`, control repetition with `while` and `continue`, and prove a `range` only in the local form the compiler accepts.
 - **Prerequisites:** 6
-- **Nim 2 delta:** yes — a `range` proof must be visible where the value is used; it does not travel into another routine (see ERRATA watch list).
-- **Status:** planned
+- **Nim 2 delta:** yes — a `range` proof must be visible where the value is used, written as two comparisons on
+  a parameter; it does not travel into another routine (see ERRATA watch list).
+- **Status:** frozen 2026-11-12; `en.md` and `id.md` written, 28 claims probed at the pin,
+  `samples/07-loops-ranges/loops.nim` passes (`6/6` in the book verifier); tech review Momo 2026-11-12,
+  editorial pass 2026-11-12. Review corrections: `countup`'s step is `Positive` while `countdown`'s is an
+  unconstrained ordinal, and `n + 0` needs no new range proof — the offset has to clear the guard's bound.
+  Four findings of record: the loop variable is writable and moves the counter (observation only), a stored
+  `0..3` slice is not loop-iterable, an `in 0..9` guard does not prove a `range` on a parameter while two
+  comparisons do, and a negative `countdown` step climbs instead of descending.
 
 ## Part III — Procedures and Data
 
