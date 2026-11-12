@@ -13,6 +13,7 @@ project repository, and no chapter work happens outside it.
 | `ERRATA.md` | Breaks found after a chapter froze; plus the watch list of known pin-level constraints. |
 | `DEVIATIONS.md` | Every place this book departs from the nim-id writing baseline. |
 | `chapters/` | One folder per chapter: `NN-slug/en.md` and `NN-slug/id.md`. Created with the first drafted chapter. |
+| `index.en.qmd`, `index.id.qmd` | The book's preface, one file per edition, same shape and the same pin statement. The Indonesian file is a translation, not a second preface. |
 
 ## Where the rules come from
 
@@ -22,11 +23,17 @@ project repository, and no chapter work happens outside it.
 
 ## Status
 
-Two chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
+Three chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
 
 - Chapter 1, `chapters/01-what-nimony-is/` — draft 2026-11-12, tech_review Momo 2026-11-12,
   editorial_pass 2026-11-12. No code samples; the compile gate does not apply.
 - Chapter 2, `chapters/02-the-pinned-toolchain/` — same dates, with `samples/02-pinned-toolchain/hello.nim`
-  proven by `tools/verify-samples.sh` (`SUMMARY 1/1 passed, 0 failed`).
+  proven by `tools/verify-samples.sh`.
+- Chapter 3, `chapters/03-values-names-mutability/` — same dates, with
+  `samples/03-values-names-mutability/values.nim`. Its review corrected the initialization rule: a module-level
+  `var` is zeroed, a local must be proven written.
 
-Chapter 3 onwards: `planned`. No chapter opens until its outline **Proof gate** line is closed.
+The verifier prints `SUMMARY 2/2 passed, 0 failed` because chapters 2 and 3 each own a sample.
+
+Chapter 4 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
+without one may.

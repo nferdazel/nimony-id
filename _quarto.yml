@@ -14,6 +14,7 @@ book:
     - index.qmd
     - chapters/01-what-nimony-is/en.md
     - chapters/02-the-pinned-toolchain/en.md
+    - chapters/03-values-names-mutability/en.md
   search: true
 
 format:

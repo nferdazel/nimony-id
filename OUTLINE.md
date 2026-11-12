@@ -45,7 +45,8 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Job:** Introduce `let`, `var`, `const`, lexical scope, and the fact that names are case-sensitive.
 - **Prerequisites:** 2
 - **Nim 2 delta:** yes — case sensitivity and what `const` evaluates at.
-- **Status:** planned
+- **Status:** frozen — draft 2026-11-12 (Aksara), tech_review Momo 2026-11-12 (11 claims: 6 PASS, 2 PASS as
+  documented, 2 corrected, 1 rewritten for scope), editorial_pass 2026-11-12; `id.md` written in the same pass
 
 ### Chapter 4: Numbers, Types, and Conversion
 - **Job:** Cover integers, floats, booleans, characters, ranges, and explicit conversion, including the fact that integer overflow wraps instead of raising.

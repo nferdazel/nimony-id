@@ -93,6 +93,10 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | verified sample | A code file that compiles and runs at the pinned commit via `nimony c`, proven by `tools/verify-samples.sh`. | book rule, `OUTLINE.md` |
 | pinned toolchain | The Nimony build from one commit, installed at a fixed path outside any temp directory, whose version is checked before any sample runs. | `tools/verify-samples.sh`; install at `/Users/sachiel/.local/opt/nimony/4ba90a7` |
 | polymorphic accessor | An accessor declared once over a non-`var` container that still yields a mutable location, replacing Nim 2's separate `var`/non-`var` overload pair. | `doc/differences.md` at `4ba90a7` |
+| let variable | A name bound to one value when the declaration runs and never written again; not an l-value, so it cannot be passed to a `var` parameter or have its address taken. | `doc/language.md:1640-1655` at `4ba90a7` |
+| case-sensitive identifier | An identifier that matches only the exact spelling used at its declaration; `step` and `Step` are two names. | `doc/language.md:7` and `doc/differences.md:22` at `4ba90a7`; probe compiled and run 2026-11-12 |
+| scope (of a name) | The stretch of source from a declaration to the end of its block, in which that name refers to it; a nested block may declare the same spelling again. | `doc/language.md:4752-4765` at `4ba90a7`; probe compiled and run 2026-11-12 |
+| zero value | The value a module-level `var` starts at before any write (`0`, `""`, an all-zero `object`); inside a routine a local must instead be proven written before it is read, whatever its type. | Momo's runs at `4ba90a7` (2026-11-12): module-level `var chosen: int` reads `0`; the same lines inside a proc are rejected with "cannot prove that x has been initialized"; `{.noinit.}` returns raw storage |
 
 ## Retired in Nimony
 
