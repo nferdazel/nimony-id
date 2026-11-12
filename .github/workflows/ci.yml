@@ -103,6 +103,12 @@ jobs:
           path: public/**/*.pdf
           retention-days: 30
 
+      # The parity check reads the chapter list out of the PDFs, so the runner
+      # needs poppler; the ubuntu image does not ship pdftotext.
+      - name: "Install poppler-utils for the parity check"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+
       # One book, two doors: the site and the latest release must list the same
       # chapters. This runs on every push to main and reads both sides out of
       # the PDFs, not the sources. When they differ the push is a content
@@ -128,9 +134,21 @@ jobs:
               --release-id .release/Nimony-A-Pinned-Guide-ID.pdf \
               --release-en .release/Nimony-A-Pinned-Guide-EN.pdf
           }
+          # Exit 2 means the check could not read a PDF: that is a broken tool
+          # or a bad download, never evidence that the book changed, so it must
+          # not fall through to cutting a release.
+          run_compare() {
+            status=0
+            compare || status=$?
+            if [ "$status" -eq 2 ]; then
+              echo "parity check could not read a PDF; fix the check before releasing" >&2
+              exit 2
+            fi
+            return "$status"
+          }
           latest="$(gh release view --json tagName --jq .tagName)"
           download "$latest"
-          if compare; then
+          if run_compare; then
             echo "ok: $latest already lists the chapters this commit builds"
             exit 0
           fi
@@ -142,7 +160,7 @@ jobs:
           fi
           if gh release view "$tag" >/dev/null 2>&1; then
             download "$tag"
-            if compare; then
+            if run_compare; then
               echo "ok: $tag already lists the chapters this commit builds"
               exit 0
             fi
@@ -152,7 +170,7 @@ jobs:
           echo "chapters changed since $latest: cutting $tag at $GITHUB_SHA"
           bash tools/publish-release.sh "$tag" "$GITHUB_SHA"
           download "$tag"
-          compare
+          run_compare
 
       # Same commit and the same Quarto version the VPS uses, so these attach
       # the same PDFs the site serves. A tag pushed by hand still publishes

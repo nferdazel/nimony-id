@@ -14,7 +14,9 @@ usage:
                         --release-en RELEASE/Nimony-A-Pinned-Guide-EN.pdf
 
 Exit 0 when both editions list the same chapters as the release and the two
-editions list the same chapters as each other; exit 1 with the diff otherwise.
+editions list the same chapters as each other; exit 1 with the diff otherwise;
+exit 2 when a PDF cannot be read or parsed, which is a broken check and never a
+reason to cut a release.
 """
 import argparse
 import re
@@ -27,6 +29,12 @@ import sys
 ROW = re.compile(r"^\s*\d+\s+(\d{1,2})\.\s+(.*?)\s+(?:\.\s+){2,}\d+\s*$")
 
 
+def die(message):
+    """A check that cannot read its input is broken, not a mismatch: exit 2."""
+    print(message, file=sys.stderr)
+    sys.exit(2)
+
+
 def chapters(pdf):
     try:
         proc = subprocess.run(
@@ -36,9 +44,9 @@ def chapters(pdf):
             text=True,
         )
     except FileNotFoundError:
-        sys.exit("pdftotext not found; install poppler-utils")
+        die("pdftotext not found; install poppler-utils")
     except subprocess.CalledProcessError as exc:
-        sys.exit(f"cannot read {pdf}: {exc.stderr.strip()}")
+        die(f"cannot read {pdf}: {exc.stderr.strip()}")
 
     found = {}
     for line in proc.stdout.splitlines():
@@ -53,10 +61,10 @@ def chapters(pdf):
         found[number] = " ".join(match.group(2).split())
 
     if not found:
-        sys.exit(f"no chapter rows found in {pdf}")
+        die(f"no chapter rows found in {pdf}")
     highest = max(found)
     if sorted(found) != list(range(1, highest + 1)):
-        sys.exit(f"chapter numbers in {pdf} are not 1..{highest}: {sorted(found)}")
+        die(f"chapter numbers in {pdf} are not 1..{highest}: {sorted(found)}")
     return [(number, found[number]) for number in sorted(found)]
 
 
