@@ -26,6 +26,9 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | nominal type | A type identified by its declaration, not its shape: two objects with identical fields are different types. | `doc/language.md:548-549` at `4ba90a7`; probe `n1` (2026-11-12) |
 | enum type | A named set of ordered values (`type Color = enum red, green, blue`), each usable where an ordinal is expected. | `doc/language.md:182-192` at `4ba90a7`; probes `e1`, `e5` (2026-11-12) |
 | variant object | An object whose fields depend on a single tag. | nim-id glossary |
+| sum type | A type whose value is exactly one of a fixed set of alternatives, written in Nimony as an object with a `case` section. | `doc/language.md:592-655` at `4ba90a7`; probe `c1` (2026-11-12) |
+| discriminator | The field of a variant object that says which alternative the value is; it must be an ordinal type. | `doc/language.md:600-627` at `4ba90a7`; probes `c1`, `c38`, `c40` (2026-11-12) |
+| exhaustive case | A `case` whose `of` labels cover every value of the selector's type, so leaving one out is a compile error. | `doc/language.md:1794-1816` at `4ba90a7`; `src/nimony/sem.nim:2699-2748`; probes `c13`, `c19` (2026-11-12) |
 | distinct | A new type with the same representation that does not interchange. | nim-id glossary |
 | `borrow` | A pragma that generates an operator body for a distinct type by converting each operand to the base, calling the base operation and converting the result back; it does not carry `noSideEffect`, so pure operators are `func`. | `src/nimony/semborrow.nim:17-60`, `doc/porting.md:51-62` at `4ba90a7`; probe `d10` (2026-11-12) |
 | type alias | Another name for an existing type, with no new type. | nim-id glossary |

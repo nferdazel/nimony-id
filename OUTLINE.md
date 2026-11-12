@@ -133,7 +133,7 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Prerequisites:** 11
 - **Nim 2 delta:** yes — this is the shape Nim 2 readers reach for `case` objects and inheritance to fake.
 - **Proof gate:** **CLOSED 2026-11-12** (Momo, pin `4ba90a7`). A variant object with payload-carrying alternatives compiles and runs; omitting a variant from `case` is rejected with `not all cases are covered; missing: {Triangle}`. One correction to the gate as first written: there is no `match` construct at the pin (no `Match` tag in `src/models/nimony_tags.nim`), so the chapter says `case`, and the chapter title changed with it. A `match` chapter waits on the syntax — it is not promised as "later".
-- **Status:** planned
+- **Status:** **FROZEN 2026-11-12.** `en.md` final after the tech review (34 of 36 claims held; the two wrong numbers were the inactive-branch read printing `1.0` and `sizeof(Shape)` being `32`), `id.md` written from that final text, both `frozen`. Verifier 11/11 at pin `4ba90a7`; sample `samples/12-sum-types-case/sumtypes.nim`. Rulings of record in `ERRATA.md`: no runtime branch check is intended by the union layout and stays a watch row; a name-spelled discriminator is constructor-only narrowness with a defective message (`doc/language.md:629-641` is the documentation gap); the `xelim` assertion is a missing diagnostic, filed as a low-priority defect candidate with repro `rv8`; the wrapped `illformed AST` line is message quality only and is not filed. Further changes go to `ERRATA.md`, not to the chapter.
 
 ## Part IV — Ownership and Failure
 

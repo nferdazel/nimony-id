@@ -25,6 +25,7 @@ book:
     - chapters/09-overloading-and-ufcs/en.md
     - chapters/10-arrays-sequences-tuples/en.md
     - chapters/11-objects-enums-distinct/en.md
+    - chapters/12-sum-types-case/en.md
   search: true
   sidebar:
     style: docked
