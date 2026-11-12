@@ -106,13 +106,14 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 ### Chapter 9: Overloading and UFCS
 - **Job:** Resolve overload sets by argument type, call either form with method-call syntax, and know what is no longer overloadable (`var T` for `[]`).
 - **Prerequisites:** 8
-- **Nim 2 delta:** yes — `var T` indexing overloads are removed.
-- **Status:** planned
+- **Nim 2 delta:** yes — `var T` indexing overloads are removed. The removal is carried by two checks, not one: resolution has no `var`-ness dimension, so a `var T`/`T` pair is one ambiguity, and `validBorrowsFrom` decides where a `var` result may point.
+- **Status:** frozen 2026-11-12 — draft 2026-11-12 (Aksara), tech review Momo 2026-11-12 (23 claims, 21 held, 1 wrong as generalised, 1 right in substance with a wrong detail; no claim left open), editorial pass 2026-11-12, 8/8 samples pass. `en.md` + `id.md`.
 
 ### Chapter 10: Arrays, Sequences, and Tuples
 - **Job:** Choose between fixed-size `array`, growable `seq` and heterogeneous `tuple`, with their slicing and unpacking rules.
 - **Prerequisites:** 8
 - **Nim 2 delta:** no
+- **Carries from 9:** the rule for a `var` accessor result — it needs a path it can borrow (`var`/`out`/`lent` parameter, or indirection such as a `seq` field), and an inline field of a by-value object is not one. Chapter 9 owns the rule; Chapter 10 points at it rather than restating it.
 - **Status:** planned
 
 ### Chapter 11: Objects, Enums, and Distinct Types
@@ -141,6 +142,7 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Job:** Show who owns a value, which aliasing and escaping-borrow shapes the compiler rejects, and why `move` is not a checked operation at this pin.
 - **Prerequisites:** 13
 - **Nim 2 delta:** yes — the compiler rejects code Nim 2 accepted.
+- **Carries from 9:** `validBorrowsFrom` (`src/nimony/derefs.nim:258-314`) is where the `var`-result rule lives; Chapter 9 states it, this chapter generalises it and cites the source.
 - **Proof gate:** **PARTLY CLOSED 2026-11-12** (Momo, pin `4ba90a7`). Two rejections are proven verbatim: `mutable argument aliases with immutable parameter`, and `borrow of 'a' escapes the proc; it does not live long enough`. The gate's first half failed as written: a use-after-move is **not** rejected — `let b = move(a)` compiles and `a` reads as an empty string at runtime. The chapter teaches the two rules that exist; a "the compiler catches use-after-move" rule is never taught. Move-as-checked-operation stays open and is not promised.
 - **Status:** planned
 

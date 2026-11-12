@@ -71,7 +71,7 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | generic | A routine or type parameterized by types rather than concrete values. | not yet verified |
 | template | A compile-time substitution construct expanding directly into code. | not yet verified |
 | pragma | A compiler directive annotating symbols to modify behavior or code generation. | not yet verified |
-| UFCS | Uniform Function Call Syntax allowing `f(x)` to be written and called as `x.f()`. | not yet verified |
+| UFCS | Uniform Function Call Syntax allowing `f(x)` to be written and called as `x.f()`. | `doc/language.md:2836-2842` at `4ba90a7`; probed 2026-11-12 (both `5.twice` and `5.twice()`) |
 | ARC | Automatic Reference Counting memory management without a cycle collector. | not yet verified |
 | ORC | Automatic Reference Counting memory management with cyclic reference handling. | not yet verified |
 | sink | A parameter annotation specifying ownership transfer of the passed value. | not yet verified |
@@ -79,6 +79,12 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | move semantics | Transferring resources from one variable to another without copying. | not yet verified |
 | bootstrap | Compiling a compiler using an earlier or minimal build of itself. | not yet verified |
 | backend | The compiler stage that generates target machine code or C code from the AST. | not yet verified |
+| overload set | The candidates one name refers to when several routines share it. | `doc/language.md:1318` at `4ba90a7` |
+| overload resolution | Choosing one candidate from an overload set by matching the arguments against the parameter types, in ranked categories. | `doc/language.md:1318-1347` at `4ba90a7`; probed 2026-11-12 |
+| method call syntax | Writing the first argument before the name: `x.f(y)` for `f(x, y)`, with the parentheses dropped when no further arguments follow. | `doc/language.md:2836-2842` at `4ba90a7`; probed 2026-11-12 |
+| receiver | The value written before the dot in a method call; it becomes the first argument. | `doc/language.md:2836-2842` at `4ba90a7`; probed 2026-11-12 |
+| index setter | The `[]=` routine an assignment to an index resolves to; `[]` alone does not make a type writable. | probed at `4ba90a7` (2026-11-12), Chapter 9 probes `s1`/`s3` |
+| module-of-origin | The implicit tie-breaker that prefers a candidate declared in the calling module over an equally good imported one. | `doc/language.md:1375-1400` at `4ba90a7`; probed 2026-11-12 with two modules |
 
 ## Terms Nimony adds
 
@@ -92,7 +98,7 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | passive proc | A proc declared `passive`: calling it needs no `await`, and the same model covers the event loop and `spawn`. | `doc/differences.md` and README at `4ba90a7`; no sample yet |
 | verified sample | A code file that compiles and runs at the pinned commit via `nimony c`, proven by `tools/verify-samples.sh`. | book rule, `OUTLINE.md` |
 | pinned toolchain | The Nimony build from one commit, installed at a fixed path outside any temp directory, whose version is checked before any sample runs. | `tools/verify-samples.sh`; install at `$NIMONY_HOME`, default `~/.local/opt/nimony/4ba90a7` |
-| polymorphic accessor | An accessor declared once over a non-`var` container that still yields a mutable location, replacing Nim 2's separate `var`/non-`var` overload pair. | `doc/differences.md` at `4ba90a7` |
+| polymorphic accessor | An accessor declared once over a non-`var` container that yields a mutable location when it has a path to borrow — a `var`, `out` or `lent` parameter, or indirection such as a `seq` field; an inline field of a by-value object has none. Replaces Nim 2's separate `var`/non-`var` overload pair. | `doc/differences.md` at `4ba90a7`; `src/nimony/derefs.nim:466-468` and `:258-314`; probes 2026-11-12 (`r2`, `y7`) |
 | let variable | A name bound to one value when the declaration runs and never written again; not an l-value, so it cannot be passed to a `var` parameter or have its address taken. | `doc/language.md:1640-1655` at `4ba90a7` |
 | case-sensitive identifier | An identifier that matches only the exact spelling used at its declaration; `step` and `Step` are two names. | `doc/language.md:7` and `doc/differences.md:22` at `4ba90a7`; probe compiled and run 2026-11-12 |
 | scope (of a name) | The stretch of source from a declaration to the end of its block, in which that name refers to it; a nested block may declare the same spelling again. | `doc/language.md:4752-4765` at `4ba90a7`; probe compiled and run 2026-11-12 |
