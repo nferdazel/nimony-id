@@ -12,7 +12,7 @@ lives in `_quarto.yml` as `book.title` and `book.subtitle`.
 | File | What it is |
 | --- | --- |
 | `OUTLINE.md` | The contract for this book: reader, pin, language policy, 24 chapters with one job each, prerequisites, status. |
-| `CHAPTER_TEMPLATE.md` | Frontmatter, section order, and the six gates a chapter must pass before `frozen`. |
+| `CHAPTER_TEMPLATE.md` | Frontmatter, section order, and the six gates a chapter must pass before `frozen`. The dated chapter checklist line is source-only: the build strips it before rendering. |
 | `GLOSSARY.md` | Every term used with a special meaning, plus the terms Nimony retired. |
 | `ERRATA.md` | Breaks found after a chapter froze; plus the watch list of known pin-level constraints. |
 | `DEVIATIONS.md` | Every place this book departs from the nim-id writing baseline. |

@@ -672,7 +672,7 @@ $endif$
 
 #show block: it => {
   if it.fill == panel-fill {
-    let body = text(size: code-panel-size, it.body)
+    let body = text(size: code-panel-size, fill: rgb("#003b4f"), it.body)
     context {
       // A listing up to about twenty lines is never split: it stands where it is
       // or moves whole to the next page, so a sample cannot turn into a stray line
@@ -698,6 +698,52 @@ $endif$
 }
 
 // ---------------------------------------------------------------------------
+// Code lines that do not fit
+//
+// Typst breaks an overlong word at an arbitrary character when it fills a code
+// line, so a URL, a path or a checksum can split mid-token and a copied command
+// stops being the command the book teaches. Each source line is one raw after
+// `NormalTok` is reduced to its text; when that line carries a token of forty
+// characters or more, the line is set smaller until it fits the measure as one
+// line. Lines made only of short words keep the normal size and wrap at spaces,
+// which is what a line of console output should do.
+//
+// All fenced blocks in this book are language-less, so NormalTok is the only
+// highlighting token they use. A language-tagged block added later would come
+// through the other token functions; its lines are left to wrap.
+// ---------------------------------------------------------------------------
+#let NormalTok(s) = raw(s)
+
+#let Skylighting(fill: none, number: false, start: 1, sourcelines) = context {
+  let blocks = []
+  let lnum = start - 1
+  let bgcolor = rgb("#f1f3f5")
+  let measure-width = 119mm - 2 * g-box-inset
+  for ln in sourcelines {
+    if number {
+      lnum = lnum + 1
+      blocks = blocks + box(width: if start + sourcelines.len() > 999 { 30pt } else { 24pt }, text(fill: rgb("#aaaaaa"), [ #lnum ]))
+    }
+    let text-of-line = if ln.func() == raw { ln.text } else { "" }
+    let factor = 1.0
+    if text-of-line != "" {
+      let longest = 0
+      for word in text-of-line.split(" ") {
+        if word.len() > longest { longest = word.len() }
+      }
+      if longest >= 40 {
+        let natural = measure(text(size: code-panel-size, ln)).width
+        if natural > measure-width {
+          factor = calc.max(0.7, measure-width / natural)
+        }
+      }
+    }
+    blocks = blocks + text(size: code-panel-size * factor, ln) + EndLine()
+  }
+  block(fill: bgcolor, width: 100%, inset: 8pt, radius: 2pt, blocks)
+}
+
+// ---------------------------------------------------------------------------
 // Tables
 //
 // Horizontal rules only, no zebra striping (DESIGN.md). The header row is
@@ -715,6 +761,16 @@ $endif$
 #show table.header: set text(weight: "bold")
 // Table cells are ragged right: justified cells open rivers in narrow columns.
 #show table: set par(justify: false)
+// A checksum or another long inline sample cannot break inside a cell. The
+// tables that carry one are given a wide value column by tools/fix-tables.py,
+// and the long span itself is set smaller so the whole token fits on one line
+// instead of crossing the trim. Shorter spans keep the table's normal size.
+#show table: it => {
+  show raw: it => {
+    if it.text.len() >= 48 { text(size: 6.2pt, it) } else { it }
+  }
+  it
+}
 
 // ---------------------------------------------------------------------------
 // Footnotes

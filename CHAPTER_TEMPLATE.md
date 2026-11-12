@@ -30,7 +30,8 @@ glossary_added: []         # terms this chapter adds in the same handoff
 4. **Samples** — the files listed in frontmatter, with the exact command that proves them:
    `nimony c -r samples/NN-slug/<file>.nim` at the pinned commit.
 5. **Checks** — short exercises with a stated expected outcome, no open-ended prompts.
-6. **Chapter checklist** — the dated line described below.
+6. **Chapter checklist** — the dated line described below. It stays in the source as the process's record;
+   the build strips it, so it is never printed as book content.
 
 ## Claim provenance
 
@@ -92,3 +93,8 @@ draft 2026-11-12 · tech_review <name> 2026-11-12 · editorial_pass 2026-11-12 �
 ```
 
 Leave a step's date empty while it is unfinished. A chapter with an empty step is open, and stays open.
+
+The line, with its `## Checklist chapter` / `## Chapter checklist` heading or chapter 1's bare backticked
+form after the closing rule, is source-only. The build removes it from the staged copy before rendering, so it
+never becomes a PDF heading, a site table-of-contents entry, or a nearly empty page. Keep it in the source; do
+not expect it to print.

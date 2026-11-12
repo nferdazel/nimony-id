@@ -73,6 +73,12 @@ stage_book() {
     mkdir -p "$stage/chapters/$slug"
     awk_strip_frontmatter "$src" > "$stage/chapters/$slug/$lang.md"
   done
+
+  # Two render-only passes over the staged copies: the freeze record is the
+  # process's, not the reader's, and a table carrying a 64-character sha256
+  # needs a wider column than pandoc's even split gives it.
+  python3 "$root/tools/strip-status.py" "$stage/chapters"
+  python3 "$root/tools/fix-tables.py" "$stage/chapters"
 }
 
 require_pairs() {
