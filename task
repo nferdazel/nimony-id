@@ -2,17 +2,17 @@
 #
 # nimony-id — single entry point for the book.
 #
-#   ./task build    render the English book with Quarto
+#   ./task build    render the English and Indonesian books with Quarto
 #   ./task verify   compile and run every sample at the pinned toolchain
 #   ./task check    verify then build (the gate before a commit)
 #   ./task help
 #
 # Plain POSIX shell, same pattern as nim-id: no extra tooling.
 #
-# The editorial frontmatter in chapters/NN-slug/en.md is not valid Quarto YAML
-# (tech_review carries an unquoted colon), so build stages copies with the
-# frontmatter stripped into .build/book and renders there. Sources are not
-# modified.
+# The editorial frontmatter in chapters/NN-slug/{en,id}.md is not valid Quarto
+# YAML (tech_review carries an unquoted colon), so build stages copies with the
+# frontmatter stripped into .build/<lang> and renders one Quarto project per
+# language there. Sources are not modified.
 set -eu
 
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -22,7 +22,7 @@ usage() {
   cat <<'TXT'
 usage: ./task <command>
 
-  build   render the English book with Quarto
+  build   render the English and Indonesian books with Quarto
   verify  compile and run every sample at the pinned toolchain
   check   verify then build
   help    show this message
@@ -57,26 +57,66 @@ verify() {
 }
 
 stage_book() {
-  stage="$ROOT/.build/book"
+  lang=$1
+  stage="$ROOT/.build/$lang"
+  rm -rf "$stage"
   mkdir -p "$stage/chapters"
-  cp "$ROOT/_quarto.yml" "$stage/_quarto.yml"
   cp "$ROOT/index.qmd" "$stage/index.qmd"
-  for src in "$ROOT"/chapters/*/en.md; do
+  # Same chapter list for both editions, retargeted at this language.
+  sed -e "s|/en\.md\$|/$lang.md|" \
+      -e "s|^lang: en\$|lang: $lang|" \
+      -e "s|^  language: en\$|  language: $lang|" \
+      "$ROOT/_quarto.yml" > "$stage/_quarto.yml"
+  for src in "$ROOT"/chapters/*/"$lang".md; do
     [ -f "$src" ] || continue
-    slug=$(basename "$(dirname -- "$src")")
+    slug=$(basename -- "$(dirname -- "$src")")
     mkdir -p "$stage/chapters/$slug"
-    awk 'NR == 1 && $0 == "---" { front = 1; next }
-         front == 1 && $0 == "---" { front = 0; next }
-         front != 1 { print }' "$src" > "$stage/chapters/$slug/en.md"
+    strip_frontmatter "$src" > "$stage/chapters/$slug/$lang.md"
   done
 }
 
+strip_frontmatter() {
+  awk 'NR == 1 && $0 == "---" { front = 1; next }
+       front == 1 && $0 == "---" { front = 0; next }
+       front != 1 { print }' "$1"
+}
+
+# The bilingual policy in executable form: every chapter folder must carry both
+# en.md and id.md, or the build refuses to run.
+require_pairs() {
+  missing=0
+  pairs=0
+  for dir in "$ROOT"/chapters/*/; do
+    [ -d "$dir" ] || continue
+    slug=$(basename -- "$dir")
+    if [ -f "$dir/en.md" ] && [ ! -f "$dir/id.md" ]; then
+      echo "chapters/$slug has en.md but no id.md; the book is bilingual, both are required" >&2
+      missing=1
+    elif [ -f "$dir/id.md" ] && [ ! -f "$dir/en.md" ]; then
+      echo "chapters/$slug has id.md but no en.md; the book is bilingual, both are required" >&2
+      missing=1
+    elif [ -f "$dir/en.md" ]; then
+      pairs=$((pairs + 1))
+    fi
+  done
+  if [ "$pairs" -eq 0 ]; then
+    echo "no chapter pairs under chapters/*/; refusing to render an empty book" >&2
+    missing=1
+  fi
+  [ "$missing" -eq 0 ] || exit 1
+}
+
 build() {
+  require_pairs
   q=$(quarto_bin)
-  stage_book
-  ( cd "$stage" && "$q" render )
-  mkdir -p "$ROOT/_book"
-  cp -R "$stage/_book/." "$ROOT/_book/"
+  stage_book en
+  stage_book id
+  ( cd "$ROOT/.build/en" && "$q" render )
+  ( cd "$ROOT/.build/id" && "$q" render )
+  rm -rf "$ROOT/_book"
+  mkdir -p "$ROOT/_book/en" "$ROOT/_book/id"
+  cp -R "$ROOT/.build/en/_book/." "$ROOT/_book/en/"
+  cp -R "$ROOT/.build/id/_book/." "$ROOT/_book/id/"
 }
 
 case "${1:-help}" in
@@ -87,6 +127,7 @@ case "${1:-help}" in
     verify
     ;;
   check)
+    require_pairs
     verify
     build
     ;;
