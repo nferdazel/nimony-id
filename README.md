@@ -42,7 +42,9 @@ push. The DNS A record already points at the VPS; the Caddy block is mirrored in
 
 `./task release` bumps `VERSION` and tags the commit; a `v*` tag makes CI assert that the tag equals `VERSION`
 and then attach both PDFs, labelled `Nimony - A Pinned Guide (ID).pdf` and `Nimony - A Pinned Guide (EN).pdf`,
-to a GitHub release. The current release is `v0.1.3` on 2026-11-12. `v0.1.1` never produced a release: both
+to a GitHub release. The current release is `v0.1.4` on 2026-11-12; it replaces `v0.1.3`, whose PDFs clipped the
+chapter 2 checksum and printed the editorial freeze record, with PDFs that keep every long token inside the text
+block and leave the record out. `v0.1.1` never produced a release: both
 PDFs share one file name and a release cannot hold two assets with the same name, so the step now copies each
 to a unique file name and labels it. `v0.1.2` published before that labelling landed; `v0.1.0` predates the
 workflow and has no release.
