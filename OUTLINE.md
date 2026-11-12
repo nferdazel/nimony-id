@@ -52,7 +52,9 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Job:** Cover integers, floats, booleans, characters, ranges, and explicit conversion, including the fact that integer overflow wraps instead of raising.
 - **Prerequisites:** 3
 - **Nim 2 delta:** yes — overflow wraps; no `OverflowDefect` rescue.
-- **Status:** planned
+- **Status:** frozen — draft 2026-11-12 (Aksara), tech_review Momo 2026-11-12 (14 claims: 13 PASS, three of
+  them with citation fixes; 1 corrected — `toInt`/`toFloat` exist only for `Rational[T]`), editorial_pass
+  2026-11-12; `id.md` written in the same pass; `samples/04-numbers-types-conversion/numbers.nim` passes
 
 ### Chapter 5: Strings
 - **Job:** Treat `string` as an ordinary value with no null terminator: build, index, slice, and compare it, and know where `cstring` still appears.
@@ -69,7 +71,7 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 ### Chapter 7: Loops and Ranges
 - **Job:** Iterate ordinals with `for`, control repetition with `while` and `continue`, and prove a `range` only in the local form the compiler accepts.
 - **Prerequisites:** 6
-- **Nim 2 delta:** yes — `range` proof works for a guarded local, not for a proc parameter (see ERRATA watch list).
+- **Nim 2 delta:** yes — a `range` proof must be visible where the value is used; it does not travel into another routine (see ERRATA watch list).
 - **Status:** planned
 
 ## Part III — Procedures and Data

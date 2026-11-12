@@ -23,7 +23,7 @@ project repository, and no chapter work happens outside it.
 
 ## Status
 
-Three chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
+Four chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
 
 - Chapter 1, `chapters/01-what-nimony-is/` — draft 2026-11-12, tech_review Momo 2026-11-12,
   editorial_pass 2026-11-12. No code samples; the compile gate does not apply.
@@ -32,8 +32,11 @@ Three chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` a
 - Chapter 3, `chapters/03-values-names-mutability/` — same dates, with
   `samples/03-values-names-mutability/values.nim`. Its review corrected the initialization rule: a module-level
   `var` is zeroed, a local must be proven written.
+- Chapter 4, `chapters/04-numbers-types-conversion/` — same dates, with
+  `samples/04-numbers-types-conversion/numbers.nim`. Its review corrected the `toInt`/`toFloat` claim (they exist
+  only for `Rational[T]` at the pin) and recorded signed narrowing as intended, documented as a guide gap.
 
-The verifier prints `SUMMARY 2/2 passed, 0 failed` because chapters 2 and 3 each own a sample.
+The verifier prints `SUMMARY 3/3 passed, 0 failed` because chapters 2, 3 and 4 each own a sample.
 
-Chapter 4 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
+Chapters 5 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
 without one may.

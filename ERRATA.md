@@ -10,7 +10,7 @@ Format — one row per break:
 
 ## Open errata
 
-_None. Chapters 1, 2 and 3 are frozen at `4ba90a7` (2026-11-12); no break has been found against them._
+_None. Chapters 1, 2, 3 and 4 are frozen at `4ba90a7` (2026-11-12); no break has been found against them._
 
 ## Watch list (known at the pin — not errata yet)
 
@@ -20,7 +20,7 @@ freezes.
 
 | Where | Finding | Evidence | Consequence for the book |
 | --- | --- | --- | --- |
-| Chapter 7 (ranges) | `doc/differences.md` implies a preceding guard proves a value in `range[0..10]`. It holds for a guarded **local** and fails for a **proc parameter**. | `probe.nim(13, 27) Error: cannot prove 'n' is in range 0..10` at `4ba90a7` | Teach the local form only; never promise a parameter guard works. |
+| Chapter 7 (ranges) | **Corrected 2026-11-12.** `doc/differences.md` implies a preceding guard proves a value in `range[0..10]`. It holds where the guard is visible at the conversion or call site, including an `int` parameter guarded in the same routine. It does not travel into another routine: a call to a `range` parameter with no visible guard fails. | Momo's runs at `4ba90a7` (2026-11-12): guard-then-pass and guard-then-convert both compile; unguarded call fails with `cannot prove 'x' is in range 0..9`. The original `probe.nim(13, 27)` shape was not reproducible. | Chapter 7 re-probes its own sample before leaning on this. Teach "the proof must be visible where the value is used"; never "a parameter guard fails". |
 | Chapter 2 (toolchain) | The native backend `nimony n` does not exist at this pin (`../nativenif not found`, `arkham: command not found`). | `hastur build all` output; Raka's run at `4ba90a7` | Every sample uses `nimony c`. `nimony n` is out of scope, not "coming later". |
 | Chapter 2 (toolchain) | A build that dies at `nifler` has no parser — but "without `nifler`" is not the general condition. `parserTool()` prefers `nifler2` when present (`src/lib/tooldirs.nim:29-37`), and `build all` stops at the first failing tool (`src/hastur/builders.nim:255-283`). | Momo's source read at `4ba90a7` (2026-11-12) | The chapter gives the build-ordering reason; never generalize to "`nifler` is the parser". |
 | Chapter 23 (testing) | `unittest` behaviour at this pin is unproven. | no sample yet | Chapter teaches an assert-based runner until a sample proves otherwise. |
@@ -34,3 +34,5 @@ freezes.
 | Chapter 14 | Use-after-move is **not** rejected: `let b = move(a)` compiles, `a` reads as an empty string at runtime with no diagnostic. `move` is documented as leaving "a moved-from state", not as a checked operation. What does get rejected: `mutable argument aliases with immutable parameter`, and `borrow of 'a' escapes the proc; it does not live long enough`. | `g3_use_after_move.nim`, `g3_alias_bad.nim`, `g3_borrow_escape_bad.nim` at `4ba90a7` (2026-11-12) | The chapter teaches the two rules that exist and never a "the compiler catches use-after-move" rule. Checked move semantics stays open. |
 | Chapter 24 | Passive procs suspend, resume and run to their end, but the default `trivialTick` scheduler does not interleave chains: `complete` runs one chain to completion before the next starts. | `g7_passive.nim` at `4ba90a7` → `A:start A:end B:start B:end driver:done` (2026-11-12) | Teach suspension and resume; never imply concurrency. Interleaving waits on a `std/threadpool` `submit(delay(...))` sample. |
 | Chapter 13 | A module-level `var base: ref int` is rejected — "which has no default value (it contains a not-nil pointer)". The same declaration inside a proc is legal once a write reaches it first. | `g2_nil_ok.nim` probe at `4ba90a7` (2026-11-12) | State the rule with the module-level/proc split, not as a blanket "a `ref` needs no initialiser". |
+| Chapter 4 (numbers) | `doc/language.md:2159-2162` states the unchecked wrap policy for unsigned targets only; signed narrowing wraps too (`int8(200)` → `-56`, `int8(-200)` → `56`) and the pin's suite depends on it. **Ruled intended** 2026-11-12; the documentation is the incomplete part. | Momo's runs at `4ba90a7` (2026-11-12); `tests/nimony/errmsgs/tconvsignchange.nim:84-88` (comment `# \`int8(wb)\` is \`-56\``); `src/nimony/sem.nim:854` `semConvArg` | Chapter 4 teaches "test before you narrow". Never "the check exists for unsigned only". |
+| Chapter 4 (numbers) | `doc/language.md:2144-2148` recommends `toInt`/`toFloat`; at the pin they exist only for `Rational[T]` (`lib/std/rationals.nim:137,141`), not for `float`/`int`. | `3.7.toInt` → `undeclared field: 'toInt' for type float64`, exit 1 at `4ba90a7` (Aksara's probes; Momo confirmed across the stdlib) | Chapter 4 teaches `T(x)` only. Documentation gap, not a bug to file — never list `toInt`/`toFloat` as available. |
