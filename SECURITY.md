@@ -15,7 +15,7 @@ issues in older commits are not patched; they are recorded in [`ERRATA.md`](ERRA
 
 - A secret, token or private path committed by mistake.
 - A sample, script or workflow step that does something other than what it says — especially anything that
-  fetches and executes code beyond the pinned toolchain and the actions named in `.github/workflows/ci.yml`.
+  fetches and executes code beyond the pinned toolchain and the actions named in `.github/workflows/`.
 - A build script or `tools/` change that could write outside the repository, or a render that could publish
   something unintended.
 - A link in the manuscript that resolves to malware, phishing, or a look-alike of a project site.
@@ -34,6 +34,19 @@ open a public issue first. Include the commit, the file, what you ran, and what 
 
 The book does not vendor, bundle or redistribute the compiler, so a Nimony advisory does not have a version of
 ours to fix. It does have a chapter that may need an errata row, and we will add one.
+
+## How the repository is set up against that
+
+- Workflows are read-only by default (`permissions: contents: read`); only the Pages job takes `pages: write`
+  and `id-token: write`, for the one deploy it exists to do.
+- Every action is pinned by commit SHA and Dependabot proposes the bumps, so a moved `@v4` tag cannot change
+  what runs here.
+- The gate compiles the pinned toolchain from `nim-lang/nimony` at the pin and runs `nimony c` inside the
+  repository. No step downloads and executes an artefact that is not named in the workflow.
+- The site publishes from `main` only, through `.github/workflows/pages.yml`. A pull request cannot reach the
+  deploy job, and the deploy writes nothing back to the repository.
+- No secret is stored in the repository and none is needed by the site. A report that a real credential
+  appeared in a file or a sample is the highest-priority kind of report here.
 
 ## What we do
 

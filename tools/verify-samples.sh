@@ -2,13 +2,13 @@
 # Verify every book sample compiles and runs on the pinned Nimony toolchain.
 #
 # Toolchain install (fixed path, outside the system temp directory):
-#   /Users/sachiel/.local/opt/nimony/4ba90a7
+#   $HOME/.local/opt/nimony/4ba90a7
 # Pinned commit: 4ba90a781b0b22d0821efaa153c129c37cef6143 (nimony 0.6.3)
-# Host compiler used for the build: official Nim 2.4.0 at /Users/sachiel/.local/opt/nim-2.4.0
+# Host compiler used for the build: official Nim 2.4.0 at $HOME/.local/opt/nim-2.4.0
 #
 # Rebuild if the install is missing:
-#   cd /Users/sachiel/.local/opt/nimony/4ba90a7
-#   PATH=/Users/sachiel/.local/opt/nim-2.4.0/bin:$PATH nim c -r src/hastur/hastur build all
+#   cd $HOME/.local/opt/nimony/4ba90a7
+#   PATH=$HOME/.local/opt/nim-2.4.0/bin:$PATH nim c -r src/hastur/hastur build all
 #
 # Usage: tools/verify-samples.sh
 # Exit: 0 all samples pass (or none exist), 1 a sample failed, 2 toolchain problem.
@@ -18,7 +18,7 @@ shopt -s nullglob
 
 PIN="4ba90a781b0b22d0821efaa153c129c37cef6143"
 PIN_VERSION="0.6.3"
-NIMONY_HOME="${NIMONY_HOME:-/Users/sachiel/.local/opt/nimony/4ba90a7}"
+NIMONY_HOME="${NIMONY_HOME:-$HOME/.local/opt/nimony/4ba90a7}"
 NIMONY="$NIMONY_HOME/bin/nimony"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

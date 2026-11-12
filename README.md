@@ -21,11 +21,25 @@ lives in `_quarto.yml` as `book.title` and `book.subtitle`.
 | `CONTRIBUTING.md` | What a reader can send, the gate before sending it, and how a chapter change reaches `frozen`. |
 | `SECURITY.md` | What counts as a security report in a book repository, and what to send to Nimony instead. |
 | `LICENSE`, `LICENSE-CODE` | Book text is CC BY-SA 4.0; samples, `task` and `tools/` are MIT. |
-| `.github/` | One workflow (the CI gate), a pull-request checklist, and two issue forms: errata and chapter proposal. |
+| `VERSION` | The book's version. `./task release` bumps it and tags the commit; CI refuses a tag that does not match it. |
+| `site/` | The published site's root page: it offers the two editions. Copied to `_book/index.html` at deploy. |
+| `.github/` | Two workflows (the CI gate, the Pages deploy), Dependabot for the action pins, a pull-request checklist, and two issue forms: errata and chapter proposal. |
+
+## The published site
+
+Both editions are served from Cloudflare at <https://nimony.qouver.com>, deployed from `main` by
+`.github/workflows/pages.yml` with GitHub Pages as the origin. `/en/` is the English edition, `/id/` the
+Indonesian, and `/` is `site/index.html`. A pull request cannot reach the deploy workflow.
+
+Anything published there is a render of `main`. The deploy runs `./task build` — both editions, and it fails
+closed on an unpaired chapter. The sample gate is the separate `ci.yml`, which runs on every pull request and
+push. The custom domain is written to `_book/CNAME` at deploy time; the DNS record points at Pages, so nothing
+in this repository touches DNS.
 
 ## Where the rules come from
 
-- Editorial contract: `/Users/sachiel/.openmausbot/product/specs/nimony-id/2026-11-12-nimony-book-editorial-contract.md`
+- Editorial contract: private, held by the editor (2026-11-12). The parts a contributor needs — one job per
+  chapter, the six gates, the terminology rule — are in `OUTLINE.md`, `CHAPTER_TEMPLATE.md` and `CONTRIBUTING.md`.
 - Chapter sequences cites, structure and terminology: this folder.
 - Technical truth: Engineering's review, named per chapter. Toolchain pin: `4ba90a7`, `nimony 0.6.3`, `nimony c` only.
 
@@ -65,7 +79,8 @@ Chapter 8's sample is synced.
 
 ## Drafting
 
-- Chapter 8, `chapters/08-procedures/` — **drafting**, `en.md` only (2,371 words of prose, 18 sections; 2,854 with code). With
+- Chapter 8, `chapters/08-procedures/` — **drafting**, `en.md` only, and not in this repo yet: it lives in the book
+  folder until the chapter freezes and syncs (2,371 words of prose, 18 sections; 2,854 with code). With
   `samples/08-procedures/procedures.nim`, proven by `tools/verify-samples.sh` (`7/7`). Thirty claims probed at the
   pin; tech review requested from Momo 2026-11-12. `review.md` carries five findings of record: a default written
   in terms of an earlier parameter dies in the backend with `[Bug] could not find symbol: x.0`; an `out`

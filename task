@@ -5,6 +5,8 @@
 #   ./task build    render the English and Indonesian books with Quarto
 #   ./task verify   compile and run every sample at the pinned toolchain
 #   ./task check    verify then build (the gate before a commit)
+#   ./task version  print the book version from VERSION
+#   ./task release  bump VERSION from the commit log, commit it, and tag
 #   ./task help
 #
 # Plain POSIX shell, same pattern as nim-id: no extra tooling.
@@ -25,6 +27,9 @@ usage: ./task <command>
   build   render the English and Indonesian books with Quarto
   verify  compile and run every sample at the pinned toolchain
   check   verify then build
+  version print the book version (from VERSION)
+  release bump the version from commit messages, then commit and tag
+          (--major / --minor / --patch, --skip-check)
   help    show this message
 
 environment:
@@ -133,6 +138,14 @@ case "${1:-help}" in
     require_pairs
     verify
     build
+    ;;
+  version)
+    tr -d '[:space:]' < "$ROOT/VERSION"
+    echo
+    ;;
+  release)
+    if [ "$#" -gt 0 ]; then shift; fi
+    sh "$ROOT/tools/release.sh" "$@"
     ;;
   help|-h|--help)
     usage

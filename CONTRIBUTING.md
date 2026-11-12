@@ -47,6 +47,30 @@ both. CI runs the same command, so a green local run is the whole gate.
 6. Technical truth is not the author's call. A chapter reaches `frozen` only with a named technical review
    recorded in its frontmatter and in `review.md` beside it.
 
+## Repository sanity
+
+This repository is public and everything in it is published twice: as Markdown on GitHub, and as a site at
+`nimony.qouver.com`. Three rules follow.
+
+1. **No path from your machine.** Use `$NIMONY_HOME`, `~/.local/opt/...` or a path relative to the repository
+   root. A transcript may show a real install path only where the chapter is about that install.
+2. **No secret, token, private URL or personal data**, in prose or in a sample. `.gitignore` already covers
+   `nimcache/`, `_book/`, `.quarto/`, `.build/` and `tools/verify-samples.log`; a build artefact in a diff is
+   a mistake, not a shortcut.
+3. **Nothing new executes in CI unless it is visible in the diff.** Every action is pinned by commit SHA,
+   Dependabot proposes the bumps, and each job sets `timeout-minutes` and a cache. `curl | sh` is not how a
+   step gets installed here.
+
+## Versions and releases
+
+`VERSION` is the book's version; `./task version` prints it. `./task release` reads the commits since the last
+`v*` tag and bumps MAJOR on `type!:` or a `BREAKING CHANGE:` footer, MINOR on `feat:`, PATCH otherwise — this
+history uses plain imperative subjects, so most releases are PATCH. The script runs `./task check`, commits
+`chore: release X.Y.Z`, and creates the annotated tag `vX.Y.Z`. CI then refuses a tag that is not `v` plus the
+contents of `VERSION`, and attaches the rendered `_book` to the tag run.
+
+The script pushes nothing: `git push origin main --follow-tags`.
+
 ## Commit style
 
 Plain imperative subject, matching the existing history:

@@ -95,7 +95,13 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Job:** Define `proc` and `func`, return through `result`, pass by `var` and `sink`, and use default and named arguments.
 - **Prerequisites:** 7
 - **Nim 2 delta:** no
-- **Status:** planned
+- **Status:** drafting — draft 2026-11-12 (Aksara), 30 claims probed at the pin,
+  `samples/08-procedures/procedures.nim` passes (`7/7` in the book verifier); tech review requested from Momo
+  2026-11-12. Five findings of record in `ERRATA.md`: a default that names an earlier parameter dies in the
+  backend with `[Bug] could not find symbol: x.0`, an `out` parameter may be read before it is written (the guide
+  says it may not), a `proc` that touches a module-level `var` is rejected as unsynchronized access, the
+  two-argument command form reports `invalid indentation` where the guide predicts `too many arguments`, and
+  named arguments are undocumented.
 
 ### Chapter 9: Overloading and UFCS
 - **Job:** Resolve overload sets by argument type, call either form with method-call syntax, and know what is no longer overloadable (`var T` for `[]`).
@@ -230,7 +236,7 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
    to `ERRATA.md` by name. Two gates failed in part on 2026-11-12 (`match`, use-after-move); both are rewritten
    above.
 9. Every sample is proven by `tools/verify-samples.sh` at the fixed install path
-   `/Users/sachiel/.local/opt/nimony/4ba90a7`, never by a toolchain under a temp directory.
+   (`$NIMONY_HOME`, default `~/.local/opt/nimony/4ba90a7`), never by a toolchain under a temp directory.
 
 ## Open questions
 

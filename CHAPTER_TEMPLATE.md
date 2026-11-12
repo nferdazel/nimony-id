@@ -10,8 +10,8 @@ title: <chapter title, same as OUTLINE.md>
 job: <the one-sentence job from OUTLINE.md, verbatim>
 nimony_version: 0.6.3
 nimony_commit: 4ba90a781b0b22d0821efaa153c129c37cef6143
-toolchain: /Users/sachiel/.local/opt/nimony/4ba90a7    # fixed install path; never a temp directory
-host_compiler: /Users/sachiel/.local/opt/nim-2.4.0    # official tarball, never Homebrew
+toolchain: ~/.local/opt/nimony/4ba90a7    # $NIMONY_HOME; fixed install path, never a temp directory
+host_compiler: ~/.local/opt/nim-2.4.0     # official tarball, never Homebrew
 status: planned            # planned | drafting | frozen
 tech_review:               # reviewer name + date, or empty
 editorial_pass:            # date, or empty
@@ -57,14 +57,14 @@ documented and still failed on a proc parameter.
    under a system temp directory:
 
    ```
-   /Users/sachiel/.openmausbot/product/books/nimony-id/tools/verify-samples.sh
+   ./tools/verify-samples.sh          # from the repository root; $NIMONY_HOME overrides the default install
    ```
 
    Exit `0` all samples pass, `1` a sample failed, `2` toolchain missing or wrong version/commit. Real output
-   at the pin, 2026-11-12:
+   at the pin, 2026-11-12 (paths abbreviated to `~`):
 
    ```
-   toolchain /Users/sachiel/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
+   toolchain ~/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
    PASS samples/02-pinned-toolchain/hello.nim exit=0
    SUMMARY 1/1 passed, 0 failed
    ```
@@ -75,7 +75,9 @@ documented and still failed on a proc parameter.
    Nimony source file or commit, and a claim that was documented but never demonstrated is recorded as design
    intent rather than fact (see Claim provenance). An empty `tech_review` blocks freeze, no exceptions.
 4. **Editorial pass.** `editorial_pass` is dated. Terminology matches `GLOSSARY.md`; new terms were added in
-   the same handoff; the delta box is present exactly where the outline marks it; nothing refers to nim-id.
+   the same handoff; the delta box is present exactly where the outline marks it; nothing refers to nim-id; the
+   frontmatter records the toolchain as `~/.local/opt/nimony/4ba90a7`, never with a build machine's home
+   directory in it, because the repository is public.
 5. **Both languages.** `en.md` and `id.md` both exist and both carry the same frontmatter and sample list.
    One side missing means the chapter cannot freeze.
 6. **Frozen means frozen.** After freeze, a break found on a newer pin goes to `ERRATA.md` with chapter,
