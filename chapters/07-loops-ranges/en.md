@@ -13,7 +13,7 @@ samples: ["samples/07-loops-ranges/loops.nim"]
 glossary_added: ["for loop", "loop variable", "iterator", "countup", "countdown", "range proof"]
 ---
 
-# 7. Loops and Ranges
+# Loops and Ranges
 
 ## What this chapter is for
 

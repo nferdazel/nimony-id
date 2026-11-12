@@ -13,7 +13,7 @@ samples: ["samples/02-pinned-toolchain/hello.nim"]
 glossary_added: ["pinned toolchain"]
 ---
 
-# 2. The Pinned Toolchain
+# The Pinned Toolchain
 
 ## What this chapter is for
 

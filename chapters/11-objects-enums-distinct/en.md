@@ -13,7 +13,7 @@ samples: ["samples/11-objects-enums-distinct/objects.nim"]
 glossary_added: ["nominal type", "enum type", "borrow"]
 ---
 
-# 11. Objects, Enums, and Distinct Types
+# Objects, Enums, and Distinct Types
 
 ## What this chapter is for
 

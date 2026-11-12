@@ -5,7 +5,7 @@ pin: nimony 0.6.3 @ commit 4ba90a781b0b22d0821efaa153c129c37cef6143 (2026-11-12)
 pin decided: 2026-11-12 by Engineering (Momo, verified; Raka re-verified); book scope gated by Wira
 pin source build: official Nim 2.4.0 tarball, sha256 93a1e638289077b972b684e6e71cb11b2029602ccac4f8fd8dfa70f193fac7df — never Homebrew Nim
 samples run through: nimony c  (nimony n is NOT available at this pin and is out of scope)
-language policy: id/en pair per chapter, en is the manuscript of record, id is the mirror; a chapter cannot freeze with one side missing
+language policy: id/en pair per chapter, en is the manuscript of record, id is the mirror; a chapter cannot freeze with one side missing. Heading rule (set 2026-11-12 by the owner's call): the `id.md` heading is the Indonesian title of that chapter, terms that read worse translated stay English; the `title:` frontmatter stays this file's English title in both files, so the two editions pair by one name; headings carry no hand-typed chapter number, the PDF takes it from the counter
 reader: an experienced programmer who has never used Nimony — not a learn-to-program book, and not a sequel to nim-id
 
 # Nimony Book Outline

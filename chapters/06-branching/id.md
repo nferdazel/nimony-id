@@ -13,7 +13,7 @@ samples: ["samples/06-branching/branching.nim"]
 glossary_added: ["if expression", "case expression", "when", "exhaustive case", "labelled break", "block expression"]
 ---
 
-# 6. Branching That Returns a Value
+# Percabangan yang Mengembalikan Nilai
 
 ## Untuk apa chapter ini
 

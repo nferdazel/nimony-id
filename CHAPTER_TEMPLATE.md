@@ -20,6 +20,15 @@ glossary_added: []         # terms this chapter adds in the same handoff
 ---
 ```
 
+## The heading
+
+The heading is the title only: `# Overloading and UFCS`, never `# 9. Overloading and UFCS`. The PDF draws the
+chapter number from the counter, so a typed prefix prints twice and pushes every section number one higher.
+`en.md` uses the outline title verbatim; `id.md` uses the Indonesian title of the same chapter
+(`# Overloading dan UFCS`), while the `title:` frontmatter stays the outline title in both files so the two
+editions pair by one name. The preface (`index.<lang>.qmd`) is `# Nimony {.unnumbered}`, so the chapters start
+at 1.
+
 ## Section order
 
 1. **What this chapter is for** — the job in the reader's terms, two or three sentences. No history.

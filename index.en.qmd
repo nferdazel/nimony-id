@@ -1,6 +1,4 @@
----
-title: "Nimony"
----
+# Nimony {.unnumbered}
 
 Nimony is the Nim 3 line: a new implementation of Nim built on a NIF pipeline, with plugins instead of
 macros. This book teaches it against one fixed commit, `4ba90a781b0b` of `nim-lang/nimony`, reported by the

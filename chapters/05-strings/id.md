@@ -13,7 +13,7 @@ samples: ["samples/05-strings/strings.nim"]
 glossary_added: ["string", "null terminator", "cstring", "slice", "escape sequence", "raw string", "concatenation"]
 ---
 
-# 5. Strings
+# String
 
 ## Untuk apa chapter ini
 

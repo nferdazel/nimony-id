@@ -1,6 +1,4 @@
----
-title: "Nimony"
----
+# Nimony {.unnumbered}
 
 Nimony adalah garis Nim 3: implementasi baru Nim yang dibangun di atas pipeline NIF, dengan plugin alih-alih
 makro. Buku ini mengajarkannya terhadap satu commit tetap, `4ba90a781b0b` dari `nim-lang/nimony`, yang

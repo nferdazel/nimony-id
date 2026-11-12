@@ -13,7 +13,7 @@ samples: ["samples/03-values-names-mutability/values.nim"]
 glossary_added: ["let variable", "case-sensitive identifier", "scope (of a name)", "zero value"]
 ---
 
-# 3. Values, Names, and Mutability
+# Values, Names, and Mutability
 
 ## What this chapter is for
 

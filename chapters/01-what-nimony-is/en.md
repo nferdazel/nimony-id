@@ -11,7 +11,7 @@ samples: []
 glossary_added: [NIF, plugin, passive proc, polymorphic accessor, ErrorCode]
 ---
 
-# 1. What Nimony Is
+# What Nimony Is
 
 Nimony is a new implementation of Nim, written to explore what Nim 3 should be. It is not Nim 2 with
 patches, and it is not finished. Both facts shape how you read everything that follows: the language you are

@@ -13,7 +13,7 @@ samples: ["samples/09-overloading/overloading.nim"]
 glossary_added: ["overload set", "overload resolution", "receiver", "method call syntax", "index setter", "module-of-origin"]
 ---
 
-# 9. Overloading and UFCS
+# Overloading dan UFCS
 
 ## Untuk apa chapter ini
 

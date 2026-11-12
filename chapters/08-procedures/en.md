@@ -13,7 +13,7 @@ samples: ["samples/08-procedures/procedures.nim"]
 glossary_added: ["proc", "func", "result", "var parameter", "out parameter", "sink parameter", "default argument", "named argument"]
 ---
 
-# 8. Procedures, Parameters, and Results
+# Procedures, Parameters, and Results
 
 ## What this chapter is for
 

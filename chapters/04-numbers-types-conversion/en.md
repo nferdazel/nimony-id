@@ -13,7 +13,7 @@ samples: ["samples/04-numbers-types-conversion/numbers.nim"]
 glossary_added: ["integer type", "floating-point type", "narrowing conversion", "wrapping overflow", "range type"]
 ---
 
-# 4. Numbers, Types, and Conversion
+# Numbers, Types, and Conversion
 
 ## What this chapter is for
 

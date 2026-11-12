@@ -13,7 +13,7 @@ samples: ["samples/10-arrays-sequences-tuples/collections.nim"]
 glossary_added: ["openArray", "view", "place", "tuple unpacking", "value semantics"]
 ---
 
-# 10. Arrays, Sequences, and Tuples
+# Arrays, Sequences, and Tuples
 
 ## What this chapter is for
 
