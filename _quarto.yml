@@ -17,6 +17,7 @@ book:
     - chapters/03-values-names-mutability/en.md
     - chapters/04-numbers-types-conversion/en.md
     - chapters/05-strings/en.md
+    - chapters/06-branching/en.md
   search: true
 
 format:

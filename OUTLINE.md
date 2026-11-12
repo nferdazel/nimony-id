@@ -70,8 +70,11 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 ### Chapter 6: Branching That Returns a Value
 - **Job:** Use `if`, `case` and `when` as expressions, rely on exhaustive `case`, and label `break` because unlabelled `break` only leaves the innermost loop.
 - **Prerequisites:** 4
-- **Nim 2 delta:** yes — labelled `break` is required to leave an outer loop.
-- **Status:** planned
+- **Nim 2 delta:** yes — labelled `break` is required to leave an outer loop, and an `elif` after the `of` branches of a `case` is rejected (nest an `if` in `else`).
+- **Status:** frozen 2026-11-12 — tech review by Momo 2026-11-12 (24 verdicts, 6 fixes applied), both editions
+  written. `samples/06-branching/branching.nim` passes at the pin (`5/5`). One finding of record: a string
+  `case` expression with no match **executes** the last `of` branch as its fallback — an unfixed defect, not a
+  rule, and the reason the chapter requires `else` on every string `case` expression.
 
 ### Chapter 7: Loops and Ranges
 - **Job:** Iterate ordinals with `for`, control repetition with `while` and `continue`, and prove a `range` only in the local form the compiler accepts.

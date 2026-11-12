@@ -27,7 +27,7 @@ lives in `_quarto.yml` as `book.title` and `book.subtitle`.
 
 ## Status
 
-Five chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
+Six chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
 
 - Chapter 1, `chapters/01-what-nimony-is/` — draft 2026-11-12, tech_review Momo 2026-11-12,
   editorial_pass 2026-11-12. No code samples; the compile gate does not apply.
@@ -43,8 +43,12 @@ Five chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` an
 - Chapter 5, `chapters/05-strings/` — same dates, with `samples/05-strings/strings.nim`. Its review corrected the
   rune claim (the pin does ship `std/unicode`'s `runes` and `runeLen`), tightened four citations, restored the
   `ensureTerminatingZero` excerpt verbatim, and recorded the `$c`-needs-`strutils` gap as a guide gap.
+- Chapter 6, `chapters/06-branching/` — same dates, with `samples/06-branching/branching.nim`. Its review kept all
+  24 claims and corrected one mechanism: an unmatched string `case` **expression** executes the last `of` branch
+  as its fallback, side effects included — a defect at the pin, so the chapter requires `else` on every string
+  `case` expression. The `elif`-in-`case` rejection also produces a third error line with an ordinal selector.
 
-The verifier prints `SUMMARY 4/4 passed, 0 failed` because chapters 2, 3, 4 and 5 each own a sample.
+The verifier prints `SUMMARY 5/5 passed, 0 failed` because chapters 2, 3, 4, 5 and 6 each own a sample.
 
-Chapter 6 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
+Chapter 7 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
 without one may.
