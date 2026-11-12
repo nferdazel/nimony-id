@@ -69,10 +69,16 @@
 
 // --- Book metadata ---------------------------------------------------------
 #let doc-title = [$title$]
-#let doc-subtitle = [$subtitle$]
 #let doc-author = "$for(by-author)$$it.name.literal$$sep$, $endfor$"
 #let doc-date-str = "$date$"
 #let doc-lang = "$lang$"
+// The title is a name and stays English in both editions; the subtitle is
+// prose and is set in the edition's own language.
+#let doc-subtitle = if doc-lang == "id" {
+  [Belajar bahasanya terhadap satu commit tetap]
+} else {
+  [$subtitle$]
+}
 
 // Month names are listed here instead of taken from a locale: Typst ships
 // month names for English only, and this book is published in two languages.
@@ -111,6 +117,12 @@
 } else {
   [Book text: CC BY-SA 4.0 · Code samples: MIT]
 }
+#let pin-label = if doc-lang == "id" { "Disematkan pada commit" } else { "Pinned at commit" }
+#let pin-caption = if doc-lang == "id" {
+  [Satu commit tetap, satu toolchain.]
+} else {
+  [One fixed commit, one toolchain.]
+}
 #let doc-keywords = if doc-lang == "id" {
   ("Nimony", "Nim 3", "pemrograman", "buku", "bahasa Indonesia")
 } else {
@@ -118,86 +130,73 @@
 }
 
 // --- Cover -----------------------------------------------------------------
-// Type and rules only, no image and no second typeface. Three devices carry
-// the identity: a 4 mm accent bar on the binding edge (the one field of colour
-// in the book, and it prints as a mid grey), the title over the book's mark (a
-// 2 pt accent rule over a hairline), and a bar mark for the book's four parts.
-// Everything else is the type hierarchy DESIGN.md asks for.
+// The jacket is this book's own, and the device is the book's premise: the pin.
+// Forty hairlines stand for the forty hex characters of the commit the book is
+// written against; the tick on the last character of the short hash is drawn
+// taller in the accent colour, and the hash is set beneath it. Type and
+// hairlines only: no image, no second typeface, no field of colour. The
+// direction is recorded in DESIGN.md.
+#let pin-hash = "4ba90a781b0b22d0821efaa153c129c37cef6143"
+#let pin-short = pin-hash.slice(0, 7)
+// 40 ticks across the 134 mm measure, each in the middle of its own slot, so
+// the strip is evenly spaced without measuring text.
+#let pin-step = 3.35mm
+#let pin-strip = block(width: 100%, height: 14mm, {
+  for i in range(0, pin-hash.len()) {
+    let pin = i == pin-short.len() - 1
+    place(bottom + left, dx: (i + 0.5) * pin-step, line(
+      start: (0mm, 0mm),
+      end: (0mm, if pin { -14mm } else { -8mm }),
+      stroke: if pin { 0.9pt + accent } else { 0.5pt + rule },
+    ))
+  }
+  // The ticks stand on one hairline, so the strip reads as a measured rule and
+  // not as a row of marks floating in the page.
+  place(bottom + left, line(length: 100%, stroke: 0.5pt + rule))
+})
 #let cover-page = block(width: 178mm, height: 233mm, fill: white)[
   #set text(fill: ink)
-
-// Short code spans stay on one line. A reference like `examples/` split into
-// "exam" and "ples/" reads as a typo; long spans may still wrap, because
-// forcing them whole would push them through the margin.
-#show raw.where(block: false): it => {
-  if it.text.len() < 24 { box(it) } else { it }
-}
-  // Trade-book jacket: the title at the head, an engraved plate in the middle,
-  // the imprint in a solid band at the foot. The plate is a field of 45-degree
-  // lines with Nim's crown left in reserve, so the cover needs no image file
-  // and still holds up when the press has only black ink.
+  // The title block is placed from the head of the jacket: edition furniture,
+  // a hairline, the book's name, and the subtitle in the edition's language.
   #place(top + left, block(width: 178mm)[
     #pad(x: 22mm, top: 21mm)[
       #text(size: 8.5pt, tracking: 0.2em, fill: ink-soft)[#upper(edition-label)]
       #v(5mm)
       #line(length: 100%, stroke: 0.5pt + rule)
-      #v(10mm)
+      #v(12mm)
       #text(size: 28pt, weight: "bold", hyphenate: false)[#doc-title]
       #v(4.5mm)
       #text(size: 11.5pt, style: "italic", fill: ink-soft)[#doc-subtitle]
     ]
   ])
-  #place(top + center, dy: 88mm, block(width: 132mm, height: 96mm)[
-    #rect(width: 132mm, height: 96mm, stroke: 0.9pt + ink)
-    // The engraved field: one path, one stroke, spacing measured in points so
-    // the lines stay even regardless of the plate size in millimetres.
-    #{
-      let pt = 2.834645669
-      let w = 126.8 * pt
-      let h = 90.8 * pt
-      let step = 5.0
-      let n = int(calc.ceil((w + h) / step))
-      place(top + left, dx: 2.6mm, dy: 2.6mm, block(width: 126.8mm, height: 90.8mm)[
-        #for i in range(0, n) {
-          let c = i * step
-          let x1 = calc.max(0.0, c - h)
-          let x2 = calc.min(w, c)
-          place(top + left, line(start: (x1 * 1pt, (c - x1) * 1pt), end: (x2 * 1pt, (c - x2) * 1pt), stroke: 0.35pt + ink.transparentize(72%)))
-        }
-      ])
-    }
-    // The crown, knocked out of the field: paper fill, one accent keyline,
-    // a solid band at its base and three finials on the points.
-    #place(top + center, dy: 19mm, block(width: 78mm, height: 52mm)[
-      #place(top + left, polygon(
-        fill: white,
-        stroke: 1.2pt + accent,
-        (3mm, 52mm), (75mm, 52mm), (75mm, 8mm), (61mm, 26mm), (39mm, 4mm), (17mm, 26mm), (3mm, 8mm),
-      ))
-      #place(top + left, dx: 3mm, dy: 40mm, rect(width: 72mm, height: 12mm, fill: accent))
-      #place(top + left, dx: 0.2mm, dy: 5.2mm, circle(radius: 2.8mm, fill: accent))
-      #place(top + left, dx: 36.2mm, dy: 1.2mm, circle(radius: 2.8mm, fill: accent))
-      #place(top + left, dx: 72.2mm, dy: 5.2mm, circle(radius: 2.8mm, fill: accent))
-    ])
-    #place(bottom + center, dy: -11mm, block[
-      #line(length: 18mm, stroke: 0.4pt + rule)
-      #v(2.4mm)
-      #text(size: 7.5pt, tracking: 0.34em, fill: ink-soft)[NIM]
-    ])
+  // The pin strip sits in the middle third. It is measured from the top, so a
+  // longer subtitle in one edition cannot shift it.
+  #place(top + left, dy: 96mm, block(width: 178mm)[
+    #pad(x: 22mm)[
+      #text(size: 7.5pt, tracking: 0.28em, fill: ink-soft)[#upper(pin-label)]
+      #v(7mm)
+      #pin-strip
+      #v(4.5mm)
+      #text(size: 15pt, tracking: 0.14em)[#pin-short]
+      #v(2.5mm)
+      #text(size: 9pt, style: "italic", fill: ink-soft)[#pin-caption]
+    ]
   ])
-  // The foot band is placed from both edges instead of flowing: the imprint
-  // sits 8 mm below the top, the licence 7.5 mm above the trim, so neither can
-  // drift past the paper when the type or the wording changes.
-  #place(bottom + left, block(width: 178mm, height: 28mm, fill: accent)[
-    #place(top + left, dx: 22mm, dy: 8mm, block(width: 134mm)[
+  // The foot is a hairline and two lines of type, not a band of colour: the
+  // imprint is placed up from the trim so it cannot drift with the copy above.
+  #place(bottom + left, block(width: 178mm)[
+    #pad(x: 22mm, bottom: 12mm)[
+      #line(length: 100%, stroke: 0.5pt + rule)
+      #v(5mm)
       #grid(
         columns: (1fr, auto),
         align: (left, right),
-        text(size: 12.5pt, fill: white)[#doc-author],
-        text(size: 9pt, fill: white.transparentize(22%))[#version-word #doc-version],
+        text(size: 12.5pt)[#doc-author],
+        text(size: 9pt, fill: ink-soft)[#version-word #doc-version],
       )
-    ])
-    #place(bottom + left, dx: 22mm, dy: -7.5mm, text(size: 8pt, fill: white.transparentize(22%))[#license-line])
+      #v(4mm)
+      #text(size: 8pt, fill: ink-soft)[#license-line]
+    ]
   ])
 ]
 

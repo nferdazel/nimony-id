@@ -8,5 +8,7 @@ _book/
 public/
 .quarto/
 .build/
+# Release assets downloaded by the parity step in CI.
+.release/
 
 .DS_Store

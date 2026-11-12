@@ -103,25 +103,64 @@ jobs:
           path: public/**/*.pdf
           retention-days: 30
 
+      # One book, two doors: the site and the latest release must list the same
+      # chapters. This runs on every push to main and reads both sides out of
+      # the PDFs, not the sources. When they differ the push is a content
+      # change, so it cuts the release from this very commit — the tag, the
+      # assets and the site are then one build. A content merge that forgot to
+      # bump VERSION has no free tag to publish under and fails here instead of
+      # leaving the release one chapter behind again.
+      - name: "Parity: site and latest release are one book"
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          download() {
+            rm -rf .release
+            mkdir -p .release
+            gh release download "$1" --dir .release --pattern '*.pdf'
+          }
+          compare() {
+            python3 tools/check-parity.py \
+              --built-id public/Nimony-A-Pinned-Guide.pdf \
+              --built-en public/en/Nimony-A-Pinned-Guide.pdf \
+              --release-id .release/Nimony-A-Pinned-Guide-ID.pdf \
+              --release-en .release/Nimony-A-Pinned-Guide-EN.pdf
+          }
+          latest="$(gh release view --json tagName --jq .tagName)"
+          download "$latest"
+          if compare; then
+            echo "ok: $latest already lists the chapters this commit builds"
+            exit 0
+          fi
+          tag="v$(tr -d '[:space:]' < VERSION)"
+          if [ "$tag" = "$latest" ]; then
+            echo "chapters changed since $latest, but VERSION is still ${tag#v}" >&2
+            echo "bump VERSION in this merge (./task release) so the push can carry a release" >&2
+            exit 1
+          fi
+          if gh release view "$tag" >/dev/null 2>&1; then
+            download "$tag"
+            if compare; then
+              echo "ok: $tag already lists the chapters this commit builds"
+              exit 0
+            fi
+            echo "release $tag exists but lists a different chapter set; VERSION must move" >&2
+            exit 1
+          fi
+          echo "chapters changed since $latest: cutting $tag at $GITHUB_SHA"
+          bash tools/publish-release.sh "$tag" "$GITHUB_SHA"
+          download "$tag"
+          compare
+
       # Same commit and the same Quarto version the VPS uses, so these attach
-      # the same PDFs the site serves. Both renders share one file name, and a
-      # release cannot hold two assets with the same name, so each copy gets a
-      # unique file name and the label the release lists. Re-running a failed
-      # tag build uploads the assets again instead of failing on an existing
-      # release.
+      # the same PDFs the site serves. A tag pushed by hand still publishes
+      # through this path; a tag created by the parity step above does not
+      # retrigger the workflow, which is why that step publishes directly.
       - name: "Publish GitHub release"
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
-        run: |
-          cp public/Nimony-A-Pinned-Guide.pdf public/Nimony-A-Pinned-Guide-ID.pdf
-          cp public/en/Nimony-A-Pinned-Guide.pdf public/Nimony-A-Pinned-Guide-EN.pdf
-          set -- \
-            "public/Nimony-A-Pinned-Guide-ID.pdf#Nimony - A Pinned Guide (ID).pdf" \
-            "public/Nimony-A-Pinned-Guide-EN.pdf#Nimony - A Pinned Guide (EN).pdf"
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" "$@" --clobber
-          else
-            gh release create "$TAG" "$@" --title "$TAG" --generate-notes
-          fi
+        run: bash tools/publish-release.sh "$TAG" "$GITHUB_SHA"

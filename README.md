@@ -16,6 +16,7 @@ lives in `_quarto.yml` as `book.title` and `book.subtitle`.
 | `GLOSSARY.md` | Every term used with a special meaning, plus the terms Nimony retired. |
 | `ERRATA.md` | Breaks found after a chapter froze; plus the watch list of known pin-level constraints. |
 | `DEVIATIONS.md` | Every place this book departs from the nim-id writing baseline. |
+| `DESIGN.md` | The design direction: the palette and type hierarchy the series shares, and the cover device that is this book's own. |
 | `chapters/` | One folder per chapter: `NN-slug/en.md` and `NN-slug/id.md`. Created with the first drafted chapter. |
 | `index.en.qmd`, `index.id.qmd` | The book's preface, one file per edition, same shape and the same pin statement. The Indonesian file is a translation, not a second preface. |
 | `CONTRIBUTING.md` | What a reader can send, the gate before sending it, and how a chapter change reaches `frozen`. |
@@ -42,12 +43,26 @@ push. The DNS A record already points at the VPS; the Caddy block is mirrored in
 
 `./task release` bumps `VERSION` and tags the commit; a `v*` tag makes CI assert that the tag equals `VERSION`
 and then attach both PDFs, labelled `Nimony - A Pinned Guide (ID).pdf` and `Nimony - A Pinned Guide (EN).pdf`,
-to a GitHub release. The current release is `v0.1.4` on 2026-11-12; it replaces `v0.1.3`, whose PDFs clipped the
-chapter 2 checksum and printed the editorial freeze record, with PDFs that keep every long token inside the text
-block and leave the record out. `v0.1.1` never produced a release: both
-PDFs share one file name and a release cannot hold two assets with the same name, so the step now copies each
-to a unique file name and labels it. `v0.1.2` published before that labelling landed; `v0.1.0` predates the
-workflow and has no release.
+to a GitHub release.
+
+The release no longer trails the site. Every push to `main` builds the book and then runs
+`tools/check-parity.py`, which reads the chapter list out of the two PDFs it just built and out of the latest
+release's assets. When the lists differ, the push is a content change, so it cuts the release from that same
+commit (`tools/publish-release.sh`, tag `v$(cat VERSION)`) and the tag and the site are one build; when they
+match, nothing is released, which is the case for a docs or CI push. A content merge that changes the book
+without bumping `VERSION` has no tag to publish under and fails the job with that sentence, instead of
+leaving the release a chapter behind.
+
+The current release is `v0.1.5` on 2026-11-12: it gives the PDF its own cover — the pin strip, one hairline
+per character of `4ba90a7` — and carries chapters 1 to 11 in both editions. `v0.1.4` replaced `v0.1.3`,
+whose PDFs clipped the chapter 2 checksum and printed the editorial freeze record, with PDFs that keep every
+long token inside the text block and leave the record out; it was still one chapter short of the site, which
+is what the parity check now catches. `v0.1.1` never produced a release: both PDFs share one file name and a
+release cannot hold two assets with the same name, so the step copies each to a unique file name and labels
+it. `v0.1.2` published before that labelling landed; `v0.1.0` predates the workflow and has no release.
+
+The cover's direction is `DESIGN.md` in this folder: the palette and the type hierarchy are the series', the
+pin strip is this book's.
 
 ## Where the rules come from
 
@@ -58,7 +73,8 @@ workflow and has no release.
 
 ## Status
 
-Eight chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`:
+Chapters 1 to 11 are in the book at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`. Chapters 1
+to 8 carry the review notes below; chapters 9 to 11 were reviewed at the same pin before the 0.1.5 release.
 
 - Chapter 1, `chapters/01-what-nimony-is/` — draft 2026-11-12, tech_review Momo 2026-11-12,
   editorial_pass 2026-11-12. No code samples; the compile gate does not apply.
@@ -99,7 +115,7 @@ The verifier prints `SUMMARY 7/7 passed, 0 failed` (samples 02–08).
 
 ## Drafting
 
-Nothing is drafting. Chapter 9 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md`
+Nothing is drafting. Chapter 12 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md`
 does not draft; a chapter without one may.
 
 ## License and contributions
