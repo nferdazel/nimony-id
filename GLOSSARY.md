@@ -70,8 +70,8 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | warning | A compiler message about code worth checking. | nim-id glossary |
 | test | An automated check of code behavior. | nim-id glossary |
 | Nimony | A redesign and reimplementation of the Nim compiler and toolchain. | not yet verified |
-| ref | A managed reference to a heap-allocated value subject to compiler memory management. | not yet verified |
-| ptr | An unmanaged raw memory address without runtime safety or tracking. | not yet verified |
+| ref | A managed reference to a heap-allocated cell that several names can share; a `ref` parameter writes through to the caller without `var`, and cannot be nil unless the type says `nil ref T`. | `doc/language.md:774-783` at `4ba90a7`; probes: two `bump(a)` calls print `2`; rebinding the parameter is `cannot mutate expression c` |
+| ptr | A raw pointer: an address obtained with `addr`, with no lifetime behind it, no runtime safety and no tracking of the storage it names. | `doc/language.md:774-783`, `:788-791` at `4ba90a7`; probes: `p[] = 20` changes the local, `addr arr[1]` changes the element |
 | tuple | An ordered heterogeneous product type with value semantics: fields are read by name or position, and the declared type supplies the names. | `doc/language.md:476-495` at `4ba90a7`; probes 2026-11-12: `y6` (named and positional reads), `t5` (copy on assignment) |
 | closure | A procedure bundled with its captured lexical environment. | not yet verified |
 | generic | A routine or type parameterized by types rather than concrete values. | not yet verified |
@@ -104,7 +104,7 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | NIF | The interchange format every stage of the Nimony pipeline reads and writes. | nimony README, checked 2026-11-12 |
 | plugin | A compiler extension that operates on NIF nodes, replacing the Nim 2 macro. | `doc/differences.md` at `4ba90a7` |
 | borrow checking | Compile-time analysis that rejects aliasing at a call site and a borrow that outlives its owner; it does **not** reject use-after-move at this pin. | `doc/language.md` at `4ba90a7`; gate 3 run, 2026-11-12 |
-| explicit nilability | Nil-ability is written in the type (`nil ref T`), so a possibly-nil reference is a different type from one that cannot be nil. | probe compiled and run at `4ba90a7` (2026-11-12) |
+| explicit nilability | Nil-ability is written in the type (`nil ref T`, `nil ptr T`, `nil cstring`, `nil pointer`, `nil proc`), so a possibly-nil reference is a different type from one that cannot be nil; the cost is that every dereference needs a visible guard. | `doc/language.md:786-788`, `:839-865`, `doc/lenientnils.md:7-19` at `4ba90a7`; probes: `var base: Node` at module level → `which has no default value (it contains a not-nil pointer)`; `if x != nil` compiles, unguarded `x[]` → `cannot prove expression is not nil: x` |
 | ErrorCode | The enum of failure categories; the only error channel, because there is no exception object. | probe compiled and run at `4ba90a7` (2026-11-12) |
 | passive proc | A proc declared `passive`: calling it needs no `await`, and the same model covers the event loop and `spawn`. | `doc/differences.md` and README at `4ba90a7`; no sample yet |
 | verified sample | A code file that compiles and runs at the pinned commit via `nimony c`, proven by `tools/verify-samples.sh`. | book rule, `OUTLINE.md` |
@@ -146,6 +146,8 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | default argument | The value a parameter takes when the call omits it; it is re-evaluated at every call, and at this pin it may not name an earlier parameter. | `doc/language.md:2234-2241` at `4ba90a7`; probes: `twice()` → `94`; `int = x` dies with `[Bug] could not find symbol: x.0` — see `ERRATA.md` |
 | named argument | An argument given as `name = value`, which may appear out of order; an unknown name is rejected. Probed, not quoted: the guide never describes the form. | probe at `4ba90a7`: `pair(b = 7, a = 3)` → `37`, `pair(c = 1)` → `named argument not found`; only doc trace is `doc/tags.md:33`, tag at `src/models/nimony_tags.nim:277` |
 | range proof | The compile-time obligation `lo <= value <= hi` that a value must satisfy before it becomes a `range` type; no runtime check is emitted, and the proof must be visible where the value is used. | `doc/differences.md:58-65` and `src/nimony/contracts_fir.nim:2386-2387` at `4ba90a7`; probes: a comparison guard compiles on a parameter, an `in` guard does not, and a guard in a caller does not travel |
+
+| nil narrowing | The compiler treating a nilable place as non-nil (not to be confused with a narrowing conversion) inside a guarded branch, because a comparison established the fact. It holds for locals and parameters; it does not reach through a field or a module-level variable, which are current limits of the analysis, not rules of the type system. | `src/nimony/inferle.nim:137-142`, `src/nimony/contracts.nim:249-275` at `4ba90a7`; probes: `if x != nil` compiles, `if p.n != nil: p.n.data` → `cannot prove expression is not nil: p.n` (`rv11`), local copy prints `5` (`vx4`), module-level guard → `cannot analyze expression is not nil: g` (`d04`) |
 
 ## Retired in Nimony
 
