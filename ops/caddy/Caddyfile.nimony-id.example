@@ -5,17 +5,18 @@
 #
 # Situs ini statis saja: tidak ada container, tidak ada image, tidak ada tag :local/:prev.
 # Yang dipakai dari kontrak deploy: ref-guard fail-closed, flock, fetch/reset, health check.
+#
+# Nama snippet di sini mengikuti qouver1, bukan qouver0: host ini mendefinisikan
+# `cf_aop` (Origin CA + Authenticated Origin Pulls), `logging`, `security`,
+# `block_dotfiles`, dan satu snippet handler per situs. `log_access` dan
+# `base_security_headers` hanya ada di qouver0 dan membuat `caddy validate` gagal di sini.
 
-nimony.qouver.com {
-	log {
-		import log_access
-	}
+# ── handler situs: Quarto book ────────────────────────────────────────────────
 
+(app_nimony) {
 	encode zstd gzip
-	import base_security_headers
 	import block_dotfiles
 
-	# Quarto memakai <style>/<script> inline untuk tema dan pencarian.
 	header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
 
 	# Hasil render Quarto. `deploy-static.sh` yang mengisi direktori ini.
@@ -26,6 +27,7 @@ nimony.qouver.com {
 	# Halaman 404 yang bisa dibaca. Tanpa blok ini, alamat yang salah dibalas
 	# badan kosong: pembaca tidak tahu apa yang terjadi dan tidak punya jalan pulang.
 	handle_errors {
+		import security
 		@notfound expression {http.error.status_code} == 404
 		rewrite @notfound /404.html
 		file_server
@@ -50,4 +52,13 @@ nimony.qouver.com {
 	# PDF rilis: jangan di-cache lama, supaya versi baru langsung terlihat.
 	@pdf path *.pdf
 	header @pdf Cache-Control "public, max-age=300"
+}
+
+# ── blok situs ────────────────────────────────────────────────────────────────
+
+nimony.qouver.com {
+	import cf_aop
+	import logging
+	import security
+	import app_nimony
 }

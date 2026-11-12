@@ -23,11 +23,11 @@ RILIS_DIR="$APP_DIR/releases"
 SIMPAN=3
 QUARTO="${QUARTO:-$APP_DIR/.tools/quarto/bin/quarto}"
 LOG="$APP_DIR/logs/deploy.log"
-# Caddy diuji lewat port 80 dengan Host header. Sejak Zone-level Authenticated
-# Origin Pulls aktif (2 Nov), TLS langsung ke origin tanpa client cert selalu
-# gagal (curl 000), jadi HTTPS loopback bukan lagi sinyal yang bisa dipakai.
-HEALTH_URL="${NIMONY_HEALTH_URL:-http://127.0.0.1/}"
-HEALTH_HOST="${NIMONY_HEALTH_HOST:-nimony.qouver.com}"
+# Health check lewat nama publik, bukan loopback. Tabel nft `inet cfedge`
+# membuang tcp 80/443 dari sumber selain rentang Cloudflare, termasuk 127.0.0.1,
+# jadi curl ke loopback selalu timeout (kode 000) dan bukan lagi sinyal yang sah.
+# Nama publik menempuh jalur sebenarnya: Cloudflare -> AOP -> Caddy -> web.
+HEALTH_URL="${NIMONY_HEALTH_URL:-https://nimony.qouver.com/}"
 
 mkdir -p "$APP_DIR/logs" "$RILIS_DIR" "$APP_DIR/scripts"
 
@@ -94,7 +94,7 @@ log "==> symlink web -> $BARU"
 sehat=0
 for i in 1 2 3 4 5; do
   kode=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 \
-           -H "Host: $HEALTH_HOST" "$HEALTH_URL" || echo "000")
+           "$HEALTH_URL" || echo "000")
   if { [ "$kode" = "200" ] || [ "$kode" = "308" ]; } \
       && grep -q "Nimony: A Pinned Guide" "$BARU/index.html" \
       && grep -q "Nimony is" "$BARU/en/index.html" \
@@ -107,8 +107,8 @@ for i in 1 2 3 4 5; do
 done
 
 if [ "$sehat" -ne 1 ]; then
-  kode=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 -H "Host: $HEALTH_HOST" "$HEALTH_URL" || echo "000")
-  log "Health check GAGAL di $HEALTH_URL (Host $HEALTH_HOST, kode $kode)"
+  kode=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 "$HEALTH_URL" || echo "000")
+  log "Health check GAGAL di $HEALTH_URL (kode $kode)"
   if [ -e "$APP_DIR/.previous" ]; then
     ln -sfn "$(readlink -f "$APP_DIR/.previous")" "$WEB_LINK"
     log "Rollback: symlink web dipulihkan"
