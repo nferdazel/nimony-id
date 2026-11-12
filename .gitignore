@@ -1,0 +1,11 @@
+# Nimony writes its .nif cache next to the sample in nimcache/.
+nimcache/
+# Transcript written by tools/verify-samples.sh.
+tools/verify-samples.log
+
+# Quarto render output and cache.
+_book/
+.quarto/
+.build/
+
+.DS_Store

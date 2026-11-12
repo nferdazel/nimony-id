@@ -1,0 +1,67 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  book:
+    name: "Book: verify samples and render"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Install Nim 2.4.0 for the toolchain build"
+        uses: jiro4989/setup-nim-action@v2
+        with:
+          nim-version: '2.4.0'
+
+      - name: "Cache Nimony 4ba90a7"
+        id: nimony
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/opt/nimony/4ba90a7
+          key: nimony-${{ runner.os }}-${{ runner.arch }}-4ba90a7-nim-2.4.0
+
+      - name: "Build Nimony 4ba90a7 on a cache miss"
+        if: steps.nimony.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "$HOME/.local/opt/nimony"
+          git clone https://github.com/nim-lang/nimony.git "$HOME/.local/opt/nimony/4ba90a7"
+          cd "$HOME/.local/opt/nimony/4ba90a7"
+          git checkout 4ba90a781b0b22d0821efaa153c129c37cef6143
+          nim c -r src/hastur/hastur build all
+
+      - name: "Cache Quarto runtime"
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/quarto
+            ~/.quarto
+          key: quarto-1.10.19-${{ runner.os }}-${{ runner.arch }}
+
+      - name: "Install Quarto 1.10.19"
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: '1.10.19'
+
+      - name: "Fail closed when no sample exists"
+        run: |
+          found=$(find samples -mindepth 2 -maxdepth 2 -name '*.nim' -print -quit)
+          if [ -z "$found" ]; then
+            echo "no sample files under samples/*/*.nim" >&2
+            exit 1
+          fi
+
+      - name: "Verify samples and render the book"
+        run: ./task check

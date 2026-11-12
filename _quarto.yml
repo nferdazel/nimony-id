@@ -1,0 +1,22 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Nimony"
+  subtitle: "A pinned guide to the Nimony language"
+  author: "Fredianto"
+  date: "2026-11-12"
+  language: en
+  chapters:
+    - index.qmd
+    - chapters/01-what-nimony-is/en.md
+    - chapters/02-the-pinned-toolchain/en.md
+  search: true
+
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    code-copy: true
+    code-overflow: wrap

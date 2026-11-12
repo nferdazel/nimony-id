@@ -1,0 +1,100 @@
+#!/usr/bin/env sh
+#
+# nimony-id — single entry point for the book.
+#
+#   ./task build    render the English book with Quarto
+#   ./task verify   compile and run every sample at the pinned toolchain
+#   ./task check    verify then build (the gate before a commit)
+#   ./task help
+#
+# Plain POSIX shell, same pattern as nim-id: no extra tooling.
+#
+# The editorial frontmatter in chapters/NN-slug/en.md is not valid Quarto YAML
+# (tech_review carries an unquoted colon), so build stages copies with the
+# frontmatter stripped into .build/book and renders there. Sources are not
+# modified.
+set -eu
+
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+cd "$ROOT"
+
+usage() {
+  cat <<'TXT'
+usage: ./task <command>
+
+  build   render the English book with Quarto
+  verify  compile and run every sample at the pinned toolchain
+  check   verify then build
+  help    show this message
+
+environment:
+  QUARTO      path to the quarto binary (default: quarto on PATH,
+              then $HOME/.local/opt/bin/quarto)
+  NIMONY_HOME fixed toolchain install (default: $HOME/.local/opt/nimony/4ba90a7)
+TXT
+}
+
+quarto_bin() {
+  if [ -n "${QUARTO:-}" ]; then
+    printf '%s\n' "$QUARTO"
+  elif command -v quarto >/dev/null 2>&1; then
+    command -v quarto
+  elif [ -x "$HOME/.local/opt/bin/quarto" ]; then
+    printf '%s\n' "$HOME/.local/opt/bin/quarto"
+  else
+    echo "requires 'quarto' on PATH, or set QUARTO=/path/to/quarto" >&2
+    exit 1
+  fi
+}
+
+verify() {
+  found=$(find samples -mindepth 2 -maxdepth 2 -name '*.nim' -print -quit)
+  if [ -z "$found" ]; then
+    echo "no sample files under samples/*/*.nim; refusing to report a green verify" >&2
+    exit 1
+  fi
+  bash tools/verify-samples.sh
+}
+
+stage_book() {
+  stage="$ROOT/.build/book"
+  mkdir -p "$stage/chapters"
+  cp "$ROOT/_quarto.yml" "$stage/_quarto.yml"
+  cp "$ROOT/index.qmd" "$stage/index.qmd"
+  for src in "$ROOT"/chapters/*/en.md; do
+    [ -f "$src" ] || continue
+    slug=$(basename "$(dirname -- "$src")")
+    mkdir -p "$stage/chapters/$slug"
+    awk 'NR == 1 && $0 == "---" { front = 1; next }
+         front == 1 && $0 == "---" { front = 0; next }
+         front != 1 { print }' "$src" > "$stage/chapters/$slug/en.md"
+  done
+}
+
+build() {
+  q=$(quarto_bin)
+  stage_book
+  ( cd "$stage" && "$q" render )
+}
+
+case "${1:-help}" in
+  build)
+    build
+    ;;
+  verify)
+    verify
+    ;;
+  check)
+    verify
+    build
+    ;;
+  help|-h|--help)
+    usage
+    ;;
+  *)
+    echo "unknown command: $1" >&2
+    echo >&2
+    usage >&2
+    exit 2
+    ;;
+esac
