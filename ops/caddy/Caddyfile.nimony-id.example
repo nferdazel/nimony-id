@@ -1,4 +1,4 @@
-# Caddyfile.nim-id.example — blok Caddy untuk situs buku di nim.qouver.com.
+# Caddyfile.nimony-id.example — blok Caddy untuk situs buku di nimony.qouver.com.
 #
 # Ini CERMIN dari blok yang hidup di /etc/caddy/Caddyfile (sumber kebenaran di server).
 # Kalau blok di server berubah, ubah berkas ini di commit yang sama.
