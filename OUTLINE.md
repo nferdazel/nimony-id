@@ -125,8 +125,8 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 ### Chapter 11: Objects, Enums, and Distinct Types
 - **Job:** Model data with nominal `object` types, ordinal `enum` types and representation-sharing `distinct` types, and explain value copy at assignment.
 - **Prerequisites:** 10
-- **Nim 2 delta:** no
-- **Status:** planned
+- **Nim 2 delta:** no — one inline box for `echo` and `$`; the outline flag stays "no"
+- **Status:** **FROZEN 2026-11-12.** `en.md` final after 13 corrections from the tech review, `id.md` written from that final text, both `frozen`. Verifier 10/10 at pin `4ba90a7`; sample `samples/11-objects-enums-distinct/objects.nim`. Rulings of record in `ERRATA.md`: `echo` does not apply a user-defined `$` is documented (`doc/language.md:466-471`) and becomes the chapter's one delta box, enum values are not bounds-checked is a watch row (`contracts_fir.nim:2551-2569`), object `==` is `lib/std/system.nim:463` (documentation gap), explicit ordinals need not ascend at the pin (`rv11`, documentation gap). Further changes go to `ERRATA.md`, not to the chapter. Chapter 12 opens next; the borrow rule it shares with 9, 10 and 14 is already in `ERRATA.md`.
 
 ### Chapter 12: Sum Types and Exhaustive `case`
 - **Job:** Express alternatives as variants and match the discriminator with an exhaustive `case`, preferring that over sentinel fields and flags.

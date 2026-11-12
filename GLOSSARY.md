@@ -23,8 +23,11 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | array | A fixed-size collection of elements of the same type. | nim-id glossary |
 | seq | A dynamically sized collection of elements of the same type (`seq`). | nim-id glossary |
 | object | A composite type with named fields. | nim-id glossary |
+| nominal type | A type identified by its declaration, not its shape: two objects with identical fields are different types. | `doc/language.md:548-549` at `4ba90a7`; probe `n1` (2026-11-12) |
+| enum type | A named set of ordered values (`type Color = enum red, green, blue`), each usable where an ordinal is expected. | `doc/language.md:182-192` at `4ba90a7`; probes `e1`, `e5` (2026-11-12) |
 | variant object | An object whose fields depend on a single tag. | nim-id glossary |
 | distinct | A new type with the same representation that does not interchange. | nim-id glossary |
+| `borrow` | A pragma that generates an operator body for a distinct type by converting each operand to the base, calling the base operation and converting the result back; it does not carry `noSideEffect`, so pure operators are `func`. | `src/nimony/semborrow.nim:17-60`, `doc/porting.md:51-62` at `4ba90a7`; probe `d10` (2026-11-12) |
 | type alias | Another name for an existing type, with no new type. | nim-id glossary |
 | range | The bounds from start to end (`a..b`, `a..<b`). | nim-id glossary |
 | index | The position of an element in a collection, starting at 0. | nim-id glossary |
