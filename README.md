@@ -18,6 +18,10 @@ lives in `_quarto.yml` as `book.title` and `book.subtitle`.
 | `DEVIATIONS.md` | Every place this book departs from the nim-id writing baseline. |
 | `chapters/` | One folder per chapter: `NN-slug/en.md` and `NN-slug/id.md`. Created with the first drafted chapter. |
 | `index.en.qmd`, `index.id.qmd` | The book's preface, one file per edition, same shape and the same pin statement. The Indonesian file is a translation, not a second preface. |
+| `CONTRIBUTING.md` | What a reader can send, the gate before sending it, and how a chapter change reaches `frozen`. |
+| `SECURITY.md` | What counts as a security report in a book repository, and what to send to Nimony instead. |
+| `LICENSE`, `LICENSE-CODE` | Book text is CC BY-SA 4.0; samples, `task` and `tools/` are MIT. |
+| `.github/` | One workflow (the CI gate), a pull-request checklist, and two issue forms: errata and chapter proposal. |
 
 ## Where the rules come from
 
@@ -48,8 +52,8 @@ Seven chapters are frozen at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` a
   as its fallback, side effects included — a defect at the pin, so the chapter requires `else` on every string
   `case` expression. The `elif`-in-`case` rejection also produces a third error line with an ordinal selector.
 
-The verifier prints `SUMMARY 6/6 passed, 0 failed` in this folder (samples 02–07); the repo prints `5/5` until
-this chapter's sample is synced.
+The verifier prints `SUMMARY 7/7 passed, 0 failed` in this folder (samples 02–08); the repo prints `6/6` until
+Chapter 8's sample is synced.
 
 - Chapter 7, `chapters/07-loops-ranges/` — draft 2026-11-12, tech_review Momo 2026-11-12, editorial_pass
   2026-11-12. With `samples/07-loops-ranges/loops.nim`. Its review corrected two claims: `countup` takes
@@ -59,5 +63,26 @@ this chapter's sample is synced.
   slice is not loop-iterable, and an `in 0..9` guard does not prove a `range` on a procedure parameter while two
   comparisons do.
 
-Chapter 8 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
+## Drafting
+
+- Chapter 8, `chapters/08-procedures/` — **drafting**, `en.md` only (2,371 words of prose, 18 sections; 2,854 with code). With
+  `samples/08-procedures/procedures.nim`, proven by `tools/verify-samples.sh` (`7/7`). Thirty claims probed at the
+  pin; tech review requested from Momo 2026-11-12. `review.md` carries five findings of record: a default written
+  in terms of an earlier parameter dies in the backend with `[Bug] could not find symbol: x.0`; an `out`
+  parameter may be read before it is written although the guide says otherwise; a `proc` touching a module-level
+  `var` is rejected as unsynchronized access; the two-argument command form in an expression reports `invalid
+  indentation` where the guide predicts `too many arguments`; and named arguments work but are documented
+  nowhere in `doc/language.md`. `id.md` is not written yet — it is written in the
+  same editorial pass as the verdict.
+
+Chapter 9 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md` does not draft; a chapter
 without one may.
+
+## License and contributions
+
+The book text (`chapters/`, `index.*.qmd`, this folder's Markdown) is CC BY-SA 4.0 — see [`LICENSE`](LICENSE).
+The samples, `task` and `tools/` are MIT — see [`LICENSE-CODE`](LICENSE-CODE). Both mirror nim-id, so the two books
+share one license pair instead of inventing a third.
+
+The gate before any change is `./task check`; what a reader can send, and what a chapter change has to satisfy, is
+in [`CONTRIBUTING.md`](CONTRIBUTING.md). Security reports are private — [`SECURITY.md`](SECURITY.md).
