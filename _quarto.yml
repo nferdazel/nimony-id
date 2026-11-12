@@ -23,6 +23,7 @@ book:
     - chapters/07-loops-ranges/en.md
     - chapters/08-procedures/en.md
     - chapters/09-overloading-and-ufcs/en.md
+    - chapters/10-arrays-sequences-tuples/en.md
   search: true
   sidebar:
     style: docked

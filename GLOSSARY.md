@@ -66,7 +66,7 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | Nimony | A redesign and reimplementation of the Nim compiler and toolchain. | not yet verified |
 | ref | A managed reference to a heap-allocated value subject to compiler memory management. | not yet verified |
 | ptr | An unmanaged raw memory address without runtime safety or tracking. | not yet verified |
-| tuple | An ordered heterogeneous product type with value semantics. | not yet verified |
+| tuple | An ordered heterogeneous product type with value semantics: fields are read by name or position, and the declared type supplies the names. | `doc/language.md:476-495` at `4ba90a7`; probes 2026-11-12: `y6` (named and positional reads), `t5` (copy on assignment) |
 | closure | A procedure bundled with its captured lexical environment. | not yet verified |
 | generic | A routine or type parameterized by types rather than concrete values. | not yet verified |
 | template | A compile-time substitution construct expanding directly into code. | not yet verified |
@@ -85,6 +85,11 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | receiver | The value written before the dot in a method call; it becomes the first argument. | `doc/language.md:2836-2842` at `4ba90a7`; probed 2026-11-12 |
 | index setter | The `[]=` routine an assignment to an index resolves to; `[]` alone does not make a type writable. | probed at `4ba90a7` (2026-11-12), Chapter 9 probes `s1`/`s3` |
 | module-of-origin | The implicit tie-breaker that prefers a candidate declared in the calling module over an equally good imported one. | `doc/language.md:1375-1400` at `4ba90a7`; probed 2026-11-12 with two modules |
+| openArray | A slice passed as a parameter or built with `toOpenArray`: a pointer plus a length over another container's storage, indexed from 0, owning nothing. | `doc/language.md:410-425` and `lib/std/system/openarrays.nim:6-21` at `4ba90a7`; probes 2026-11-12: `o1` (array and seq both accepted), `y4` (a write through the view changes the array) |
+| view | A value that points at another container's storage instead of copying it; `toOpenArray` builds one, and a `let` view still writes through to storage that may be written. | `lib/std/system/openarrays.nim:6-10` and `src/nimony/derefs.nim:399-407` (comment at `:406`) at `4ba90a7`; probes 2026-11-12: `y4` and `rv3` (a write through a `let` view reaches the array), `rv4` and `rv12` (rejected over a `let` array) |
+| place | A location that can be assigned to: a `var`, a field, an index. A by-value parameter is not one, so a routine cannot write it. | `doc/language.md:2350-2372` at `4ba90a7` (Chapter 8); probes 2026-11-12: `rv2`, `rv7`, `rv8` (a write to a by-value `seq`, `tuple` or `array` parameter is rejected) |
+| tuple unpacking | Binding each field of a tuple to its own name in one `let`, `var` or `const` statement, with `_` to skip a field and nesting allowed. | `doc/language.md:1669-1710` at `4ba90a7`; probe `t4` prints `42`, `13`, `123` |
+| value semantics | Assignment copies the whole value, so changing the copy leaves the source unchanged; a by-value parameter is not a place, so a routine cannot write it at all. `array`, `seq` and `tuple` all behave this way at the pin. | probes 2026-11-12: `y2` (`1`/`9`), `m3` (`2`/`3`), `t5` (`36`/`37`) for assignment; `rv2`, `rv7`, `rv8` (a write to a by-value `seq`, `tuple` or `array` parameter rejected) |
 
 ## Terms Nimony adds
 
@@ -111,7 +116,7 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | string | A sequence of bytes indexed from 0, stored as a value (assignment copies it), UTF-8 by convention rather than by enforcement, and carrying no null terminator. | `doc/language.md:280-303` at `4ba90a7`; probes compiled and run 2026-11-12: `"héllo"` has length 6 and `ord` of index 1 is 195; a copy grows without touching the original |
 | null terminator | The `'\0'` byte C uses to mark the end of a string; a Nimony `string` does not store one, so `toCString` writes it on demand and may have to copy first. | `doc/differences.md:15-18`; `lib/std/system/stringimpl.nim:1095-1106` at `4ba90a7` |
 | cstring | The C-compatible pointer to a zero-terminated char array, used at the C boundary; `len` on it calls `strlen`, and `cstring(s)` converts only from a literal. | `doc/language.md:306-341` and `lib/std/system/stringimpl.nim:377` at `4ba90a7`; `src/nimony/sem.nim:880` refuses a non-literal |
-| slice | A range of a string written `s[a..b]` or `s[a..<b]`; the result is a new string, and out-of-range bounds are clamped instead of checked. | `lib/std/system.nim:649-652` and `lib/std/system/stringimpl.nim:706-717` at `4ba90a7`; probe: `"clamped"[0..20]` prints `clamped` |
+| slice | A range of a string or `seq` written `s[a..b]` or `s[a..<b]`; the result is a new value with copied elements, and out-of-range bounds are clamped instead of checked. An `array` has no slice operator — it gets a view through `toOpenArray`. | `lib/std/system.nim:649-652`, `:658-668` and `lib/std/system/stringimpl.nim:706-717` at `4ba90a7`; probes: `"clamped"[0..20]` prints `clamped`; `xs[5..1]` is empty and `xs[2..10]` clamps |
 | escape sequence | A backslash pair inside a string literal that stands for another byte (`\n`, `\t`, `\\`, `\"`, `\x41`); a raw string disables it. | probe compiled and run at `4ba90a7` (2026-11-12): `"a\tb"` contains a tab, `"\x41"` is `A` |
 | raw string | A string literal written `r"..."` in which a backslash is literal and no escape is processed. | probe compiled and run at `4ba90a7` (2026-11-12): `r"a\tb"` prints `a\tb` |
 | concatenation | Joining two strings into a new one with `&`, as opposed to appending in place with `add` on a `var`. | `doc/language.md:303`; `lib/std/system/stringimpl.nim:1062-1063` at `4ba90a7` |

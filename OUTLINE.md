@@ -114,7 +114,13 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Prerequisites:** 8
 - **Nim 2 delta:** no
 - **Carries from 9:** the rule for a `var` accessor result — it needs a path it can borrow (`var`/`out`/`lent` parameter, or indirection such as a `seq` field), and an inline field of a by-value object is not one. Chapter 9 owns the rule; Chapter 10 points at it rather than restating it.
-- **Status:** planned
+- **Status:** frozen 2026-11-12 — draft 2026-11-12 (Aksara); tech review Momo 2026-11-12 (32 claims: 27 held, 2
+  half held — the observable half only, 3 wrong: `newSeq` wording, the mangled-suffix claim, the 21-line
+  candidate count; no claim left open), 13 text corrections applied, editorial pass 2026-11-12, `9/9` samples
+  pass. `en.md` + `id.md`. Rulings of record in `ERRATA.md`: different tuple field names are a documentation gap
+  (`sigmatch.nim:2435`), `high` of an empty `seq` is `-1` by contract so that candidate was dropped, no sequence
+  concatenation is a watch row, and a by-value `seq` parameter cannot be grown — a Nim 2 delta stated in the
+  body, not as a delta box (Wira's call).
 
 ### Chapter 11: Objects, Enums, and Distinct Types
 - **Job:** Model data with nominal `object` types, ordinal `enum` types and representation-sharing `distinct` types, and explain value copy at assignment.
