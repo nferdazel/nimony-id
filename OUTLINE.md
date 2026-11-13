@@ -289,15 +289,33 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 ### Chapter 23: Testing and the Sample Verifier
 - **Job:** Write checks that run under the pin and use the book's sample verifier so a chapter's claims stay reproducible.
 - **Prerequisites:** 20
-- **Nim 2 delta:** yes — `unittest` support at this pin is unproven; the chapter teaches what runs.
-- **Status:** planned
+- **Nim 2 delta:** yes — `assert` is in `std/assertions` not `system`, `doAssert` and `static:` are absent,
+  `std/unittest` does not exist, and a mutable global touched inside a routine needs a `var`/`ptr` parameter, an
+  `{.cast(assumeSync).}:` block, or a `{.feature: "assumeSync".}` module; declaring the routine `{.sync.}` is not
+  enough.
+- **Status:** **frozen 2026-11-13** (Momo's verdict in `chapters/23-testing/review.md`; 24 claims stand, four
+  citations fixed, two text changes, none open; verifier `23/23`, four output lines byte-identical). Draft
+  2026-11-13 (Aksara), 30 claims probed at the pin. The findings that shape the chapter: `assert` needs
+  `import std / [assertions]` because it is not in `system` (a01), a routine may not touch a mutable module-level
+  variable by name, and `{.sync.}` on the routine does not lift that — a `var`/`ptr` parameter or an
+  `{.cast(assumeSync).}:` block does (b10, s1, s2), and `nimony c -r` flattens a non-zero child exit to `1` while
+  the binary keeps the real code (e01). `{.assert: cond.}` works as a statement in a body and crashes the compiler
+  only in the routine-pragma position (v2, v4) — a compiler defect to file, not a documentation erratum. `id.md`
+  written from the final text.
 
 ### Chapter 24: Passive Procs and Concurrency
 - **Job:** Suspend and resume work with passive procs, the single mechanism standing in for both async and threaded procedures, and state the scheduling limit instead of implying parallelism.
 - **Prerequisites:** 14, 20
 - **Nim 2 delta:** yes — no separate `async`/`thread` split.
 - **Proof gate:** **CLOSED 2026-11-12 with a limit** (Momo, pin `4ba90a7`). Two `.passive` procs each start, `suspend()` and run past it to their end, driven by a third passive proc using `delay`/`complete`, with no `async` or `await` in the source. **Not proven: interleaving.** `complete` runs a chain to completion on the default `trivialTick` scheduler, so A finishes before B starts. The chapter teaches suspension and resume and never promises concurrency; an interleaving claim waits on a `std/threadpool` `submit(delay(...))` sample.
-- **Status:** planned
+- **Status:** **frozen 2026-11-13** (Momo's verdict in `chapters/24-passive-procs/review.md`; 43 claims stand,
+  26 narrowed to "does not guarantee overlap", none open; verifier `23/23`, ten output lines byte-identical).
+  Draft 2026-11-13 (Aksara), 43 claims probed at the pin. The findings that shape the chapter: `complete` on a
+  coroutine that parks never returns (`p05`), a `delay()` with no following `suspend()` kills the compiler with a
+  `cps.nim:269` assertion while a bare `suspend()` is silently a synchronous transition (`p09`, `p10`), and
+  `delay` refuses both a `var` parameter and a callee that returns a value (`p14`, `p12`). Interleaving is the
+  driver's decision; two tasks that block do overlap, so the chapter says "no guarantee" rather than "never"
+  (`e1`, `p20`). `id.md` written from the final text.
 
 ## Back matter
 
@@ -326,6 +344,6 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 ## Open questions
 
 1. **Coverage of compiler internals:** whether NIF gets a chapter of its own later (currently folded into Chapter 19 as motivation, not internals). Owner: Wira / Damar.
-2. **`unittest` at the pin:** whether Nim 2's `unittest` module runs here; until a sample proves it, Chapter 23 teaches a plain assert-based runner.
+2. **`unittest` at the pin:** **closed 2026-11-13.** `lib/std/` carries no `unittest.nim` and `import std / [unittest]` fails in the parser (probe `a09`, `b06`); Chapter 23 teaches an assert-and-exit-code harness.
 3. **Stdlib surface:** the module list can only grow with a verified sample at the pin, never from Nim 2 documentation.
 4. **id/en pair:** the policy above follows nim-id's baseline; if the owner later wants English-only, that is a dated decision in this file, not a silent drift.

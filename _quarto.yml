@@ -36,6 +36,8 @@ book:
     - chapters/20-stdlib/en.md
     - chapters/21-files-processes/en.md
     - chapters/22-cinterop/en.md
+    - chapters/23-testing/en.md
+    - chapters/24-passive-procs/en.md
   search: true
   sidebar:
     style: docked
