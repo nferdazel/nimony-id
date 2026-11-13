@@ -42,6 +42,7 @@ book:
     - chapters/a1-nim2-delta-table/en.md
     - chapters/a2-sample-verification-record/en.md
     - chapters/a3-errata-index/en.md
+    - chapters/a4-sources/en.md
   search: true
   sidebar:
     style: docked

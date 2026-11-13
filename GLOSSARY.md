@@ -247,6 +247,8 @@ introduces it.
 | --- | --- | --- |
 | chapter, `Chapter N` | bab, `Bab N` | body prose and `## Untuk apa bab ini` |
 | appendix | lampiran, `Lampiran A` | headings and cross-references |
+| references, reference list | daftar pustaka | Appendix D heading and any cross-reference to it |
+| source (a cited file or document) | sumber | prose; the file itself stays `doc/language.md` |
 | Samples (section) | `## Samples` | heading; English kept |
 | sample (the artifact) | sample | prose and `samples/`; never *sampel* |
 | Checks (section) | `## Cek` | heading |

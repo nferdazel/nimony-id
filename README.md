@@ -17,7 +17,7 @@ lives in `_quarto.yml` as `book.title` and `book.subtitle`.
 | `ERRATA.md` | Breaks found after a chapter froze; plus the watch list of known pin-level constraints. |
 | `DEVIATIONS.md` | Every place this book departs from the nim-id writing baseline. |
 | `DESIGN.md` | The design direction: the palette and type hierarchy the series shares, and the cover device that is this book's own. |
-| `chapters/` | One folder per chapter: `NN-slug/en.md` and `NN-slug/id.md`. Created with the first drafted chapter. The back matter (Appendices A, B, C) sits in the same tree as `aN-slug/` pairs, listed under `book.appendices` so the PDF letters them A, B, C. |
+| `chapters/` | One folder per chapter: `NN-slug/en.md` and `NN-slug/id.md`. Created with the first drafted chapter. The back matter (Appendices A, B, C, D) sits in the same tree as `aN-slug/` pairs, listed under `book.appendices` so the PDF letters them A, B, C, D. |
 | `index.en.qmd`, `index.id.qmd` | The book's preface, one file per edition, same shape and the same pin statement. The Indonesian file is a translation, not a second preface. |
 | `CONTRIBUTING.md` | What a reader can send, the gate before sending it, and how a chapter change reaches `frozen`. |
 | `SECURITY.md` | What counts as a security report in a book repository, and what to send to Nimony instead. |
@@ -54,7 +54,7 @@ without bumping `VERSION` has no tag to publish under and fails the job with tha
 leaving the release a chapter behind.
 
 The current release tag is cut from `VERSION`, so read that file rather than a number here: it carries 24 chapters
-plus Appendices A–C in both editions, with every reader-facing path written home-relative. `v0.1.17` added the back matter, `v0.1.16` added Chapters 23
+plus Appendices A–D in both editions, with every reader-facing path written home-relative. `v0.1.23` added Appendix D, the source list, `v0.1.17` added the back matter, `v0.1.16` added Chapters 23
 and 24, and `v0.1.6` made the parity check read the localized contents layout and compare the two editions by
 chapter set and order rather than by title. `v0.1.5` on 2026-11-12 gave the PDF its own cover — the pin strip, one
 hairline per character of `4ba90a7` — with chapters 1 to 11. `v0.1.4` replaced `v0.1.3`,
@@ -76,7 +76,7 @@ pin strip is this book's.
 
 ## Status
 
-Chapters 1 to 24 and Appendices A to C are in the book at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md`
+Chapters 1 to 24 and Appendices A to D are in the book at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md`
 and `id.md` and each `frozen`. The review notes below cover Chapters 1 to 8; every later chapter carries the
 same record in its own `review.md`, and `ERRATA.md` holds the pin-level findings that outlived the chapter.
 
@@ -119,7 +119,7 @@ The verifier prints `SUMMARY 23/23 passed, 0 failed` (samples 02–24; Chapter 1
 
 ## Drafting
 
-Nothing is drafting and nothing is planned: all 24 chapters and Appendices A–C are `frozen` at pin `4ba90a7`.
+Nothing is drafting and nothing is planned: all 24 chapters and Appendices A–D are `frozen` at pin `4ba90a7`.
 The outline's **Proof gate** lines are all closed; a new chapter needs a line in `OUTLINE.md` first, and that is
 Damar's call, not a drafting decision.
 

@@ -14,7 +14,7 @@ what the language does on `master`; it has a strong interest in anything at the 
 | A proposal for a new chapter | issue first; chapters are one job each and the outline is the contract |
 | A third language | issue first; a translation needs a structural decision, not just text |
 
-All 24 chapters and Appendices A–C are `frozen`. A frozen chapter is not rewritten. If the pin moved and a
+All 24 chapters and Appendices A–D are `frozen`. A frozen chapter is not rewritten. If the pin moved and a
 sample broke, the break goes to [`ERRATA.md`](ERRATA.md) — that file exists precisely so a frozen chapter stays
 frozen.
 
