@@ -5,7 +5,7 @@ candidates. Append your verdict at end of file; do not edit the table rows in pl
 
 Pin for every run below: `4ba90a781b0b22d0821efaa153c129c37cef6143` (nimony 0.6.3), install
 `~/.local/opt/nimony/4ba90a7`. Probe sources: `ch19-probes/` in the authoring workspace
-(`~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch19-probes`), one directory per
+(`probes/ch19/`), one directory per
 probe, each run as `~/.local/opt/nimony/4ba90a7/bin/nimony c -r main.nim` from inside the probe directory.
 Inputs were decoded with `~/.local/opt/nimony/4ba90a7/bin/niftools bif2nif` (built from `tools/niftools.nim`
 with the host Nim 2.4.0; the pin ships no binary for it).
@@ -134,7 +134,7 @@ Reviewer: **Momo**. Pin `4ba90a781b0b22d0821efaa153c129c37cef6143` (nimony 0.6.3
 own copy of `ch19-probes/` (rsync without `nimcache/`, so every build below is a cold one), plus new
 probes where a table row did not settle the question. New probes are named `v1, b1-b5, c1, e1, f1-f3,
 h4-h7, k1-k2, d8-d10` and live next to the copied probes in
-`~/.openmausbot/workspaces/49df9f87-8857-46c0-b9b8-8f066a10a55e/ch19-verify/`.
+`probes/ch19/verify/`.
 
 Verifier, run by me from the book repository root:
 

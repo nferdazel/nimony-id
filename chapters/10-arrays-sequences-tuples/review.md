@@ -6,7 +6,7 @@ Toolchain: `~/.local/opt/nimony/4ba90a7`, pin `4ba90a781b0b22d0821efaa153c129c37
 Verifier: `./tools/verify-samples.sh` → `SUMMARY 9/9 passed, 0 failed`, exit 0.
 
 Each claim below is what the chapter teaches. The probe is the file in
-`~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch10-probes/`, run with
+`probes/ch10/`, run with
 `$NIMONY_HOME/bin/nimony c -r <file>`; the output is pasted raw, trimmed to the lines that matter. Every claim
 you verify replaces a row with `held` or `wrong, because …`; do not rewrite the rows I cite.
 

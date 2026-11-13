@@ -70,6 +70,10 @@ A sample's **exit code is the whole verdict**. A chapter's expected output is ch
 that chapter, byte for byte, by the editor and independently by the reviewer; the verifier itself judges exit
 status only, because a printed value that is merely plausible is exactly what a book must not accept.
 
+The gate's scope is worth stating in the same breath: it runs one program per chapter — 23 files for 24 chapters,
+because Chapter 1 shows no code — not every listing printed on the pages, so a green run says those programs
+compile and exit 0, not that every block in the book would.
+
 One consequence of `nimony c -r` matters when reading any exit code in this book: the driver turns a non-zero exit
 of the child into `1` and prints `FAILURE: <binary path>`, while the compiled binary keeps the real code. Where a
 chapter teaches a specific exit status, it says the status came from the binary under `nimcache/c/<hash>/main`, not

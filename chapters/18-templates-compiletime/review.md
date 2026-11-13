@@ -14,7 +14,7 @@ SUMMARY 17/17 passed, 0 failed
 Sample output diffed against the block in `en.md` §Samples: `6`, `100`, `report ready`, `3`, `3`, `9`, `6`, seven
 lines, byte-identical.
 
-Probes live in `~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch18-probes/`
+Probes live in `probes/ch18/`
 (`a01`–`a32b`, `c01`–`c27`, `b01`, `sample`/`sample2`, plus `nim2/n1`, `nim2/n2`, `nim2/n3`). Each is a directory
 whose `main.nim` was run with `~/.local/opt/nimony/4ba90a7/bin/nimony c -r main.nim`; the Nim 2 probes used
 `~/.local/opt/nim-2.4.0/bin/nim c -r --hints:off`. Every probe imports `std/syncio` before `echo`.
@@ -281,7 +281,7 @@ Watch rows: keep the seq-`.len` asymmetry but reword it to the named-const shape
 
 Every probe the table cites, plus b01 and nim2/n3: a01, a03, a05, a06, a07, a08, a09, a11, a11b, a11c, a12, a13,
 a14, a16, a17, a21, a22, a24, a24b, a24c, a27, a28, a29, a29d, a30, a31, a32, a32b, b01, c01–c11, c13–c22, c24–c27,
-nim2/n3. My own under `~/.openmausbot/workspaces/49df9f87-8857-46c0-b9b8-8f066a10a55e/ch18m/`:
+nim2/n3. My own under `probes/ch18/m/`:
 `m01`–`m05` dirty with and without the feature, `m06`/`m09` object type and field injection, `m07`/`m17`/`m18`/`m19`/
 `m24`/`m25` varargs, `m10`–`m14` seq/array `.len` shapes, `m15`/`m16` effects while folding, `m20` injection on the
 manual example, `m21` `typedSlot(notDeclared)`, `m22` enum const, `m23` loop-variable hygiene.

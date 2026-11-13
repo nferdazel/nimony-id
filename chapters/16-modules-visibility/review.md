@@ -15,7 +15,7 @@ Sample output diffed against the block in `en.md` §Samples: `diff` empty, 6 lin
 `modules.nim` plus `support/{shapes,report,notes}.nim`; `tools/verify-samples.sh` compiles only `samples/*/*.nim`,
 so the `support/` files are inputs, not samples.
 
-Probes live in `~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch16-probes/`
+Probes live in `probes/ch16/`
 (`p01`–`p45`, `p08b`, `p08c`, `p11a`/`p11b`, `p12b`, `p22b`, `p24b`, `p26b`, `p26c`, `p37`–`p44`, `h1`–`h3`,
 `nim2/n1`, `nim2/n2`). Each probe is a directory whose `main.nim` was run with
 `~/.local/opt/nimony/4ba90a7/bin/nimony c -r main.nim`; the Nim 2 probes used `nim c -r --hints:off`.

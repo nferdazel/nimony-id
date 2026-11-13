@@ -87,7 +87,8 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
   unconstrained ordinal, and `n + 0` needs no new range proof — the offset has to clear the guard's bound.
   Four findings of record: the loop variable is writable and moves the counter (observation only), a stored
   `0..3` slice is not loop-iterable, an `in 0..9` guard does not prove a `range` on a parameter while two
-  comparisons do, and a negative `countdown` step climbs instead of descending.
+  comparisons do, and a negative `countdown` step climbs instead of descending. Correction 2026-11-13
+  (`ERRATA.md`): the inclusive-loop output block now shows the `a`, `b`, `c` printed before the assertion.
 
 ## Part III — Procedures and Data
 
@@ -317,12 +318,14 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
   `cps.nim:269` assertion while a bare `suspend()` is silently a synchronous transition (`p09`, `p10`), and
   `delay` refuses both a `var` parameter and a callee that returns a value (`p14`, `p12`). Interleaving is the
   driver's decision; two tasks that block do overlap, so the chapter says "no guarantee" rather than "never"
-  (`e1`, `p20`). `id.md` written from the final text.
+  (`e1`, `p20`). `id.md` written from the final text. Corrections 2026-11-13 (`ERRATA.md`): the chain listing
+  declares `var innerCont: Continuation`, and the driver sketch is now the sample's own five lines with the
+  sample's own output.
 
 ## Back matter
 
 - **Appendix A — Nim 2 to Nimony delta table:** one consolidated table of everything removed or changed at the pin, each row citing `doc/differences.md` or a Nimony source file. **FROZEN 2026-11-13** — `chapters/a1-nim2-delta-table/{en,id}.md`; assembled only from Chapters 3-24, so it adds no claim and needs no new technical review; the rows it deliberately omits are named in its last section.
-- **Appendix B — Sample verification record:** the exact command, pin, and output format every chapter must reproduce. **FROZEN 2026-11-13** — `chapters/a2-sample-verification-record/{en,id}.md`; carries the `23/23 passed` run of 2026-11-13 verbatim and the chapter-to-sample map.
+- **Appendix B — Sample verification record:** the exact command, pin, and output format every chapter must reproduce. **FROZEN 2026-11-13** — `chapters/a2-sample-verification-record/{en,id}.md`; carries the `23/23 passed` run of 2026-11-13 verbatim and the chapter-to-sample map. The scope sentence added 2026-11-13 says the gate proves one program per chapter, not every listing on the page.
 - **Appendix C — Errata index:** pointer to `ERRATA.md`. **FROZEN 2026-11-13** — `chapters/a3-errata-index/{en,id}.md`; restates the errata rule, the three parts of `ERRATA.md`, and the one filed upstream defect (`nim-lang/nimony#2985`, fix in `#2988`).
 
 The three appendices live under `chapters/aN-slug/` so the bilingual staging in `tools/build-site.sh` treats them like a chapter pair; they are listed under `book.appendices` in `_quarto.yml`, so the PDF letters them A, B, C and never numbers them as chapters 25-27.

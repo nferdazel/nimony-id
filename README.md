@@ -53,8 +53,8 @@ match, nothing is released, which is the case for a docs or CI push. A content m
 without bumping `VERSION` has no tag to publish under and fails the job with that sentence, instead of
 leaving the release a chapter behind.
 
-The current release is `v0.1.18` on 2026-11-13: it carries 24 chapters plus Appendices A–C in both editions,
-with every reader-facing path written home-relative. `v0.1.17` added the back matter, `v0.1.16` added Chapters 23
+The current release tag is cut from `VERSION`, so read that file rather than a number here: it carries 24 chapters
+plus Appendices A–C in both editions, with every reader-facing path written home-relative. `v0.1.17` added the back matter, `v0.1.16` added Chapters 23
 and 24, and `v0.1.6` made the parity check read the localized contents layout and compare the two editions by
 chapter set and order rather than by title. `v0.1.5` on 2026-11-12 gave the PDF its own cover — the pin strip, one
 hairline per character of `4ba90a7` — with chapters 1 to 11. `v0.1.4` replaced `v0.1.3`,

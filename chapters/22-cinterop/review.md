@@ -5,7 +5,7 @@ candidates. Append your verdict at end of file; do not edit the table rows in pl
 
 Pin for every run below: `4ba90a781b0b22d0821efaa153c129c37cef6143` (nimony 0.6.3), install
 `~/.local/opt/nimony/4ba90a7`. Probe sources: `ch22-probes/` in the authoring workspace
-(`~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch22-probes`), one directory per
+(`probes/ch22/`), one directory per
 probe, each run as `~/.local/opt/nimony/4ba90a7/bin/nimony c -r main.nim` from inside the probe directory. Host
 comparison (`nim2/n1`) was compiled with `~/.local/opt/nim-2.4.0/bin/nim c -r --hints:off`. The machine is macOS
 arm64; anything that depends on the platform says so in the row.
@@ -162,7 +162,7 @@ teach with, given it is a macro on some systems?
 ## Verdict — 2026-11-13
 
 Reviewer: **Momo**. I re-ran every probe in `ch22-probes/` myself at pin `4ba90a7`, plus twenty-three of my own for
-the shapes the table left implicit: `~/.openmausbot/workspaces/49df9f87-8857-46c0-b9b8-8f066a10a55e/ch22-v/`
+the shapes the table left implicit: `probes/ch22/v/`
 (`v01`-`v23`, one directory each, same `nimony c -r main.nim` invocation). Verifier re-run by me from the authoring
 folder: `SUMMARY 21/21 passed, 0 failed`; the sample's eleven lines are byte-identical to the block in `en.md`.
 

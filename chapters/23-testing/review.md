@@ -5,7 +5,7 @@ candidates. Append your verdict at end of file; do not edit the table rows in pl
 
 Pin for every run below: `4ba90a781b0b22d0821efaa153c129c37cef6143` (nimony 0.6.3), install
 `~/.local/opt/nimony/4ba90a7`. Probe sources: `ch23-probes/` in the authoring workspace
-(`~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch23-probes`), one directory per
+(`probes/ch23/`), one directory per
 probe, each run as `~/.local/opt/nimony/4ba90a7/bin/nimony c -r main.nim` from inside the probe directory. Probes
 about exit codes were then run as the compiled binary `nimcache/c/<hash>/main`, because `nimony c -r` does not
 forward the child's code (claim 15). Host comparisons are not used in this chapter: every claim here is about

@@ -70,6 +70,10 @@ Tiga exit code, dan ketiganya tidak bisa ditukar:
 tercetak di bab itu, byte per byte, oleh editor dan independen oleh reviewer; verifier sendiri hanya menilai status
 exit, karena nilai tercetak yang sekadar masuk akal justru hal yang tidak boleh diterima buku.
 
+Cakupan gate ini perlu disebut di tarikan napas yang sama: dia menjalankan satu program per bab — 23 berkas untuk
+24 bab, karena Bab 1 tidak menampilkan kode — bukan setiap listing yang tercetak di halaman, jadi run hijau
+berarti program-program itu kompil dan keluar 0, bukan bahwa setiap blok di buku ini akan begitu.
+
 Satu akibat `nimony c -r` penting saat membaca exit code mana pun di buku ini: driver mengubah exit non-nol anak
 jadi `1` dan mencetak `FAILURE: <path biner>`, sementara biner hasil kompilasi menyimpan kode yang sebenarnya. Bab
 yang mengajarkan status exit tertentu mengatakan bahwa status itu datang dari biner di `nimcache/c/<hash>/main`,

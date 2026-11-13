@@ -13,7 +13,7 @@ SUMMARY 16/16 passed, 0 failed
 
 Sample output diffed against the block in `en.md` §Samples: `42`, `6`, `12`, three lines, byte-identical.
 
-Probes live in `~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch17-probes/`
+Probes live in `probes/ch17/`
 (`g01`–`g27`, plus `nim2/n1`, `nim2/n2`). Each is a directory whose `main.nim` was run with
 `~/.local/opt/nimony/4ba90a7/bin/nimony c -r main.nim`; the Nim 2 probes used
 `~/.local/opt/nim-2.4.0/bin/nim c -r --hints:off`. Every probe imports `std/syncio` before `echo`.
@@ -220,7 +220,7 @@ Byte-identical to the block at `en.md:285-290`. Every probe below I ran myself w
 
 ## Probes I ran
 
-All of `ch17-probes` g01-g27 (no g08), `nim2/n1`, `nim2/n2` with the host compiler, plus my own under `~/.openmausbot/workspaces/49df9f87-8857-46c0-b9b8-8f066a10a55e/ch17-verify/`:
+All of `ch17-probes` g01-g27 (no g08), `nim2/n1`, `nim2/n2` with the host compiler, plus my own under `probes/ch17/verify/`:
 
 - `d1` `Box[NoAdd]` → the `missing:` line; `d2` `find[T](x: Findable[T])` with no call; `d3b` generic routine as a proc value.
 - `e1` `proc smaller(a, b: Comparable)` with no call; `e2` `g[var int](c, i)`.

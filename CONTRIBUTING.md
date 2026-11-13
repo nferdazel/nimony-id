@@ -39,8 +39,12 @@ both. CI runs the same command, so a green local run is the whole gate.
    for the section order, frontmatter and the six gates a chapter must pass.
 2. Both editions or neither. `chapters/NN-slug/en.md` and `chapters/NN-slug/id.md` carry the same frontmatter,
    the same section order and the same code blocks. `./task build` fails closed on an unpaired chapter folder.
-3. Every code block in a chapter has a file under `samples/NN-slug/` that the verifier runs. A block with no
-   sample behind it is prose that nobody has compiled.
+3. Every Nimony listing that is meant to compile has a home in the chapter's sample: it appears in the file the
+   verifier runs, or the prose says it is an excerpt and where the whole is. Fragments, before/after shapes and
+   listings whose point is the diagnostic are marked as such where they appear and never added to `samples/` —
+   the verifier fails any program that exits non-zero. A chapter with no Nimony code carries `samples: []` and
+   no sample file. What the gate proves is one program per chapter, not every listing on the page: it judges
+   exit status, not the lines printed.
 4. A new term goes into [`GLOSSARY.md`](GLOSSARY.md) in the same change that introduces it.
 5. Provenance is part of the sentence. A claim about behaviour cites the Nimony file and line at the pin, or it
    is marked as design intent. "The documentation says so" is not proof of pin behaviour — the documentation
@@ -60,7 +64,8 @@ This repository is public and everything in it is published twice: as Markdown o
 1. **No path from your machine.** Use `$NIMONY_HOME`, `~/.local/opt/...` or a path relative to the repository
    root. A transcript may show a real install path only where the chapter is about that install. A review
    artifact beside a chapter is a transcript too: a workspace path in it is written home-relative (`~/...`) and
-   the rest of the command is left exactly as it ran.
+   the rest of the command is left exactly as it ran. A probe directory is named by a label, not by the workspace
+   it lived in — `probes/ch09/`, not a path under a home directory that belongs to one authoring machine.
 2. **No secret, token, private URL or personal data**, in prose or in a sample. `.gitignore` already covers
    `nimcache/`, `_book/`, `.quarto/`, `.build/` and `tools/verify-samples.log`; a build artefact in a diff is
    a mistake, not a shortcut.
