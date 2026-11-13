@@ -173,9 +173,12 @@ when 1 + 1 != 3:
 main.nim(3, 5) Error: arithmetic broke
 ```
 
-`{.assert.}` is the third shape, and the position decides whether it works. As a statement inside a body it is
-accepted, which is the form `tests/nimony/contracts/tassertpragma.nim` exercises. Put in the routine-pragma
-position it crashes the compiler: `proc half(x: int): int {.assert: x mod 2 == 0.}` stops with
+`{.assert.}` is the third shape, and two things decide whether it works: where it sits, and whether the prover can
+discharge the claim. As a statement inside a body it is accepted, but the claim has to be proven there from what
+the code already establishes, which is why every assertion in `tests/nimony/contracts/tassertpragma.nim` sits
+behind a guard. `{.assert: x mod 2 == 0.}` at the top of a proc body called with `4` stops the build with
+`half.nim(4, 5) Error: cannot prove assertion: x mod 2 == 0 [pass --verbose for the Final IR]`. Put in the
+routine-pragma position it crashes the compiler: `proc half(x: int): int {.assert: x mod 2 == 0.}` stops with
 `Error: unhandled exception: nifcore.nim(1875, 3) 'b.openTags.len > 0' closeTag with no matching openTag`. That is
 a compiler defect to file, not a feature to avoid: the assertion module's own comment points at the pragma — "a
 claim the contract prover may rely on is `{.assert: cond.}`" (`lib/std/assertions.nim:33-35`) — so the statement

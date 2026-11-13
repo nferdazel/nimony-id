@@ -174,9 +174,13 @@ when 1 + 1 != 3:
 main.nim(3, 5) Error: arithmetic broke
 ```
 
-Bentuk ketiga adalah `{.assert.}`, dan posisinya menentukan berhasil atau tidak. Sebagai statement di dalam body
-dia diterima, dan itu bentuk yang diuji `tests/nimony/contracts/tassertpragma.nim`. Ditaruh di posisi pragma
-routine, pragma yang sama membuat compiler mati: `proc half(x: int): int {.assert: x mod 2 == 0.}` berhenti
+Bentuk ketiga adalah `{.assert.}`, dan ada dua hal yang menentukan berhasil atau tidak: posisinya, dan apakah
+prover bisa membuktikan klaimnya. Sebagai statement di dalam body dia diterima, tapi klaimnya harus terbukti di
+situ dari apa yang sudah ditetapkan kode, itu sebabnya setiap assertion di
+`tests/nimony/contracts/tassertpragma.nim` duduk di belakang guard. `{.assert: x mod 2 == 0.}` di awal body proc
+yang dipanggil dengan `4` menghentikan build dengan
+`half.nim(4, 5) Error: cannot prove assertion: x mod 2 == 0 [pass --verbose for the Final IR]`. Ditaruh di posisi
+pragma routine, pragma yang sama membuat compiler mati: `proc half(x: int): int {.assert: x mod 2 == 0.}` berhenti
 dengan `Error: unhandled exception: nifcore.nim(1875, 3) 'b.openTags.len > 0' closeTag with no matching openTag`.
 Itu defect compiler yang harus di-file, bukan fitur yang harus dihindari: komentar modul assertion sendiri
 menunjuk pragma itu — "a claim the contract prover may rely on is `{.assert: cond.}`"

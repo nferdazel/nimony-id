@@ -10,7 +10,12 @@ Format — one row per break:
 
 ## Open errata
 
-_None. Chapters 1 to 24 are frozen at `4ba90a7` (2026-11-12 and 2026-11-13); no break has been found against them._
+| Chapter | Section | What broke | Broke on (version / commit) | Date | Status |
+| --- | --- | --- | --- | --- | --- |
+| Chapter 23 (both editions) | Checks that run at compile time | The text said `{.assert: cond.}` as a statement inside a body "is accepted", full stop. Acceptance is conditional on the prover discharging the claim: `{.assert: x mod 2 == 0.}` at the top of a proc body called with `4` stops the build with `half.nim(4, 5) Error: cannot prove assertion: x mod 2 == 0 [pass --verbose for the Final IR]`. The test the sentence cites passes only because every assertion in it sits behind a guard, which the chapter's own review note recorded and the chapter text dropped. One sentence added to both editions; no other claim moved. | Text as shipped in `v0.1.16`–`v0.1.18`; pin `4ba90a7` unchanged. Found and re-run by Momo (`reviews/2026-11-13-technical-audit.md` finding 2), re-run by the editor on 2026-11-13. | 2026-11-13 | Corrected in `v0.1.19`. The pin was right and the chapter was incomplete, so there is nothing to file upstream. |
+
+_No break against the pin: Chapters 1 to 24 are frozen at `4ba90a7` (2026-11-12 and 2026-11-13), and the row above is a
+chapter that understated the pin, not a pin that moved._
 
 ## Watch list (known at the pin — not errata yet)
 
