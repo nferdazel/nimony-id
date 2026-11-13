@@ -33,6 +33,7 @@ book:
     - chapters/17-generics-concepts/en.md
     - chapters/18-templates-compiletime/en.md
     - chapters/19-plugins-nif/en.md
+    - chapters/20-stdlib/en.md
   search: true
   sidebar:
     style: docked

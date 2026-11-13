@@ -235,10 +235,19 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 ## Part VI — Programs
 
 ### Chapter 20: The Standard Library You Can Rely On
-- **Job:** Tour only the modules proven at the pin (`syncio`, `strutils`, `seqs`, `tables`, `sets`, `atomics`) and state the rule for using any other.
+- **Job:** Tour only the modules proven at the pin (`syncio`, `strutils`, sequence helpers from `system` and `sequtils`, `tables`, `sets`, `atomics`) and state the rule for using any other.
 - **Prerequisites:** 16
-- **Nim 2 delta:** no
-- **Status:** planned
+- **Nim 2 delta:** yes — `std/strformat` and `std/re` are absent at the pin, `&` is string-only, and an atomic is
+  an operation on a plain `var`, not a wrapper type. Changed from "no" 2026-11-13 by the editor: the chapter's job
+  is to say what a Nim 2 reader may rely on, and these three are exactly the habits that mislead.
+- **Status:** frozen 2026-11-13 — draft 2026-11-13 (Aksara), 65 claims probed at the pin, tech review by Momo the
+  same day (59 stood, 2 stood with a source-line fix, 2 narrowed, 2 paragraphs rewritten, zero open). Momo re-ran
+  the verifier himself: `19/19 passed` at `4ba90a7`, sample output 26 lines byte-identical. Corrections in the
+  text: iteration order at the pin is insertion order (with the guide still silent on it), `Keyable` also requires
+  `==`, `HashSet` wraps rather than is a `Table[T, bool]`, `std/json` reads through `tree{"a"}` not `[]`, the
+  `echo` overload set is the module default because a declared `write` overload is found, and atomics lower to
+  `__atomic_*` builtins. `id.md` written from the final text. ERRATA rows: `strtabs` `See also`, the missing
+  `json` section, and `getOrQuit`.
 
 ### Chapter 21: Files, Processes, and the Outside World
 - **Job:** Read and write files, read arguments and environment, return exit codes, and run a subprocess.
