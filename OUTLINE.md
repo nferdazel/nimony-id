@@ -252,8 +252,19 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 ### Chapter 21: Files, Processes, and the Outside World
 - **Job:** Read and write files, read arguments and environment, return exit codes, and run a subprocess.
 - **Prerequisites:** 20
-- **Nim 2 delta:** no
-- **Status:** planned
+- **Nim 2 delta:** yes — at the pin `removeFile` is not in `std/os` any more but in `std/files` and takes a
+  `Path`, while `fileExists` still takes a `string`; `quit(msg)` writes to stdout where Nim 2.4.0 writes
+  stderr; a Nim 2 file program compiles in half its lines.
+- **Status:** frozen 2026-11-13 — draft 2026-11-13 (Aksara), 52 claims probed at the pin, tech review by Momo
+  the same day (44 stood as written, 5 stood with a source-line fix, 3 narrowed, zero open). Momo re-ran the
+  verifier himself: `20/20 passed` at `4ba90a7`, sample output 16 lines byte-identical. Corrections in the
+  text: `removeFile` still ignores a missing file, so the delta is the module and the type, not the tolerance;
+  `quit(msg)` writes to stdout at the pin while `doc/stdlib.md:232` and Nim 2.4.0 say stderr;
+  `createTempFile` returns an open handle the caller must close and a path the caller must remove;
+  `execShellCmd` is the one routine that reports a launch failure as `-1`; and the `execProcess` defaults are
+  the Nim 2 defaults, so the cancelled ERRATA row was withdrawn rather than filed. `id.md` written from the
+  final text. ERRATA rows: the `open`-returns-`File` docstring, the missing `files` section in the guide, and
+  `quit(msg)`'s stream.
 
 ### Chapter 22: The C Boundary
 - **Job:** Bind a C function, map its types, and cross the `cstring` boundary deliberately.

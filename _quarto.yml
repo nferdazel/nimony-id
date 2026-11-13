@@ -34,6 +34,7 @@ book:
     - chapters/18-templates-compiletime/en.md
     - chapters/19-plugins-nif/en.md
     - chapters/20-stdlib/en.md
+    - chapters/21-files-processes/en.md
   search: true
   sidebar:
     style: docked
