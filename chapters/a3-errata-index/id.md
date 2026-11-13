@@ -37,7 +37,8 @@ diverifikasi, dan seluruh kalimat buku ini berdiri di atas satu commit.
   pemeriksaan yang tidak eksis. Setiap baris menyebut buktinya, kalimat yang karena itu boleh dicetak buku, dan
   bab yang terikat.
 - **Editorial corrections** — perubahan pada bab yang sudah beku tanpa menyentuh pin, di mana babnya benar tentang
-  kompiler dan salah tentang edisinya.
+  kompiler dan halamannya yang salah: edisinya, tanda kutip pada diagnostik yang dikutip, atau listing yang
+  mencetak sesuatu yang tidak dihasilkan sample-nya.
 
 ## Bentuk satu baris
 

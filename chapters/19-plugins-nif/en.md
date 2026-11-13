@@ -62,26 +62,28 @@ The same call argument reaches a plugin in two different shapes. Declare the par
 ```nim
 import std / syncio
 
+var a = 2
+
 template shape(x: untyped) {.plugin: "deps/shape".}
 template typedShape(x: typed) {.plugin: "deps/shape".}
 
-shape(2 + 3 * 4)
-typedShape(2 + 3 * 4)
+shape(a + 1)
+typedShape(a + 1)
 ```
 
-A plugin that prints the first argument's tag reports `infix` for the first call and `add` for the second. The difference is in the cached input files, and the compiler keeps them: each invocation writes its input to a `.in.nif` file under `nimcache`, in NIF's binary form behind the usual extension. `tools/niftools bif2nif` decodes one in place. The `untyped` input for the call above reads, with paths and indices left out:
+A plugin that prints the first argument's tag reports `infix` for the first call and `add` for the second. The difference is in the cached input files, and the compiler keeps them: each invocation writes its input to a `.in.nif` file under `nimcache`, in NIF's binary form behind the usual extension. `tools/niftools bif2nif` decodes one in place. The `untyped` input for the call above reads, with paths and indices left out and `+` escaped as `\2B`, the way the file stores it:
 
 ```
-(stmts shape (infix \+ a~2 1))
+(stmts shape (infix \2B a 1))
 ```
 
 The `typed` input for the same source reads:
 
 ```
-(stmts typedShape (add (i 64)a.0.main~2 1))
+(stmts typedShape (add (i 64)a.0.<build id> 1))
 ```
 
-Four things changed. The operator's sugar is gone: `2 + 3 * 4` was an `infix` node with an operator token, and it is an `add` node now. The identifier `a` became `a.0.main`, a symbol that names its declaration and its module. The symbol carries its type, `(i 64)`, so an argument's type is readable without asking the compiler for a declaration. And the tree says `2` where the source said a literal operand of an infix expression. That is what "semantically checked, lowered NIF" means in practice.
+Three things changed. The operator's sugar is gone: `a + 1` was an `infix` node with an operator token, and it is an `add` node now. The identifier `a` became a symbol, `a.0.<build id>`, whose suffix is the build's module id. And the symbol carries its type, `(i 64)`, so an argument's type is readable without asking the compiler for a declaration. That is what "semantically checked, lowered NIF" means in practice.
 
 Raw input is not checked, and that is not a detail. A plugin that drops its argument can be called with a name that does not exist:
 
@@ -92,7 +94,7 @@ ignore(notDeclared + 1)
 echo "survived"
 ```
 
-That builds and prints `survived`, because the argument is never resolved: the plugin was handed `(infix \+ notDeclared 1)` and answered with something else. Change the parameter to `typed` and the same call still builds if the plugin still drops it, which is the useful lesson: the parameter kind decides what the plugin is given, not when the argument is checked. An argument the plugin passes through is checked when the plugin's output is checked.
+That builds and prints `survived`, because the argument is never resolved: the plugin was handed `(infix \2B notDeclared 1)` and answered with something else. Change the parameter to `typed` and the same call still builds if the plugin still drops it, which is the useful lesson: the parameter kind decides what the plugin is given, not when the argument is checked. An argument the plugin passes through is checked when the plugin's output is checked.
 
 The wrapper is worth memorising because every plugin writes against it. The input is a `(stmts <template name> <argument>...)` node, and `callArgs` exists to skip both the wrapper and the name (`src/nimony/lib/plugins.nim:1095-1105`). A plugin given two arguments calls `callArgs` once and iterates from there.
 
@@ -136,7 +138,7 @@ deps/double.nim(7, 3) Error: expected 3..3 children, got 2 [transform builds (ad
 FAILURE: .../bin/validator --nimcache:nimcache/double_v deps/double.nim
 ```
 
-Three children, because the arithmetic tags carry more than the two operands the source shows: a type in slot 0, then the left and the right operand. The compiler's own input for `2 + 3 * 4` writes `(add (i 64)a.0.main 1)`, which reads as two children only because the type rides on the symbol. A hand-built operator supplies the type itself:
+Three children, because the arithmetic tags carry more than the two operands the source shows: a type in slot 0, then the left and the right operand. The compiler's own input for `a + 1` writes `(add (i 64)a.0.<build id> 1)`, the same three slots: the type, then the symbol, then the literal. A hand-built operator supplies the type itself:
 
 ```nim
 result.withTree AddX, info:

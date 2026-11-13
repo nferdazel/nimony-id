@@ -141,10 +141,12 @@ after a bare `suspend()` prints both lines and returns normally). A `delay()` wi
 point is worse: the compiler asserts while generating code and dies with
 
 ```
-'state != -1' delay() no-arg must precede suspension point
+`state != -1` delay() no-arg must precede suspension point
 ```
 
-(`src/hexer/cps.nim:269`). One half is silently ignored, the other crashes the compiler. Write them together.
+(`src/hexer/cps.nim:269`; the compiler prints the position `cps.nim(269, 5)` in front of that message and
+`[AssertionDefect]` behind it, both elided here as elsewhere in the book). One half is silently ignored, the
+other crashes the compiler. Write them together.
 
 ## Driving a parked coroutine
 
@@ -388,7 +390,7 @@ the reason is the missing resumer.
 4. Add `let c = delay()` before the park, save it to a module-level `var`, and drive it with `advance`.
 Expected: the line after `suspend()` runs.
 5. Call `delay()` with no `suspend()` anywhere after it. Expected: the compiler dies with
-`'state != -1' delay() no-arg must precede suspension point`.
+`` `state != -1` delay() no-arg must precede suspension point``.
 6. Call `suspend()` with no `delay()` before it. Expected: no park; the next line runs.
 7. Pass a passive proc where a `proc (x: int): int {.nimcall.}` is expected. Expected: ``[1] `.passive` mismatch``.
 8. Run a passive proc whose loop makes 100000 passive calls. Expected: it finishes; the trampoline keeps the

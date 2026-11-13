@@ -37,7 +37,8 @@ wording of this one rests on a single commit.
   a check that does not exist. Each row names the evidence, the sentence the book is therefore allowed to print,
   and the chapter it binds.
 - **Editorial corrections** — changes made to a frozen chapter without touching the pin, where the chapter was right
-  about the compiler and wrong about the edition.
+  about the compiler and the page was wrong: the edition, the quotation marks on a quoted diagnostic, or a listing
+  that printed something the sample does not produce.
 
 ## How a row is written
 

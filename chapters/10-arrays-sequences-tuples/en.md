@@ -407,11 +407,12 @@ Type mismatch at [position]
 a[1 .. 2]
 [1] array[0..3, int64] does not match constraint T (declared in .../lib/std/system.nim(24, 1))
 [2] expected: int64 but got: HSlice[int64,int64] (declared in .../lib/std/system.nim(25, 1))
-... 18 more candidate lines
+...
 [2] expected: BackwardsIndex but got: HSlice[int64,int64] (declared in .../lib/std/system.nim(632, 1))
 ```
 
-That listing is 21 candidate lines, every `[]` and slice overload the compiler could try. The `seq` slice this
+That listing is 21 candidate lines, every `[]` and slice overload the compiler could try; the `...` stands for the
+18 in the middle, so the block prints three and the compiler prints all 21. The `seq` slice this
 call actually needed is in the middle of it (`lib/std/system.nim:658`); the last two lines are the compiler
 trying the `^` form, `BackwardsIndex`, which the argument is not. The point is the first line — the array's own
 `[]` takes an integer index, and no overload takes an array plus a range.

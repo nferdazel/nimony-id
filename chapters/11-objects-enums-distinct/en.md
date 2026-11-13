@@ -142,7 +142,7 @@ check, not a comment.
 ### Printing an object costs a `$`
 
 `echo` writes built-in types. A user-defined object is not one of them, so `echo p` is a type error listing
-every `write` overload the compiler tried (`ch11-probes/o6.nim`):
+the `write` overloads the compiler tried, trimmed here to the first two of nine (`ch11-probes/o6.nim`):
 
 ```
 write stdout, P(x: 1)

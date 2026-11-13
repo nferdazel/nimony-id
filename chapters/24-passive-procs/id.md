@@ -142,11 +142,12 @@ sebelum dan sesudah `suspend()` telanjang mencetak dua baris itu dan kembali nor
 suspend sesudahnya lebih buruk: compiler meng-assert saat menghasilkan kode lalu mati dengan
 
 ```
-'state != -1' delay() no-arg must precede suspension point
+`state != -1` delay() no-arg must precede suspension point
 ```
 
-(`src/hexer/cps.nim:269`). Satu bagian diabaikan diam-diam, yang lain membuat compiler mati. Tulis dua-duanya
-bersama.
+(`src/hexer/cps.nim:269`; compiler mencetak posisi `cps.nim(269, 5)` di depan pesan itu dan
+`[AssertionDefect]` di belakangnya, dua-duanya dihilangkan di sini seperti di bagian lain buku ini). Satu bagian
+diabaikan diam-diam, yang lain membuat compiler mati. Tulis dua-duanya bersama.
 
 ## Menggerakkan coroutine yang park
 
@@ -391,7 +392,7 @@ seperti yang aturan di atas minta.
 4. Tambahkan `let c = delay()` sebelum park, simpan ke `var` di level modul, dan gerakkan dengan `advance`.
    Harapan: baris sesudah `suspend()` jalan.
 5. Panggil `delay()` tanpa `suspend()` di mana pun sesudahnya. Harapan: compiler mati dengan
-   `'state != -1' delay() no-arg must precede suspension point`.
+   `` `state != -1` delay() no-arg must precede suspension point``.
 6. Panggil `suspend()` tanpa `delay()` sebelumnya. Harapan: tidak park; baris berikutnya jalan.
 7. Serahkan passive proc ke tempat yang mengharapkan `proc (x: int): int {.nimcall.}`. Harapan:
    ``[1] `.passive` mismatch``.

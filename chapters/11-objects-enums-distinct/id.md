@@ -142,7 +142,7 @@ membeli pemeriksaan, bukan komentar.
 ### Mencetak object butuh `$`
 
 `echo` menulis tipe bawaan. Object buatan kamu bukan salah satunya, jadi `echo p` adalah type error yang
-mendaftar setiap overload `write` yang dicoba compiler (`ch11-probes/o6.nim`):
+mendaftar overload `write` yang dicoba compiler, dipangkas di sini jadi dua dari sembilan (`ch11-probes/o6.nim`):
 
 ```
 write stdout, P(x: 1)

@@ -79,33 +79,35 @@ sudah di-lower dan di-resolve.
 ```nim
 import std / syncio
 
+var a = 2
+
 template shape(x: untyped) {.plugin: "deps/shape".}
 template typedShape(x: typed) {.plugin: "deps/shape".}
 
-shape(2 + 3 * 4)
-typedShape(2 + 3 * 4)
+shape(a + 1)
+typedShape(a + 1)
 ```
 
 Plugin yang mencetak tag argumen pertama melaporkan `infix` untuk panggilan pertama dan `add` untuk yang kedua.
 Bedanya ada di file input yang di-cache, dan compiler menyimpannya: tiap invocation menulis inputnya ke file
 `.in.nif` di bawah `nimcache`, dalam bentuk biner NIF dengan ekstensi yang biasa. `tools/niftools bif2nif`
-men-decode-nya di tempat. Input `untyped` untuk panggilan di atas berbunyi, dengan path dan indeks dihilangkan:
+men-decode-nya di tempat. Input `untyped` untuk panggilan di atas berbunyi, dengan path dan indeks dihilangkan
+dan `+` di-escape jadi `\2B` sebagaimana file menyimpannya:
 
 ```
-(stmts shape (infix \+ a~2 1))
+(stmts shape (infix \2B a 1))
 ```
 
 Input `typed` untuk sumber yang sama berbunyi:
 
 ```
-(stmts typedShape (add (i 64)a.0.main~2 1))
+(stmts typedShape (add (i 64)a.0.<build id> 1))
 ```
 
-Empat hal berubah. Gula operatornya hilang: `2 + 3 * 4` tadinya node `infix` dengan token operator, sekarang
-node `add`. Identifier `a` menjadi `a.0.main`, simbol yang menyebut deklarasinya dan module-nya. Simbolnya
-membawa tipe, `(i 64)`, jadi tipe sebuah argumen bisa dibaca tanpa meminta deklarasi ke compiler. Dan pohonnya
-menulis `2` di tempat sumber menulis literal sebagai operand ekspresi infix. Itu arti "NIF yang sudah diperiksa
-dan di-lower" dalam praktik.
+Tiga hal berubah. Gula operatornya hilang: `a + 1` tadinya node `infix` dengan token operator, sekarang
+node `add`. Identifier `a` menjadi simbol, `a.0.<build id>`, dengan suffix berupa id module build itu. Dan
+simbolnya membawa tipe, `(i 64)`, jadi tipe sebuah argumen bisa dibaca tanpa meminta deklarasi ke compiler. Itu
+arti "NIF yang sudah diperiksa dan di-lower" dalam praktik.
 
 Input mentah tidak diperiksa, dan itu bukan detail. Plugin yang membuang argumennya bisa dipanggil dengan nama
 yang tidak ada:
@@ -118,7 +120,7 @@ echo "survived"
 ```
 
 Itu bisa dibangun dan mencetak `survived`, karena argumennya tidak pernah di-resolve: plugin dikirimi
-`(infix \+ notDeclared 1)` dan menjawab dengan hal lain. Ubah parameternya ke `typed` dan panggilan yang sama
+`(infix \2B notDeclared 1)` dan menjawab dengan hal lain. Ubah parameternya ke `typed` dan panggilan yang sama
 tetap bisa dibangun kalau plugin tetap membuangnya, dan itulah pelajarannya: jenis parameter menentukan apa
 yang dikirim ke plugin, bukan kapan argumennya diperiksa. Argumen yang diteruskan plugin diperiksa saat output
 plugin diperiksa.
@@ -180,8 +182,8 @@ FAILURE: .../bin/validator --nimcache:nimcache/double_v deps/double.nim
 ```
 
 Tiga anak, karena tag aritmetika membawa lebih dari dua operand yang kelihatan di sumber: satu tipe di slot 0,
-lalu operand kiri dan kanan. Input milik compiler untuk `2 + 3 * 4` menulis `(add (i 64)a.0.main 1)`, yang
-terbaca sebagai dua anak hanya karena tipenya menumpang di simbol. Operator yang dibangun tangan memasok tipenya
+lalu operand kiri dan kanan. Input milik compiler untuk `a + 1` menulis `(add (i 64)a.0.<build id> 1)`, tiga
+slot yang sama: tipenya, lalu simbolnya, lalu literalnya. Operator yang dibangun tangan memasok tipenya
 sendiri:
 
 ```nim

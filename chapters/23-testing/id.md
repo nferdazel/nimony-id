@@ -98,8 +98,8 @@ proc bump() =
 ```
 
 ```
-Error: unsynchronized access to global variable 'checks'; pass it to a '.sync' routine or use
-'{.cast(assumeSync).}'
+Error: unsynchronized access to global variable 'checks'; pass it to a `.sync` routine or use
+`{.cast(assumeSync).}`
 ```
 
 Di pin variabel module-level yang mutable tidak boleh disentuh lewat namanya dari dalam routine

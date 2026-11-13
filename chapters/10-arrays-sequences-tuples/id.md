@@ -411,11 +411,12 @@ Type mismatch at [position]
 a[1 .. 2]
 [1] array[0..3, int64] does not match constraint T (declared in .../lib/std/system.nim(24, 1))
 [2] expected: int64 but got: HSlice[int64,int64] (declared in .../lib/std/system.nim(25, 1))
-... 18 more candidate lines
+...
 [2] expected: BackwardsIndex but got: HSlice[int64,int64] (declared in .../lib/std/system.nim(632, 1))
 ```
 
-Daftar itu 21 baris kandidat, setiap overload `[]` dan slice yang bisa dicoba compiler. Slice `seq` yang
+Daftar itu 21 baris kandidat, setiap overload `[]` dan slice yang bisa dicoba compiler; `...` menggantikan 18
+baris di tengahnya, jadi blok ini mencetak tiga baris dan compiler mencetak 21. Slice `seq` yang
 sebenarnya dibutuhkan panggilan ini ada di tengahnya (`lib/std/system.nim:658`); dua baris terakhir adalah
 compiler mencoba bentuk `^`, `BackwardsIndex`, yang bukan tipe argumennya. Intinya baris pertama — `[]` milik
 array menerima indeks integer, dan tidak ada overload yang menerima array plus rentang.

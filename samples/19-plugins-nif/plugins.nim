@@ -4,8 +4,10 @@ import std / syncio
 template shape(x: untyped) {.plugin: "deps/shape".}
 template typedShape(x: typed) {.plugin: "deps/shape".}
 
-shape(2 + 3 * 4)
-typedShape(2 + 3 * 4)
+var a = 2
+
+shape(a + 1)
+typedShape(a + 1)
 
 proc twice(n: int): int = n + n
 
