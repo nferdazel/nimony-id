@@ -15,13 +15,13 @@ glossary_added: ["for loop", "loop variable", "iterator", "countup", "countdown"
 
 # Loop dan Range
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Perulangan punya dua bentuk di sini. `for` menjalankan body sekali untuk tiap nilai yang dihasilkan iterator —
 cara biasa untuk menyusuri rentang angka atau karakter. `while` menjalankan body selama kondisi terpenuhi, dan itu
 yang kamu mau kalau jumlah putarannya belum diketahui di depan.
 
-Paruh kedua chapter ini soal `range`, tipe yang sudah diperkenalkan Chapter 4. Loop adalah tempat range paling
+Paruh kedua bab ini soal `range`, tipe yang sudah diperkenalkan Bab 4. Loop adalah tempat range paling
 sering muncul: batas index, batas loop, angka kecil yang dikirim ke routine yang cuma menerima digit. Di pin ini
 compiler membela sebuah range dengan **bukti**, bukan dengan runtime check, dan bukti itu punya cakupan — harus
 terlihat di tempat nilainya dipakai, dan tidak ikut nilainya masuk ke routine lain.
@@ -223,7 +223,7 @@ for i in 0..5:
 Penulisan itu menyetel counter ke `3`, dan putaran berikutnya lanjut dari `4`. Menulis melewati batas malah
 mengakhiri loop: `for i in 0..2: i = 5; echo i` mencetak `5` sekali lalu berhenti.
 
-Aturan buku ini: baca variabel loop, jangan tulis. Tidak ada sample di sini yang menulisnya, dan tidak ada chapter
+Aturan buku ini: baca variabel loop, jangan tulis. Tidak ada sample di sini yang menulisnya, dan tidak ada bab
 berikutnya yang bergantung padanya — perilakunya dicatat di `ERRATA.md` sebagai observasi pin, bukan diajarkan
 sebagai teknik.
 
@@ -260,7 +260,7 @@ for i in 0..2:
 2
 ```
 
-Itu aturan yang sama dengan `break` di Chapter 6: loop terdalam, bukan block. Dua keyword itu beda di arah
+Itu aturan yang sama dengan `break` di Bab 6: loop terdalam, bukan block. Dua keyword itu beda di arah
 tujuannya — `continue` ke putaran berikutnya, `break` keluar dari loop — bukan di apa yang mereka anggap konstruk
 pembungkusnya.
 
@@ -302,7 +302,7 @@ kesalahan `while` yang layak disebut, karena compiler tidak akan menyebutkannya 
 
 ## Parameter `range`: buktinya lokal
 
-Chapter 4 sudah menunjukkan tipe dan konversinya. Dalam praktik range biasanya ditemui di batas — routine yang
+Bab 4 sudah menunjukkan tipe dan konversinya. Dalam praktik range biasanya ditemui di batas — routine yang
 hanya menerima digit:
 
 ```
@@ -355,7 +355,7 @@ r = n
 Jadi aturan buku ini: taruh penjagaannya di routine yang butuh range itu, tulis sebagai dua perbandingan, dan
 buktikan ulang nilai hasil hitungan terhadap batas yang benar-benar dijanjikan penjagaannya.
 
-## Delta Nim 2: bukti range bersifat lokal
+## Nim 2 delta: bukti range bersifat lokal
 
 > **Apa yang dilakukan Nim 2.** Sebuah `range` dibela saat runtime ketika nilainya mencapai tipe, jadi nilai yang
 > benar pada saat dipakai diterima sejauh apa pun dia sudah berjalan untuk sampai ke sana. Dicek di host
@@ -372,9 +372,9 @@ buktikan ulang nilai hasil hitungan terhadap batas yang benar-benar dijanjikan p
 > hitungan yang dibangun dari nilai terjaga bisa melewati penjagaannya: dengan penjagaan `n <= 9`, `n + 1` butuh
 > `n <= 8`, jadi buktinya harus mencakup hasilnya, bukan cuma nilainya.
 
-## Sample
+## Samples
 
-`samples/07-loops-ranges/loops.nim` — setiap konstruksi di chapter ini, berurutan, di commit yang dipatok:
+`samples/07-loops-ranges/loops.nim` — setiap konstruksi di bab ini, berurutan, di commit yang dipatok:
 
 ```
 $ nimony c -r samples/07-loops-ranges/loops.nim
@@ -414,7 +414,7 @@ not a digit
 diakumulasi `var` di luar loop. Dua baris terakhir adalah parameter range yang menerima `7` lewat penjagaan
 perbandingan dan menolak `70` di `else`.
 
-## Latihan
+## Cek
 
 1. Tulis `for i in 0..3: echo i`. Harapan: `0 1 2 3`, empat baris. Ubah ke `0..<3`. Harapan: tiga baris.
 2. Hitung putaran `for i in 3..0`. Harapan: `0`. Ganti header-nya dengan `countdown(3, 1)`. Harapan: `3 2 1`.
@@ -426,7 +426,7 @@ perbandingan dan menolak `70` di `else`.
    dengan `i < len(s) [AssertionDefect]`, exit 1. Ganti header ke `0..<len("abc")`. Harapan: tiga baris, exit 0.
 6. Tulis `for i in 0..high(int): echo i`. Harapan: `contract violated:` dengan syarat `b < …`. Ganti batasnya ke
    `high(int) - 1`. Harapan: compile dan jalan (jangan dijalankan sampai habis).
-7. Tulis contoh variabel loop dari chapter ini. Harapan: `0 3 4 5`. Pindahkan penulisannya melewati batas
+7. Tulis contoh variabel loop dari bab ini. Harapan: `0 3 4 5`. Pindahkan penulisannya melewati batas
    (`for i in 0..2: i = 5; echo i`). Harapan: `5` sekali.
 8. Tulis contoh `continue`. Harapan: `1 3 5`. Taruh di dalam `block` telanjang. Harapan: `0 2`.
 9. Tulis contoh `while` + `continue`. Harapan: `1 2 4 5`. Pindahkan increment-nya setelah `continue`. Harapan:

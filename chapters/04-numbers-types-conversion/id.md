@@ -15,14 +15,14 @@ glossary_added: ["integer type", "floating-point type", "narrowing conversion", 
 
 # Angka, Tipe, dan Konversi
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Setiap nilai dalam program Nimony punya tepat satu tipe, dan compiler sudah menyimpulkannya sebelum kamu
 menyebutnya. Untuk angka, kesimpulan itu menentukan tiga hal yang langsung terasa: seberapa banyak ruang yang
 dimiliki nilai itu, apa yang terjadi ketika sebuah perhitungan butuh ruang lebih besar dari itu, dan apakah dua
 nilai bertipe berbeda boleh bertemu dalam satu ekspresi.
 
-Chapter ini membahas tipe numerik, dua tipe non-numerik yang setiap hari kamu pegang di variabel — `bool` dan
+Bab ini membahas tipe numerik, dua tipe non-numerik yang setiap hari kamu pegang di variabel — `bool` dan
 `char` — dan satu tempat di mana tipe bukan sekadar label melainkan bukti: `range`. Konversi dapat bagiannya
 sendiri karena Nimony relatif sedikit melakukannya untukmu.
 
@@ -42,7 +42,7 @@ let byte = 255'u8
 
 Satu kebiasaan dari C sebaiknya ditinggalkan di sini: `int` bukan "32 bit, kira-kira". Ia adalah tipe yang
 lebarnya mengikuti target, dan kode yang butuh lebar pasti menyebutkannya. Tipe unsigned sebagian besar ada untuk
-batas C, yaitu Chapter 22; untuk aritmetika di programmu sendiri, `int` adalah default-nya.
+batas C, yaitu Bab 22; untuk aritmetika di programmu sendiri, `int` adalah default-nya.
 
 ## Apa yang terjadi saat integer overflow
 
@@ -106,7 +106,7 @@ echo 6 / 2        # 3.0
 
 `div` memotong ke arah nol, jadi `-7 div 2` adalah `-3`, bukan `-4`. `mod` mengambil tanda dari dividend:
 `-7 mod 3` adalah `-1`. Tidak satu pun dari kedua operator itu bisa ditukar dengan `/`, dan menulis `7 / 2` di
-tempat yang kamu maksud `3` adalah cara diam-diam untuk mengakhiri chapter berikutnya dengan float.
+tempat yang kamu maksud `3` adalah cara diam-diam untuk mengakhiri bab berikutnya dengan float.
 
 ## Konversi eksplisit
 
@@ -179,7 +179,7 @@ if step >= 0 and step <= 9:
   d = Digit(step)
 ```
 
-Chapter 7 memakai range di loop; di sini poinnya cuma bahwa range memindahkan fakta yang biasanya kamu uji saat
+Bab 7 memakai range di loop; di sini poinnya cuma bahwa range memindahkan fakta yang biasanya kamu uji saat
 runtime ke dalam tipe, dan compiler tidak akan membiarkanmu melewati pembuktian itu.
 
 ## Nim 2 delta: overflow wraps
@@ -198,7 +198,7 @@ runtime ke dalam tipe, dan compiler tidak akan membiarkanmu melewati pembuktian 
 > yang salah, panjang yang negatif, total yang diam-diam keliru. Dan aritmetika yang ditulis dengan mengandalkan
 > build debug melempar sekarang hanyalah aritmetika yang wrap.
 
-## Sample
+## Samples
 
 - `samples/04-numbers-types-conversion/numbers.nim` — satu program yang mencetak lebar `int`, me-wrap nilai signed
   dan unsigned di batasnya, membaca overflow flag, membagi dengan `div`, `mod` dan `/`, mengonversi dua arah
@@ -238,7 +238,7 @@ runtime ke dalam tipe, dan compiler tidak akan membiarkanmu melewati pembuktian 
 
   `8` untuk `sizeof(int)` adalah host 64-bit ini; pada target 32-bit baris yang sama mencetak `4`.
 
-## Latihan
+## Cek
 
 1. Cetak `sizeof(int)`, `low(int8)` dan `high(int8)`. Harapan: `8`, `-128`, `127` di host ini; angka pertama
    berubah mengikuti target, dua sisanya tidak pernah.

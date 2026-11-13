@@ -15,13 +15,13 @@ glossary_added: ["string", "null terminator", "cstring", "slice", "escape sequen
 
 # String
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 `string` di Nimony adalah nilai biasa: punya panjang, menyalin dirinya saat kamu assign, dan berupa urutan byte
 yang bisa kamu index. Yang **tidak** dia punya adalah byte nol tak terlihat di ujungnya, dan perubahan tunggal
 itulah yang paling sering membongkar kebiasaan dari bahasa lain.
 
-Chapter ini mengajar nilai itu lebih dulu — bangun, index, slice, bandingkan — lalu batasnya, di mana `cstring`
+Bab ini mengajar nilai itu lebih dulu — bangun, index, slice, bandingkan — lalu batasnya, di mana `cstring`
 masih muncul dan berapa harga konversinya.
 
 ## String adalah nilai
@@ -45,7 +45,7 @@ echo copy             # abcd
 ```
 
 Itu bukan catatan kaki. Ini yang menentukan apa yang dilakukan sebuah procedure terhadap string yang dia terima:
-tanpa parameter `var`, dia bekerja di salinannya sendiri, dan string milik pemanggil tidak tersentuh. (Chapter 8
+tanpa parameter `var`, dia bekerja di salinannya sendiri, dan string milik pemanggil tidak tersentuh. (Bab 8
 membahas parameter selengkapnya.)
 
 ## Membangun string
@@ -100,7 +100,7 @@ Pemeriksaannya terjadi saat program jalan, bukan saat compile: compiler menerima
 dan assertion-nya menyala belakangan. Index yang kamu hitung sendiri adalah tanggung jawabmu.
 
 Pemeriksaan tetap hidup di bawah `-d:release`; hanya `-d:danger` yang mematikannya (`nimony --help`), dan setelah
-itu `s[5]` membaca byte apa pun yang kebetulan ada setelah payload dan programnya lanjut. Gue sudah
+itu `s[5]` membaca byte apa pun yang kebetulan ada setelah payload dan programnya lanjut. Kamu sudah
 mengonfirmasi keduanya di pin: default dan `-d:release` berhenti dengan `AssertionDefect` di atas, `-d:danger`
 mencetak byte nyasar itu.
 
@@ -251,7 +251,7 @@ tidak punya byte seperti itu sampai ada yang menulisnya.
 ## Di mana `cstring` masih muncul
 
 `cstring` adalah tipe pointer yang kompatibel dengan C (`doc/language.md:306-314`). Di buku ini dia muncul di
-batas C dan hampir tidak di tempat lain: Chapter 22 mengikat fungsi C, dan chapter itulah yang bersandar padanya.
+batas C dan hampir tidak di tempat lain: Bab 22 mengikat fungsi C, dan bab itulah yang bersandar padanya.
 
 Aturan yang kamu butuh sebelum itu:
 
@@ -265,7 +265,7 @@ Aturan yang kamu butuh sebelum itu:
 - **`case`.** `cstring` bekerja di `case` seperti string (`doc/language.md:341`).
 - **Indexing.** Panduannya menyatakan tidak ada pemeriksaan batas pada index `cstring` (`doc/language.md:312-314`).
   Perlakukan `c[3]` sebagai pembacaan tidak aman: tidak ada yang menghentikanmu berjalan melewati ujung.
-- **Nil.** Tipenya muncul sebagai `cstring not nil` di pesan error. Nilability adalah subjek Chapter 13; untuk
+- **Nil.** Tipenya muncul sebagai `cstring not nil` di pesan error. Nilability adalah subjek Bab 13; untuk
   sekarang, catat saja bahwa `cstring` tidak nil secara default.
 
 Arah yang paling penting praktis satu arah: kamu konversi di batas, panggil fungsi C, lalu kembali dengan
@@ -289,7 +289,7 @@ echo "a-b-c".replace("-", "+")              # a+b+c
 ```
 
 `find` mengembalikan `-1` ketika yang dicari tidak ada, bukan optional. `split` mengembalikan `seq[string]`, jadi
-Chapter 10 adalah tempat indexing dan pembongkarannya dibahas penuh.
+Bab 10 adalah tempat indexing dan pembongkarannya dibahas penuh.
 
 Perhatikan apa yang **tidak** ada di sini: `insert` dan `delete` tidak ada untuk `string` di pin (`insert` adalah
 identifier yang tidak dideklarasikan, dan `delete` hanya ketemu overload `seq` lalu gagal dengan type mismatch),
@@ -313,7 +313,7 @@ dengan `&`, `add`, dan slicing, bukan dengan editor in-place.
 > nyasar). Dan kode yang menyimpan `cstring` melewati perubahan string sumbernya salah dua kali: pointernya
 > mungkin berasal dari salinan, dan nolnya hanya ditulis pada saat konversi.
 
-## Sample
+## Samples
 
 `samples/05-strings/strings.nim`, di-compile dan dijalankan di commit yang dipatok:
 
@@ -357,7 +357,7 @@ cstring case
 Baris `a` lalu tab lalu `b` adalah satu baris yang berisi tab. Angka `195` adalah byte pertama dari `é`, dan `7`
 adalah `strlen` yang berhenti di nol yang ditulis `toCString`.
 
-## Latihan
+## Cek
 
 1. Cetak `len`, `[0]`, `[^1]`, dan `[0..2]` dari `"Nimony"`. Harapan: `6`, `N`, `y`, `Nim`.
 2. Tulis `echo "n=" & 42`. Harapan: type mismatch yang menyebut `char` dan `int64`. Ganti ke `$42` dan harapkan

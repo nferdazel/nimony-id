@@ -15,33 +15,33 @@ glossary_added: [ownership, borrow, alias, moved-from state, ensureMove]
 
 # Ownership dan Pemeriksaan Borrow
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
-Chapter 13 memberi lo dua cara mencapai storage milik nama lain: `ref` yang dikelola dan `ptr` mentah. Chapter
+Bab 13 memberi kamu dua cara mencapai storage milik nama lain: `ref` yang dikelola dan `ptr` mentah. Bab
 ini soal aturan yang datang bersama cara itu. Siapa yang bertanggung jawab atas sebuah nilai, kapan dua nama
-boleh menunjuk storage yang tumpang tindih, dan apa yang compiler tolak sebelum program lo sempat jalan.
+boleh menunjuk storage yang tumpang tindih, dan apa yang compiler tolak sebelum program kamu sempat jalan.
 
 Di pin ini compiler menegakkan tiga aturan, dan cuma tiga. Sebuah panggilan tidak boleh mengirim lokasi yang
 sama sekali sebagai argumen mutable dan sekali sebagai argumen yang membaca storage pemanggil. Sebuah borrow
 tidak boleh hidup lebih lama dari storage yang ia pinjam. Sebuah jalur yang sedang di-borrow tidak boleh
 dimutasi selama borrow-nya berjalan. Sebagian besar yang programmer Nim 2 kelompokkan sebagai "ownership" tidak
-ditegakkan di sini, pemeriksaan move yang paling atas, jadi paruh kedua chapter ini menuliskan apa yang pin
+ditegakkan di sini, pemeriksaan move yang paling atas, jadi paruh kedua bab ini menuliskan apa yang pin
 lakukan, bukan mengajarkan aturan yang tidak dimiliki compiler-nya.
 
 ## Apa artinya "memiliki" sebuah nilai
 
 Mulai dari yang assignment sudah lakukan. `var b = a` menyalin, dan kedua nama mencapai storage terpisah,
-kecuali tipenya `ref`, yang berarti kedua nama mencapai satu cell (Chapter 13). Jadi pemilik sebuah nilai
+kecuali tipenya `ref`, yang berarti kedua nama mencapai satu cell (Bab 13). Jadi pemilik sebuah nilai
 adalah nama yang salinannya dihancurkan di akhir scope-nya. Tidak ada yang menandainya di tipe, dan tidak ada
 yang melacaknya saat runtime.
 
 Compiler punya hook untuk momen itu — `=destroy`, `=dup`, `=copy`, `=wasMoved`, `=sink` — dideklarasikan di
 `lib/std/system.nim:112-116`. Itu routine biasa yang dipanggil runtime; bukan flow analysis, dan sebuah tipe
 bebas mendefinisikannya atau tidak. `string` dan `seq` memakainya untuk melepas buffer. `int` tidak butuh sama
-sekali, itu sebabnya memindahkan `int` nanti di chapter ini tidak mengubah apa pun.
+sekali, itu sebabnya memindahkan `int` nanti di bab ini tidak mengubah apa pun.
 
 `doc/language.md:893-960` mendokumentasikan anotasi `owned` yang opt-in untuk `ref` dan closure di balik
-`{.feature: "ownedRefs".}`. Chapter ini tidak memakainya, dan tidak ada aturan di bawah yang bergantung padanya.
+`{.feature: "ownedRefs".}`. Bab ini tidak memakainya, dan tidak ada aturan di bawah yang bergantung padanya.
 
 ## Pemeriksaan aliasing di titik panggilan
 
@@ -64,7 +64,7 @@ Error: mutable argument aliases with mutable parameter
 Kapan paruh kedua menyala mudah dilihat. `swap(x, x)` pada dua parameter `int` ditolak
 (`src/nimony/contracts_fir.nim:4282`), karena dua penulisan lewat satu lokasi membuat hasilnya bergantung pada
 urutan callee menulis, dan tidak ada properti tipe yang bisa menyelamatkan itu. Field yang berbeda dari satu
-object aman, dan `swap(p.x, p.y)` jalan — itu blok pertama sample chapter ini.
+object aman, dan `swap(p.x, p.y)` jalan — itu blok pertama sample bab ini.
 
 Paruh pertama bergantung pada tipe, dan itu bagian yang layak dipelajari. `passedByPointer`
 (`src/nimony/contracts_fir.nim:4340-4351`) menjawab satu pertanyaan — bisakah salinan milik callee berubah
@@ -165,7 +165,7 @@ Error: borrow of 'a' escapes the proc; it does not live long enough
 Error: unsynchronized access to global variable 'g'; pass it to a `.sync` routine or use `{.cast(assumeSync).}`
 ```
 
-Dua error, dan yang kedua sama sekali bukan soal borrow: aturan akses global dari Chapter 13 menyala di baris
+Dua error, dan yang kedua sama sekali bukan soal borrow: aturan akses global dari Bab 13 menyala di baris
 yang sama (`src/nimony/contracts_fir.nim:4125`). Pembaca yang cuma membaca baris pertama tidak akan tahu kenapa
 assignment biasa ke global jadi masalah; harapkan keduanya.
 
@@ -194,7 +194,7 @@ menyimpan karakternya inline — dan view atas salinan akan menggantung. Pemerik
 (`src/nimony/contracts_fir.nim:680-695`); paruh parameter pertama itulah sebabnya
 `proc window(s: seq[int]): openArray[int]` di sample legal.
 
-Hasil `var T` mengikuti aturan yang sama, dan dari situ pernyataan Chapter 9 berasal. `validBorrowsFrom`
+Hasil `var T` mengikuti aturan yang sama, dan dari situ pernyataan Bab 9 berasal. `validBorrowsFrom`
 (`src/nimony/derefs.nim:258-314`) menjawab satu pertanyaan — apakah ekspresi ini diturunkan dari parameter
 pertama routine, atau dari pointer? — dan `trReturn` (`src/nimony/derefs.nim:461-470`) menolak sisanya:
 
@@ -203,7 +203,7 @@ proc p(a: int; b: var int): var int =
   result = b            # Error: cannot borrow from b
 ```
 
-Pesannya menyebut ekspresinya, bukan aturannya. `cannot borrow from b` itu semua yang lo dapat; sebabnya, `b`
+Pesannya menyebut ekspresinya, bukan aturannya. `cannot borrow from b` itu semua yang kamu dapat; sebabnya, `b`
 adalah parameter kedua. Merantai lewat proc penerus berbunyi sama: `result = forward(x)` gagal dengan
 `cannot borrow from forward(x)`.
 
@@ -265,10 +265,10 @@ Baris terakhir yang perlu diinternalisasi: `=wasMoved` adalah magic (`lib/std/sy
 `src/nimony/magics.nim:128`) yang hanya bekerja di tempat sebuah tipe punya spesialisasi — `string`
 (`lib/std/system/stringimpl.nim:296-297`), `seq[T]` (`lib/std/system/seqimpl.nim:59-61`), dan beberapa tipe
 handle. `int` tidak punya, jadi panggilannya tidak melakukan apa pun dan move-nya jadi salinan dengan langkah
-ekstra. Compiler tidak akan memberi tahu bahwa lo memakainya lagi.
+ekstra. Compiler tidak akan memberi tahu bahwa kamu memakainya lagi.
 
 Membaca nama lama setelah `move` compile dan jalan di setiap baris tabel di atas; tidak ada error untuk
-ditangkap. Itu sebabnya chapter ini tidak mengajarkan "compiler menghentikan use after move". Di pin ini ia
+ditangkap. Itu sebabnya bab ini tidak mengajarkan "compiler menghentikan use after move". Di pin ini ia
 tidak, dan aturan yang diajarkan di sini akan salah di program berikutnya.
 
 **`ensureMove` adalah yang diperiksa.** Ia duduk dua baris di atas `move` di berkas yang sama
@@ -287,9 +287,9 @@ Buang baris terakhir dan proc yang sama compile dan mencetak `text`, jadi beda y
 pembacaan kedua itu. Analisisnya `trEnsureMove` (`src/hexer/duplifier.nim:1573`), errornya dibangun di `:1611`,
 dan `doc/language.md:3591-3594` mendokumentasikannya sebagai error statis saat move tidak bisa dibuktikan aman.
 Jadi kalimat yang jujur harus dibatasi: membaca nama setelah `move` compile, membacanya setelah `ensureMove`
-tidak. Pakai `ensureMove` kalau lo mau compiler memeriksa penyerahannya.
+tidak. Pakai `ensureMove` kalau kamu mau compiler memeriksa penyerahannya.
 
-Satu catatan lagi sebelum lo memakainya: analisisnya hanya berjalan pada nama yang bisa ia lacak — `var`, `let`,
+Satu catatan lagi sebelum kamu memakainya: analisisnya hanya berjalan pada nama yang bisa ia lacak — `var`, `let`,
 atau parameter `sink` di scope lokal. Variabel module-level ditolak apa pun yang menyusul, karena `isLastRead`
 memang sengaja memperlakukan global sebagai tidak bisa dianalisis (`src/hexer/duplifier.nim:124-129`). Jaga
 penyerahannya di dalam proc.
@@ -297,11 +297,11 @@ penyerahannya di dalam proc.
 Hal yang sama berlaku untuk `sink`. Parameter `sink` menerima argumennya dan callee memiliki salinannya;
 variabel pemanggil tidak tersentuh sesudahnya. Mengirim `string` ke parameter `sink string` membiarkan nilai dan
 panjang milik pemanggil utuh (`c06`, `rv40`), dan `sink seq[int]` membiarkan panjangnya (`rv39`). Apa yang
-compiler lakukan di balik itu bukan urusan chapter ini; bentuk yang bisa diamati itulah yang ia ajarkan.
+compiler lakukan di balik itu bukan urusan bab ini; bentuk yang bisa diamati itulah yang ia ajarkan.
 
-## Delta Nim 2
+## Nim 2 delta
 
-Nim 2 meng-compile panggilan yang Nimony tolak, dan bedanya ada pada kapan lo tahu.
+Nim 2 meng-compile panggilan yang Nimony tolak, dan bedanya ada pada kapan kamu tahu.
 
 *Apa yang Nim 2 lakukan.* `take(s, s)` dengan `(var seq[int], seq[int])` compile dan mencetak `1` di Nim 2.4.0;
 begitu juga loop yang menambahkan ke seq yang sedang ia iterasi, yang lalu mati saat runtime dengan
@@ -340,18 +340,18 @@ Delapan baris, dalam urutan itu. `tools/verify-samples.sh` meng-compile dan menj
 lain di buku ini dan keluar 0 hanya kalau semuanya jalan; ia tidak membandingkan stdout, jadi delapan baris di
 atas adalah output yang diharapkan dan hal yang dicek dengan mata.
 
-## Checks
+## Cek
 
 1. Tulis `take(a: var int, b: int)` lalu panggil `take(x, x)`. Ia compile. Ubah `b` jadi `seq[int]` dan panggil
    `take(s, s)`. Ia tidak. Sekarang buat `b` bertipe `array[25, uint8]` dan panggil `take(v[0], v)`, yang juga
    gagal. Sebutkan properti parameter kedua yang memutuskan di tiap kasus, satu kalimat masing-masing.
-2. Ambil pasangan `Plain`/`Named` dari chapter ini dan tambahkan satu field `string` ke `Plain`. Compile kedua
+2. Ambil pasangan `Plain`/`Named` dari bab ini dan tambahkan satu field `string` ke `Plain`. Compile kedua
    panggilannya lagi dan sebutkan mana yang sekarang gagal, dan kenapa errornya menunjuk `plain.x`, argumen
    mutable itu.
 3. Tulis ulang loop `addItem(s, x)` sebagai loop indeks. Kedua versi melakukan kerja yang sama; sebutkan apa yang
    tidak diambil versi indeks.
 4. Pindahkan sebuah `string` ke sebuah `let`, cetak panjang nama lamanya, lalu cetak nama lamanya itu sendiri.
-   Tuliskan dugaan lo sebelum menjalankannya, dan periksa nilai moved-from-nya cocok dengan kolom kedua tabel.
+   Tuliskan dugaan kamu sebelum menjalankannya, dan periksa nilai moved-from-nya cocok dengan kolom kedua tabel.
    Lalu ganti `move` dengan `ensureMove`: catat apa yang berubah, dan kenapa kegagalannya datang sebelum program
    berjalan.
 

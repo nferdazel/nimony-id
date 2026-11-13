@@ -15,17 +15,17 @@ glossary_added: ["nominal type", "enum type", "borrow"]
 
 # Object, Enum, dan Distinct Type
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
-Chapter 10 memilih container berdasarkan apa yang harus dilakukan data. Chapter ini memberi nama pada datanya
+Bab 10 memilih container berdasarkan apa yang harus dilakukan data. Bab ini memberi nama pada datanya
 sendiri. Sebuah `object` memberi satu nama untuk sekumpulan field yang berhubungan, jadi routine bisa menerima
 `Point` alih-alih dua integer dengan urutan yang harus diingat. Sebuah `enum` menamai sekumpulan nilai tetap dan
 mengurutkannya, jadi `Color` bukan pengganti `int`. Tipe `distinct` mempertahankan satu representasi dan menolak
 bercampur dengan base-nya, jadi jarak dalam meter tidak bisa dijumlahkan dengan durasi dalam detik secara tidak
 sengaja.
 
-Ketiganya value type biasa, dan aturan dari Chapter 10 tetap berlaku: assignment menyalin. Yang berubah adalah
-apa yang diizinkan compiler untuk lo campur. Object itu nominal, jadi dua object dengan field identik tetap dua
+Ketiganya value type biasa, dan aturan dari Bab 10 tetap berlaku: assignment menyalin. Yang berubah adalah
+apa yang diizinkan compiler untuk kamu campur. Object itu nominal, jadi dua object dengan field identik tetap dua
 tipe. Nilai enum terurut dan bisa diiterasi. Tipe distinct berbagi byte dengan base-nya dan tidak berbagi apa pun
 selain itu.
 
@@ -40,7 +40,7 @@ type Point = object
   y: int
 ```
 
-Field yang tidak pernah ditulis tetap punya nilai. Konstruksi mengisi field yang lo sebut dan membiarkan sisanya
+Field yang tidak pernah ditulis tetap punya nilai. Konstruksi mengisi field yang kamu sebut dan membiarkan sisanya
 apa adanya — manual menyatakannya di `doc/language.md:568-583`. Bahwa field yang dihilangkan mengambil default
 tipenya (`0` untuk `int`, `false` untuk `bool`, string kosong untuk `string`) diukur di pin ini, bukan dikutip
 (`ch11-probes/o1.nim`, `o3.nim`).
@@ -100,7 +100,7 @@ echo b.items[0]    # 99
 
 Itu diukur di pin ini (`ch11-probes/o12.nim`), dan cocok dengan aturan yang disebut language reference untuk
 tuple dan object: operator assignment menyalin tiap komponen (`doc/language.md:564`). Ini juga menjelaskan aturan
-parameter dari Chapter 10. Parameter object by-value bukan place, jadi routine tidak bisa menulis object milik
+parameter dari Bab 10. Parameter object by-value bukan place, jadi routine tidak bisa menulis object milik
 pemanggil; `var` yang membuatnya bisa ditulis.
 
 ### Object itu nominal
@@ -141,7 +141,7 @@ membeli pemeriksaan, bukan komentar.
 
 ### Mencetak object butuh `$`
 
-`echo` menulis tipe bawaan. Object buatan lo bukan salah satunya, jadi `echo p` adalah type error yang
+`echo` menulis tipe bawaan. Object buatan kamu bukan salah satunya, jadi `echo p` adalah type error yang
 mendaftar setiap overload `write` yang dicoba compiler (`ch11-probes/o6.nim`):
 
 ```
@@ -151,7 +151,7 @@ write stdout, P(x: 1)
 ...
 ```
 
-`echo` tidak menerapkan `$` untuk lo. Tulis sendiri dan terapkan sendiri:
+`echo` tidak menerapkan `$` untuk kamu. Tulis sendiri dan terapkan sendiri:
 
 ```nim
 func `$`(v: Point): string =
@@ -165,12 +165,12 @@ terdokumentasi, bukan bug. Template `echo` di Nimony mengulang `unpack()` dan me
 konverter `$` (`doc/language.md:466-471`, `lib/std/syncio.nim:465-468`), dan `doc/porting.md:346-347` menyatakan
 object memang sengaja tidak punya `$` generik — definisikan satu untuk tipe object itu.
 
-> **Nim 2 delta — `echo` tidak lagi menerapkan `$` lo**
+> **Nim 2 delta — `echo` tidak lagi menerapkan `$` kamu**
 >
 > *Apa yang dilakukan Nim 2* → `echo p` menemukan overload `$` dan mencetak `P1`, dari source yang sama
 > (`~/.local/opt/nim-2.4.0`, probe `nim2check.nim`).
-> *Apa yang dilakukan Nimony* → template `echo` di atas menulis nilainya sendiri; `$` buatan lo adalah routine
-> yang lo panggil, jadi tulis `echo $p`.
+> *Apa yang dilakukan Nimony* → template `echo` di atas menulis nilainya sendiri; `$` buatan kamu adalah routine
+> yang kamu panggil, jadi tulis `echo $p`.
 > *Apa yang rusak kalau kebiasaannya dibawa* → `echo` pada object gagal dengan `write stdout, P(x: 1)` plus
 > daftar kandidat, dan perbaikannya bukan mendefinisikan `$` tapi menerapkannya.
 
@@ -224,7 +224,7 @@ Manual mewajibkan ordinal menaik (`doc/language.md:213-215`), dan pin ini tidak 
 tetap compile (`ch11-probes/rv11.nim`), `c` tetap mengambil nilai sebelumnya plus satu sehingga `ord` memberi
 `5` / `3` / `4`, dan perbandingan mengikuti nilainya, jadi `a < b` bernilai `false`. Enum-nya menjadi holey,
 dengan konsekuensi di bawah. Tulis daftar menaik; daftar menurun diterima, bukan ditolak, jadi compiler tidak
-akan menangkapnya untuk lo.
+akan menangkapnya untuk kamu.
 
 Bentuk pasangan melampirkan string ke nilai, dan string itulah yang dicetak `$` (`doc/language.md:228-240`).
 Hole adalah harga dari ordinal eksplisit: enum-nya lalu **bukan ordinal**, jadi tidak bisa mengindeks array dan
@@ -241,7 +241,7 @@ echo succ(blue)   # ordinal 3 — not a member, prints an empty line
 Dua sisi kasar, dua-duanya diukur di pin ini. Pertama, `low` dan `high` adalah proc bawaan atas sebuah
 `typedesc` (`lib/std/system/basic_types.nim:113-116`), dan di posisi argumen nama tanpa kualifikasi merujuk ke
 proc itu, bukan ke member enum: enum dengan member bernama `low` membuat `ord(low)` gagal dengan
-`auto does not match constraint T (system.nim(207, 1))`, pesan yang tidak pernah menyebut enum lo
+`auto does not match constraint T (system.nim(207, 1))`, pesan yang tidak pernah menyebut enum kamu
 (`ch11-probes/e10.nim`). Member-nya sendiri utuh — `ord(Level.low)` adalah `0` (`rv9.nim`). Jadi kualifikasikan
 nilainya sebagai `Level.low`, atau hindari kedua nama itu.
 
@@ -277,13 +277,13 @@ var i: int = Meters(4)   # Error: type mismatch: got: Meters but wanted: int64
 ```
 
 `int64` di pesan-pesan itu bukan salah tulis — di pin ini `int` dan `int64` adalah tipe yang sama, yang sudah
-ditetapkan Chapter 9 dan ditunjukkan lagi oleh `ch11-probes/d1.nim` dan `d12.nim`. Nama yang dipakai sebuah pesan
+ditetapkan Bab 9 dan ditunjukkan lagi oleh `ch11-probes/d1.nim` dan `d12.nim`. Nama yang dipakai sebuah pesan
 mengikuti ekspresinya, bukan base tipe distinct-nya: literal `int` menamai `int64` bahkan untuk
 `distinct int32` (`rv7.nim`), sementara nilai yang sudah bertipe `int32` menamai `int32` (`rv8.nim`). Baca pesan
-yang lo dapat; jangan menganggapnya selalu `int64`.
+yang kamu dapat; jangan menganggapnya selalu `int64`.
 
 Operator juga tidak diwarisi. `Meters(2) + Meters(3)` adalah type error, begitu juga
-`Meters(2) == Meters(2)`, sampai lo menulisnya (`ch11-probes/d3.nim`, `d4.nim`). Tulis body-nya dulu — itu
+`Meters(2) == Meters(2)`, sampai kamu menulisnya (`ch11-probes/d3.nim`, `d4.nim`). Tulis body-nya dulu — itu
 menyatakan operasinya:
 
 ```nim
@@ -303,7 +303,7 @@ func `+`(lhs, rhs: Meters): Meters {.borrow.}
 `borrow` tidak menyalin body. Compiler membangkitkan body yang mengonversi tiap operand distinct ke base,
 memanggil operasi base, lalu mengonversi hasilnya kembali (`src/nimony/semborrow.nim:17-60`). Ia tidak membawa
 `noSideEffect` ikut, jadi operator yang seharusnya murni adalah `func`, dan itulah bentuk yang ditunjukkan
-`doc/porting.md:51-62`. Body yang ditulis tangan adalah hal yang sama yang dieja penuh, dan itulah yang lo
+`doc/porting.md:51-62`. Body yang ditulis tangan adalah hal yang sama yang dieja penuh, dan itulah yang kamu
 butuhkan ketika operasinya bukan operasi base.
 
 Base-nya tidak harus numerik. Tipe distinct atas sebuah object mempertahankan akses field base-nya lewat
@@ -323,7 +323,7 @@ dan routine yang meminta `Meters` tidak bisa diberi `int` atau `Seconds` secara 
 
 ## Samples
 
-Satu berkas membuktikan chapter ini: `samples/11-objects-enums-distinct/objects.nim`.
+Satu berkas membuktikan bab ini: `samples/11-objects-enums-distinct/objects.nim`.
 
 ```
 ~/.local/opt/nimony/4ba90a7/bin/nimony c -r samples/11-objects-enums-distinct/objects.nim
@@ -387,7 +387,7 @@ ordinal, urutan, kualifikasi dan `ord` lewat method syntax, lalu `5`, `3`, dan t
 `8` — dua konversi dan dua ukuran — dan `5`, `4m` untuk `+` yang di-borrow dan `$` distinct. `7` terakhir adalah
 pembacaan field lewat konversi distinct.
 
-## Latihan
+## Cek
 
 1. Deklarasikan `type Point = object` dengan `x, y: int`, lalu `echo Point(x: 1).y`. Harapan: `0`.
 2. Beri sebuah field default (`label: string = "new"`), cetak `Badge().label` dan `Badge(label: "x").label`.
@@ -400,7 +400,7 @@ pembacaan field lewat konversi distinct.
 7. `echo` sebuah object tanpa `$`. Harapan: `write stdout, P(x: 1)` dan daftar kandidat. Definisikan `$` untuk
    tipe itu, lalu cetak `echo $p`. Harapan: tercetak.
 8. Cetak `ord(blue)`, `red < blue` dan `Color.green` untuk enum tiga nilai. Harapan: `2`, `true`, `green`.
-9. Indeks `array[Color, int]` dengan `green` dan cetak `.len`. Harapan: nilai yang lo simpan, lalu `3`.
+9. Indeks `array[Color, int]` dengan `green` dan cetak `.len`. Harapan: nilai yang kamu simpan, lalu `3`.
 10. Deklarasikan enum dengan `a = 2, b = 4, c = 89` dan panggil `inc` pada salah satu nilai. Harapan: tidak
     terbangun — enum-nya tidak lagi ordinal.
 11. Namai sebuah nilai enum `low` atau `high` dan panggil `ord` padanya. Harapan: type error, bukan angka yang

@@ -6,7 +6,7 @@ Toolchain: `~/.local/opt/nimony/4ba90a7`, pin `4ba90a781b0b22d0821efaa153c129c37
 Verifier: `./tools/verify-samples.sh` → `SUMMARY 10/10 passed, 0 failed`, exit 0.
 
 Each claim below is what the chapter teaches. The probe is the file in
-`/Users/sachiel/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch11-probes/`, run with
+`~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch11-probes/`, run with
 `$NIMONY_HOME/bin/nimony c -r <file>`; output is pasted raw, trimmed to the lines that matter. `nim2check.nim`
 is the same file compiled with the host compiler `~/.local/opt/nim-2.4.0`, used only where the chapter claims a
 Nim 2 difference.
@@ -105,7 +105,7 @@ My verifier run:
 
 ```
 $ ./tools/verify-samples.sh
-toolchain /Users/sachiel/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
+toolchain ~/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
 PASS samples/11-objects-enums-distinct/objects.nim exit=0
 SUMMARY 10/10 passed, 0 failed
 VERIFY_EXIT=0

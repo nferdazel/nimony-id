@@ -53,10 +53,11 @@ match, nothing is released, which is the case for a docs or CI push. A content m
 without bumping `VERSION` has no tag to publish under and fails the job with that sentence, instead of
 leaving the release a chapter behind.
 
-The current release is `v0.1.6` on 2026-11-13: it makes the parity check read the localized contents layout and
-compare the two editions by chapter set and order rather than by title, and it carries chapters 1 to 13 in both
-editions. `v0.1.5` on 2026-11-12 gave the PDF its own cover — the pin strip, one hairline per character of
-`4ba90a7` — with chapters 1 to 11. `v0.1.4` replaced `v0.1.3`,
+The current release is `v0.1.18` on 2026-11-13: it carries 24 chapters plus Appendices A–C in both editions,
+with every reader-facing path written home-relative. `v0.1.17` added the back matter, `v0.1.16` added Chapters 23
+and 24, and `v0.1.6` made the parity check read the localized contents layout and compare the two editions by
+chapter set and order rather than by title. `v0.1.5` on 2026-11-12 gave the PDF its own cover — the pin strip, one
+hairline per character of `4ba90a7` — with chapters 1 to 11. `v0.1.4` replaced `v0.1.3`,
 whose PDFs clipped the chapter 2 checksum and printed the editorial freeze record, with PDFs that keep every
 long token inside the text block and leave the record out; it was still one chapter short of the site, which
 is what the parity check now catches. `v0.1.1` never produced a release: both PDFs share one file name and a
@@ -75,9 +76,9 @@ pin strip is this book's.
 
 ## Status
 
-Chapters 1 to 18 are in the book at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`. Chapters 1
-to 8 carry the review notes below; chapters 9 to 14 were reviewed at the same pin, 9 to 11 before the 0.1.5
-release, 12 to 14 after it, and 15 to 18 on 2026-11-13.
+Chapters 1 to 24 and Appendices A to C are in the book at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md`
+and `id.md` and each `frozen`. The review notes below cover Chapters 1 to 8; every later chapter carries the
+same record in its own `review.md`, and `ERRATA.md` holds the pin-level findings that outlived the chapter.
 
 - Chapter 1, `chapters/01-what-nimony-is/` — draft 2026-11-12, tech_review Momo 2026-11-12,
   editorial_pass 2026-11-12. No code samples; the compile gate does not apply.
@@ -118,8 +119,9 @@ The verifier prints `SUMMARY 23/23 passed, 0 failed` (samples 02–24; Chapter 1
 
 ## Drafting
 
-Nothing is drafting. Chapter 15 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md`
-does not draft; a chapter without one may.
+Nothing is drafting and nothing is planned: all 24 chapters and Appendices A–C are `frozen` at pin `4ba90a7`.
+The outline's **Proof gate** lines are all closed; a new chapter needs a line in `OUTLINE.md` first, and that is
+Damar's call, not a drafting decision.
 
 ## License and contributions
 

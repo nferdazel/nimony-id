@@ -15,15 +15,15 @@ glossary_added: ["let variable", "case-sensitive identifier", "scope (of a name)
 
 # Nilai, Nama, dan Mutabilitas
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Nimony memberimu tiga cara menempelkan nama pada sebuah nilai, dan ketiganya cuma berbeda di satu pertanyaan:
 *bisakah nama ini ditulis lagi setelah baris yang mendeklarasikannya lewat?* `const` bilang tidak, dan nilainya
 ditetapkan sebelum program berjalan. `let` bilang tidak, dan nilainya ditetapkan saat deklarasinya dijalankan.
 `var` bilang bisa.
 
-Itu seluruh aturannya, dan layak dipelajari persis sekarang karena hampir semua chapter berikutnya jadi lebih
-mudah dibaca begitu kamu tahu nama mana yang boleh berubah. Chapter ini juga membahas dua hal tentang nama itu
+Itu seluruh aturannya, dan layak dipelajari persis sekarang karena hampir semua bab berikutnya jadi lebih
+mudah dibaca begitu kamu tahu nama mana yang boleh berubah. Bab ini juga membahas dua hal tentang nama itu
 sendiri yang berbeda dari Nim 2: ejaannya harus persis, dan sebuah nama hanya hidup di block yang mendeklarasikannya.
 
 ## Tiga deklarasi, tiga janji
@@ -170,7 +170,7 @@ ulang sesering yang kamu mau.
 > Dan `const` yang nilainya bergantung pada sebuah `var` tetap compile error, jadi menghitung "konstanta" dari
 > data runtime tetap mustahil; obatnya `let`, bukan pragma.
 
-## Sample
+## Samples
 
 - `samples/03-values-names-mutability/values.nim` — satu program yang mendeklarasikan ketiga bentuk, menghitung
   `const` lewat pemanggilan routine, menjaga dua nama yang beda huruf besar-kecil tetap hidup, membayangi salah
@@ -195,7 +195,7 @@ ulang sesering yang kamu mau.
   1
   ```
 
-## Latihan
+## Cek
 
 1. Deklarasikan `let n = 1` lalu `n = 2`. Harapan: compile error `invalid reassignment to \`let\` variable`,
    dilaporkan di assignment-nya, bukan di deklarasinya.

@@ -15,14 +15,14 @@ glossary_added: [importc, exportc, cdecl, header, dynlib, cstring array]
 
 # Batas C
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Setiap routine di buku ini sampai titik ini ditulis dalam Nimony dan diperiksa Nimony. Fungsi C berbeda: compiler
-cuma melihat signature yang lo tulis dan tidak melihat body sama sekali, jadi tidak ada apa pun di dalamnya yang
-diverifikasi. Chapter ini soal mendeklarasikan signature itu dengan jujur, memetakan tipe supaya sisi C membaca
-apa yang lo maksud, dan menyeberangi batas string tanpa berpura-pura dua model string itu sama.
+cuma melihat signature yang kamu tulis dan tidak melihat body sama sekali, jadi tidak ada apa pun di dalamnya yang
+diverifikasi. Bab ini soal mendeklarasikan signature itu dengan jujur, memetakan tipe supaya sisi C membaca
+apa yang kamu maksud, dan menyeberangi batas string tanpa berpura-pura dua model string itu sama.
 
-Aturan yang menata chapter ini lugas: di deklarasi `importc`, tipe itu janji, bukan pemeriksaan. Semua yang salah
+Aturan yang menata bab ini lugas: di deklarasi `importc`, tipe itu janji, bukan pemeriksaan. Semua yang salah
 di batas ini salah karena janjinya salah — `long` yang dideklarasikan `int`, pointer yang dideklarasikan non-null
 padahal C membiarkannya null, callback yang daftar parameternya beda satu `const`.
 
@@ -39,7 +39,7 @@ echo strlen(cstring"hello")
 ```
 
 Itu mencetak `5`. Namanya diambil dari identifier Nimony kecuali pragma membawa string, dan header bukan yang
-memunculkan simbolnya: Nimony menulis sendiri prototipe dari deklarasi lo, dan tanpa header dia memancarkan
+memunculkan simbolnya: Nimony menulis sendiri prototipe dari deklarasi kamu, dan tanpa header dia memancarkan
 prototipe dengan nama C ditempel lewat label assembler, `cstrlen_0(...) __asm__("strlen")`. Yang ditambahkan
 `header` adalah deklarasi aslinya. `major` adalah buktinya — dia mencetak `0` dengan `<sys/types.h>` di pragma,
 dan tanpa header itu link gagal dengan `_major` yang tidak terdefinisi, karena `major` adalah makro di header
@@ -76,7 +76,7 @@ Alias selebar C datang bersama `system`, jadi tidak perlu import: `cint` adalah 
 di pin, dan empat nilai yang penting di sini adalah `4` untuk `cint`, `8` untuk `cdouble`, `8` untuk `pointer`,
 dan `8` untuk `csize_t`.
 
-Alias-alias itulah inti aturan pertama chapter ini. `cint` bukan `int`, dan nilai yang sudah bertipe harus
+Alias-alias itulah inti aturan pertama bab ini. `cint` bukan `int`, dan nilai yang sudah bertipe harus
 dikonversi: `csize_t(sizeof(cint))` ditulis eksplisit karena `sizeof` mengembalikan `int`, sementara literal
 telanjang seperti `3` di bawah berkonversi sendiri.
 
@@ -88,7 +88,7 @@ discard memset(addr buf[0], cint(ord('x')), 3)
 
 `buf` lalu berisi `xxx`, dan `buf[3]` masih `'\0'` — array `char` adalah buffer C, dan alamatnya yang diminta C.
 
-Struct C dipetakan sebagai object `{.importc.}` yang field-nya lo daftar berurutan, dan nama tipenya nama C-nya:
+Struct C dipetakan sebagai object `{.importc.}` yang field-nya kamu daftar berurutan, dan nama tipenya nama C-nya:
 
 ```nim
 type
@@ -103,7 +103,7 @@ let d = cdiv(7, 2)
 `d.quot` dan `d.rem` mencetak `3` dan `1`: struct kecil kembali by value dan dibaca field demi field. Pemetaan
 yang sama berlaku untuk parameter output — `stat` POSIX mengisi object `Stat` lewat `ptr Stat` dan mengembalikan
 `0`, dan C yang dihasilkan memuat `struct stat` serta pemanggilan `stat(...)` yang asli. `out Stat` adalah
-pointer yang sama dengan aturan inisialisasi dari Chapter 8 menempel padanya: deklarasi yang manualnya sendiri
+pointer yang sama dengan aturan inisialisasi dari Bab 8 menempel padanya: deklarasi yang manualnya sendiri
 tunjukkan (`doc/language.md:2778`) memancarkan `stat("main.nim", (&st))` dan mengisi object-nya.
 
 `sizeof` pada tipe seperti itu bertanya ke C, bukan ke Nimony: object `{.importc: "struct stat".}` yang cuma
@@ -114,7 +114,7 @@ seberapa besar object C-nya.
 ## String di batas
 
 `string` Nimony membawa panjang dan boleh berisi byte apa pun; `char*` C berhenti di byte nol pertama. Pin
-memberi lo tiga jalan menyeberang, dan ketiganya tidak bisa saling menggantikan.
+memberi kamu tiga jalan menyeberang, dan ketiganya tidak bisa saling menggantikan.
 
 `cstring"..."` adalah literal di memori read-only, mentah seperti dijelaskan di atas. `toCString(s)` mengambil
 `var string` dan mengembalikan pointer ke byte string itu sendiri, jadi pandangannya bisa ditulis dan string-nya
@@ -135,7 +135,7 @@ Itu mencetak `hello` lalu `Hello`. `let` tidak bisa dikirim: `toCString` pada `l
 
 `fromCString(c)` menyalin arah sebaliknya. `$c` juga menyalin, tapi `$` untuk `cstring` di pin tinggal di
 `std/strutils`, bukan di `system`: tanpa import itu, `$c` gagal sebagai type mismatch terhadap setiap kandidat
-`$`. `echo c` gagal karena alasan yang Chapter 20 berikan: sembilan overload `write` tidak memuat `cstring`.
+`$`. `echo c` gagal karena alasan yang Bab 20 berikan: sembilan overload `write` tidak memuat `cstring`.
 
 Dua model itu berbeda pendapat di byte nol pertama, dan perselisihannya diam:
 
@@ -205,7 +205,7 @@ benar ada: `nm` pada binary menunjukkan `_book_add` untuk probe `exportc` biasa,
 ditambahkan toolchain C platform ini. `{.cdecl.}` mendarat di C yang dihasilkan sebagai `N_CDECL(int, book_add)(...)`,
 dan di platform ini makronya mengembang jadi kosong karena konvensi default-nya memang C.
 
-Satu-satunya tempat compiler C benar-benar memeriksa lo adalah prototipe callback, dan dia lebih ketat dari sisi
+Satu-satunya tempat compiler C benar-benar memeriksa kamu adalah prototipe callback, dan dia lebih ketat dari sisi
 Nimony. `qsort` meminta `int (*)(const void *, const void *)`; pin memancarkan proc Nimony `{.cdecl.}` dengan
 parameter `pointer` sebagai `int (void *, void *)` — tanpa `const` — dan clang menolaknya dengan
 `incompatible function pointer types`. Mendeklarasikan parameternya `pointer` lalu mengirim `cast[pointer](cmp)`
@@ -215,7 +215,7 @@ dua signature cukup dekat, janji yang sama dengan yang dipakai seluruh batas ini
 ## Yang tidak diperiksa batas ini
 
 Tidak ada apa pun tentang routine `importc` yang dianalisis. Body-nya diperlakukan eksternal, jadi effect tag-nya
-apa pun yang lo tulis dan signature-nya tidak dibandingkan dengan header C:
+apa pun yang kamu tulis dan signature-nya tidak dibandingkan dengan header C:
 `src/nimony/contracts_fir.nim:6036-6041` melewati penelusuran body untuk proc extern sepenuhnya. `cint` yang
 salah di tempat C punya `long` ter-compile di kedua sisi dan membaca byte yang salah; `proc` yang mengambil dua
 parameter lalu dipanggil dengan tiga paling banter jadi error C.
@@ -225,8 +225,8 @@ ditulis, dan setelah `open` pada file yang tidak ada mengembalikan `-1`, variabe
 yang asli (`src/nimony/contracts_fir.nim:5791`). Mendeklarasikannya `cint` benar di sini; mendeklarasikan `long`
 C sebagai `cint` akan ter-compile dan membaca separuh nilai.
 
-Itulah metode seluruh chapter: baca prototipe C, tulis tipe Nimony yang cocok persis, dan perlakukan setiap
-penyimpangan sebagai bug yang lo temukan saat jalan, bukan saat compile.
+Itulah metode seluruh bab: baca prototipe C, tulis tipe Nimony yang cocok persis, dan perlakukan setiap
+penyimpangan sebagai bug yang kamu temukan saat jalan, bukan saat compile.
 
 ## Nim 2 delta
 
@@ -237,7 +237,7 @@ lain.
 `let` tidak bisa sama sekali. `$` untuk `cstring` datang dari `std/strutils`. Tidak ada `allocCStringArray`:
 array-nya adalah `alloc0` plus `cast` ke `ptr UncheckedArray[nil cstring]`, lalu `dealloc` di akhir. Nullability
 terbalik — tipe telanjang non-null dan tipe nullable ditulis `nil cstring`.
-*Apa yang rusak kalau lo bawa kebiasaannya:* `cstring(someVar)` adalah error konversi yang dikutip di atas,
+*Apa yang rusak kalau kamu bawa kebiasaannya:* `cstring(someVar)` adalah error konversi yang dikutip di atas,
 `echo cstringValue` adalah mismatch terhadap sembilan overload `write`, `allocCStringArray` adalah
 `undeclared identifier`, dan `getenv` yang dideklarasikan mengembalikan `cstring` ter-compile sambil menjanjikan
 sesuatu yang tidak ditepati fungsi C-nya.
@@ -280,12 +280,12 @@ Nimony dengan nol di dalamnya melawan hitungan C (`3 1`); elemen array yang dipe
    `cstring`.
 3. Panggil `toCString` pada `let`. Harapan: `cannot pass … to var/out T parameter`.
 4. Tulis `cstring"a\nb"` dan `"a\nb"` lalu cetak kedua panjangnya. Harapan: `4` dan `3`.
-5. Deklarasikan `getenv` mengembalikan `cstring` biasa, lalu panggil dengan nama yang lo tahu tidak diset dan
+5. Deklarasikan `getenv` mengembalikan `cstring` biasa, lalu panggil dengan nama yang kamu tahu tidak diset dan
    cetak `isNil`. Harapan: `true`, tanpa keluhan compiler — pelajarannya, deklarasi tidak bisa membuatnya
    non-null.
 6. Deklarasikan `memset` dan isi tiga byte dari `array[4, char]` dengan `'x'`. Harapan: `xxx` dan byte keempat
    nol.
-7. Taruh proc `{.exportc.}` di program lo dan cari namanya dengan `nm`. Harapan: simbolnya ada.
+7. Taruh proc `{.exportc.}` di program kamu dan cari namanya dengan `nm`. Harapan: simbolnya ada.
 
 ## Chapter checklist
 

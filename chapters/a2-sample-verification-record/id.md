@@ -13,12 +13,12 @@ samples: []
 glossary_added: []
 ---
 
-# Catatan verifikasi sampel
+# Catatan verifikasi sample
 
 ## Untuk apa lampiran ini
 
 Buku pemrograman adalah klaim tentang sebuah kompiler. Buku ini membuat klaim itu dalam satu bentuk saja: setiap
-sampel di `samples/` dikompilasi dan dijalankan oleh satu skrip terhadap satu toolchain, dan sebuah bab tidak beku
+sample di `samples/` dikompilasi dan dijalankan oleh satu skrip terhadap satu toolchain, dan sebuah bab tidak beku
 sebelum run itu hijau. Lampiran ini adalah catatan arti "hijau", perintahnya, dan bentuk outputnya di pin — hal
 yang sama yang dibutuhkan pembaca untuk memeriksa buku alih-alih memercayainya.
 
@@ -50,7 +50,7 @@ perintah mencari toolchain lewat `$NIMONY_HOME` dan jatuh ke `~/.local/opt/nimon
 ## Arti outputnya
 
 Verifier membaca setiap `samples/*/*.nim`, mengompilasi masing-masing dengan `nimony c -r`, dan mencetak satu baris
-per sampel diikuti ringkasan:
+per sample diikuti ringkasan:
 
 ```
 toolchain ~/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
@@ -61,12 +61,12 @@ SUMMARY 23/23 passed, 0 failed
 
 Tiga exit code, dan ketiganya tidak bisa ditukar:
 
-- **0** — semua sampel kompil dan jalan.
-- **1** — ada sampel yang gagal; baris yang gagal menyebut sampelnya dan exit code-nya.
-- **2** — toolchain tidak ada atau bukan pin. Ini bukan putusan tentang sampel, dan ringkasan yang tampak hijau
+- **0** — semua sample kompil dan jalan.
+- **1** — ada sample yang gagal; baris yang gagal menyebut samplenya dan exit code-nya.
+- **2** — toolchain tidak ada atau bukan pin. Ini bukan putusan tentang sample, dan ringkasan yang tampak hijau
   mustahil: skrip berhenti sebelum mengompilasi.
 
-**Exit code sampel adalah seluruh putusannya.** Output yang diharapkan sebuah bab dicocokkan dengan blok yang
+**Exit code sample adalah seluruh putusannya.** Output yang diharapkan sebuah bab dicocokkan dengan blok yang
 tercetak di bab itu, byte per byte, oleh editor dan independen oleh reviewer; verifier sendiri hanya menilai status
 exit, karena nilai tercetak yang sekadar masuk akal justru hal yang tidak boleh diterima buku.
 
@@ -107,16 +107,16 @@ PASS samples/24-passive-procs/passive.nim exit=0
 SUMMARY 23/23 passed, 0 failed
 ```
 
-Dua puluh tiga sampel untuk dua puluh empat bab, dan jumlah itu bukan salah hitung: Bab 1 tidak punya sampel. Bab
-itu yang mengatakan apa itu Nimony, dan sampel di sana berarti harus jalan sebelum pembaca punya toolchain.
+Dua puluh tiga sample untuk dua puluh empat bab, dan jumlah itu bukan salah hitung: Bab 1 tidak punya sample. Bab
+itu yang mengatakan apa itu Nimony, dan sample di sana berarti harus jalan sebelum pembaca punya toolchain.
 
-## Bab mana di belakang sampel mana
+## Bab mana di belakang sample mana
 
 | Bab | Sampel | Catatan |
 | --- | --- | --- |
 | 2 | `samples/02-pinned-toolchain/hello.nim` | Membuktikan build dan run, bukan apa pun tentang bahasanya. |
 | 3 | `samples/03-values-names-mutability/values.nim` | |
-| 4 | `samples/04-numbers-types-conversion/numbers.nim` | Wrap adalah poin ajarnya, jadi sampelnya menjalankan wrap. |
+| 4 | `samples/04-numbers-types-conversion/numbers.nim` | Wrap adalah poin ajarnya, jadi samplenya menjalankan wrap. |
 | 5 | `samples/05-strings/strings.nim` | |
 | 6 | `samples/06-branching/branching.nim` | |
 | 7 | `samples/07-loops-ranges/loops.nim` | |
@@ -128,7 +128,7 @@ itu yang mengatakan apa itu Nimony, dan sampel di sana berarti harus jalan sebel
 | 13 | `samples/13-references-pointers-nil/refs.nim` | |
 | 14 | `samples/14-ownership-borrow/ownership.nim` | |
 | 15 | `samples/15-errors-as-values/errors.nim` | |
-| 16 | `samples/16-modules-visibility/modules.nim` | Satu-satunya sampel yang lebih dari satu berkas: modul pendukungnya ada di `support/`. |
+| 16 | `samples/16-modules-visibility/modules.nim` | Satu-satunya sample yang lebih dari satu berkas: modul pendukungnya ada di `support/`. |
 | 17 | `samples/17-generics-concepts/generics.nim` | |
 | 18 | `samples/18-templates-compiletime/templates.nim` | |
 | 19 | `samples/19-plugins-nif/plugins.nim` | Plugin-nya ada di `deps/shape` dan dibangun selama run. |
@@ -138,13 +138,13 @@ itu yang mengatakan apa itu Nimony, dan sampel di sana berarti harus jalan sebel
 | 23 | `samples/23-testing/testing.nim` | |
 | 24 | `samples/24-passive-procs/passive.nim` | Satu berkas, satu thread, tanpa I/O; thread pool jadi prosa. |
 
-`review.md` di samping teks setiap bab menyimpan tabel probe per klaim yang berdiri di belakang sampel-sampel ini:
+`review.md` di samping teks setiap bab menyimpan tabel probe per klaim yang berdiri di belakang sample-sample ini:
 apa yang dijalankan, output mentahnya, dan baris sumber Nimony untuk hal yang output mentahnya saja tidak bisa
 jelaskan.
 
-## Menambah sampel
+## Menambah sample
 
 Sampel baru adalah satu berkas, `samples/NN-slug/nama.nim`, dengan output yang diharapkan tercetak di bagian
 **Samples** bab itu dan diulang di catatan review. Ia dibuktikan oleh perintah yang sama, dan barisnya bergabung ke
-blok output di atas. Tidak ada sampel yang dikecualikan, dan tidak ada bab yang beku di atas sampel yang dijalankan
+blok output di atas. Tidak ada sample yang dikecualikan, dan tidak ada bab yang beku di atas sample yang dijalankan
 dengan tangan.

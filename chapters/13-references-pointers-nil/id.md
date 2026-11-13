@@ -15,25 +15,25 @@ glossary_added: ["ref (sourced)", "ptr (sourced)", "explicit nilability (extende
 
 # Reference, Pointer, dan Nilability Eksplisit
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
-Setiap nilai yang lo bangun sejauh ini di-copy saat di-assign, dan sebuah parameter adalah copy dari yang
+Setiap nilai yang kamu bangun sejauh ini di-copy saat di-assign, dan sebuah parameter adalah copy dari yang
 dikirim pemanggil. Model itu patah begitu dua bagian program harus melihat cell yang sama, atau satu bagian
 program mau menyentuh storage milik bagian lain. Nimony menjawab dengan dua alat berbeda — `ref` yang dikelola
 dan `ptr` mentah — dan, di atas keduanya, satu batasan yang disengaja: **nilai mirip-pointer bukan nil kecuali
 tipenya bilang begitu**.
 
-Chapter ini punya tiga kerjaan, berurutan: memilih antara `ref` dan `ptr`, menuliskan nil-ability ke dalam tipe
-saat lo butuh, dan melewati syarat pembuktian compiler di titik lo melakukan dereference.
+Bab ini punya tiga kerjaan, berurutan: memilih antara `ref` dan `ptr`, menuliskan nil-ability ke dalam tipe
+saat kamu butuh, dan melewati syarat pembuktian compiler di titik kamu melakukan dereference.
 
 ## Dua cara menunjuk sesuatu
 
 `ref T` adalah reference yang dikelola: cell-nya hidup di managed heap, runtime menjaganya tetap hidup selama
 masih ada reference ke sana, dan beberapa nama bisa menunjuk cell yang sama. `ptr T` adalah bentuk yang tidak
-di-trace — alamat mentah yang lo dapat sendiri, tanpa lifetime di belakangnya. `doc/language.md:774-783`
+di-trace — alamat mentah yang kamu dapat sendiri, tanpa lifetime di belakangnya. `doc/language.md:774-783`
 menarik garis antara reference yang di-trace dan yang tidak dengan cara ini.
 
-Konsekuensi praktisnya adalah aliasing, dan itu mengubah perilaku sebuah parameter. Di Chapter 11 aturannya:
+Konsekuensi praktisnya adalah aliasing, dan itu mengubah perilaku sebuah parameter. Di Bab 11 aturannya:
 parameter object by-value bukan place, jadi menulis ke sana sia-sia dan ditolak. Parameter `ref` kebalikannya:
 copy-nya adalah copy dari *reference*-nya, dan menulis lewat situ mencapai cell-nya.
 
@@ -51,12 +51,12 @@ reference melakukan dereference otomatis, dan `[]` melakukan hal yang sama untuk
 
 Dua reference dibandingkan berdasarkan identitas, bukan isi: `a == b` bernilai `true` kalau kedua nama mencapai
 cell yang sama, dan `false` untuk dua cell berbeda yang field-nya sama, karena kesetaraan reference adalah magic
-`EqRef` (`src/nimony/magics.nim:64`). Ini bukan kesetaraan object yang Chapter 11 ajarkan. Operator itu berjalan
+`EqRef` (`src/nimony/magics.nim:64`). Ini bukan kesetaraan object yang Bab 11 ajarkan. Operator itu berjalan
 field per field, dan ia berlaku pada nilai object — `a[] == b[]` — bukan pada dua reference ke object itu.
 
 Menulis lewat parameter dan mengikat ulang parameter adalah dua hak berbeda. `c.n += 1` boleh;
 `c = Counter(n: 9)` ditolak dengan `cannot mutate expression c`, karena parameternya adalah copy dari reference
-dan parameter tidak bisa di-assign. Lo boleh mengubah cell-nya; lo tidak boleh mengubah cell mana yang dinamai
+dan parameter tidak bisa di-assign. Kamu boleh mengubah cell-nya; kamu tidak boleh mengubah cell mana yang dinamai
 parameter itu.
 
 Pointer mentah mulai dengan `addr`. Kalau `v` bertipe `T`, maka `addr v` bertipe `ptr T`, dan `p[]` membaca atau
@@ -70,20 +70,20 @@ echo local          # 20
 ```
 
 `addr` berlaku pada satu variabel utuh atau pada satu elemen, jadi `addr arr[1]` memberi `ptr int` yang menulis
-ke dalam array. Ini paruh bahasa yang tidak aman: tidak ada yang mengecek storage-nya masih ada saat lo menulis
-lewat pointer. Sisa chapter ini soal satu hal yang *akan* dicek compiler untuk lo, yaitu apakah pointer-nya nil.
+ke dalam array. Ini paruh bahasa yang tidak aman: tidak ada yang mengecek storage-nya masih ada saat kamu menulis
+lewat pointer. Sisa bab ini soal satu hal yang *akan* dicek compiler untuk kamu, yaitu apakah pointer-nya nil.
 
 ## Tipe pointer yang tidak bisa nil
 
 `ref`, `ptr`, `pointer`, `cstring` dan tipe prosedural tidak bisa memuat `nil` kecuali tipenya bilang begitu
 (`doc/language.md:839`, dan pembahasan lebih penuh di `doc/lenientnils.md:7-19`). Compiler mencetak tipe seperti
 itu dengan faktanya dieja — `ref Node.Obj not nil` — jadi pesan yang terlihat aneh pada awalnya sebenarnya
-sedang mengutip tipe balik ke lo.
+sedang mengutip tipe balik ke kamu.
 
 Tiga error berbeda menjaga tiga cara berbeda untuk salah, dan layak dikenali satu per satu, karena masing-masing
 punya perbaikan sendiri.
 
-**Lo menyerahkan nil.** `var r: Node = nil` untuk `Node` yang not-nil ditolak dengan `expected non-nil value`
+**Kamu menyerahkan nil.** `var r: Node = nil` untuk `Node` yang not-nil ditolak dengan `expected non-nil value`
 (`src/nimony/contracts.nim:280`, dicapai dari `checkNilMatch`). Tidak ada yang dianalisis: nil memang bukan nilai
 dari tipe itu.
 
@@ -95,7 +95,7 @@ menolak simbol itu kalau ia global, karena global diasumsikan dibagi antar threa
 `if q != nil: echo q[].data` dianalisis dengan baik selama `q` lokal. Komentar di cabang itu ditutup dengan
 "Maybe this needs a better solution", jadi perlakukan ini sebagai perilaku pin, bukan aturan permanen.
 
-**Ini lokal dan tidak ada faktanya.** `cannot prove expression is not nil: x` berarti lo melakukan dereference
+**Ini lokal dan tidak ada faktanya.** `cannot prove expression is not nil: x` berarti kamu melakukan dereference
 pada lokal nilable yang belum ditutup guard mana pun. Perbaikannya sebuah guard, dan section berikutnya soal di
 mana compiler menerima guard.
 
@@ -110,7 +110,7 @@ Error: 'base' is of type 'ref Node.Obj not nil', which has no default value
 `src/nimony/contracts_fir.nim:5798-5821` membangun pesan itu. Aturan yang sama menangkap array dari tipe itu
 (`array[0..2, ref Node.Obj not nil]`), object dengan field seperti itu (`'p' is of type 'Pair'`), dan tipe
 prosedural (`'cb' is of type 'proc (x: int64)'`). Dua alasan `zeroedStorage` lain memakai pesan yang identik —
-range yang mengecualikan nol, dan enum tanpa anggota berordinal 0 — dan keduanya milik Chapter 4 dan 11.
+range yang mengecualikan nol, dan enum tanpa anggota berordinal 0 — dan keduanya milik Bab 4 dan 11.
 
 **Lokal** diperlakukan berbeda, dan sumbernya menyebut alasannya: lokal tidak berutang apa pun pada
 deklarasinya, karena flow analysis membiarkan `var r: ref int` berdiri selama sebuah penulisan mencapainya
@@ -160,7 +160,7 @@ Pemeriksaannya adalah fakta yang menempel pada **place**, dan faktanya dilacak p
 - `while it != nil:` menyempitkan badan loop, dan itulah yang membuat walk list legal.
 
 Walk-nya butuh satu detail hati-hati. Kondisi loop harus menguji **lokal**, jadi sample menyalin parameter ke
-`var it = list` lalu memajukan `it`. Menguji parameternya langsung gagal karena alasan Chapter 8 yang tidak
+`var it = list` lalu memajukan `it`. Menguji parameternya langsung gagal karena alasan Bab 8 yang tidak
 berkaitan — parameter tidak mutable, dan `list = list.next` ditolak dengan `cannot mutate expression list`.
 
 Fakta terikat pada place, bukan pada cell, jadi apa pun yang menulis place itu menggugurkannya:
@@ -171,7 +171,7 @@ if x != nil:
   echo x[]        # Error: cannot prove expression is not nil: x
 ```
 
-Dua jebakan mengikuti desain yang sama, dan keduanya memakan satu sore kalau lo bertemu tanpa persiapan.
+Dua jebakan mengikuti desain yang sama, dan keduanya memakan satu sore kalau kamu bertemu tanpa persiapan.
 
 **Meng-assign nilai yang pasti not-nil tidak memperbaiki faktanya.** Nilability-nya ada di tipe, jadi ia
 bertahan melewati assignment:
@@ -191,7 +191,7 @@ jadi `p.n` dan `p.m` sama-sama place `p` di fact set: fakta yang dicatat `if p.n
 sistem tipe, dan sumbernya menandainya sebagai sementara. Salin field-nya ke lokal, uji lokal itu, lalu pakai
 lokal itu. Itulah persisnya kenapa walk list di sample bekerja lewat `it` dan bukan lewat `list.next`.
 
-## Allocation, dan place yang lo serahkan ke `new`
+## Allocation, dan place yang kamu serahkan ke `new`
 
 `new` adalah cara mendapat managed cell untuk tipe yang bukan konstruksi object:
 
@@ -200,7 +200,7 @@ func new*[T: ref](x: out T) {.inline.} = x = newConstr(T)
 ```
 
 (`lib/std/system.nim:200`.) Parameternya `out T` untuk sembarang `T` yang memang ref, dan `T` boleh berbentuk
-not-nil. Jadi lokal not-nil adalah tujuan yang sah, dan tipenya adalah bukti yang lo butuhkan:
+not-nil. Jadi lokal not-nil adalah tujuan yang sah, dan tipenya adalah bukti yang kamu butuhkan:
 
 ```nim
 proc boxedNotNil(v: int): ref int =
@@ -211,7 +211,7 @@ proc boxedNotNil(v: int): ref int =
 ```
 
 Tidak ada yang perlu dijaga di sini. `tmp` adalah `ref int` sebelum panggilan dan `ref int` terisi sesudahnya,
-jadi `return` menerimanya tanpa pemeriksaan. Yang tidak bisa lo lakukan adalah berubah pikiran sesudahnya:
+jadi `return` menerimanya tanpa pemeriksaan. Yang tidak bisa kamu lakukan adalah berubah pikiran sesudahnya:
 `tmp = nil` ditolak dengan `expected non-nil value`, dan `tmp == nil` dievaluasi jadi `false`.
 
 Deklarasi not-nil di module level adalah kegagalan yang lain, dan itu bukan soal `new`: `var x: ref int` di
@@ -236,7 +236,7 @@ berlanjut.
 
 Konstruksi object adalah kasus mudah, dan layak diketahui bahwa keduanya tidak setara: `Node(data: 9)`
 bertipe not-nil `Node` dan bisa langsung di-assign ke `var r: Node`, sementara `new` menyerahkan tipe tujuan —
-lokal not-nil sudah berupa `ref T`, dan yang nullable masih meminta lo membereskan kasus nil secara tertulis.
+lokal not-nil sudah berupa `ref T`, dan yang nullable masih meminta kamu membereskan kasus nil secara tertulis.
 
 ## Pointer mentah, `unchecked`, dan saklar porting
 
@@ -245,7 +245,7 @@ guard, dan ia ditolak tanpa guard. `ptr T` di-assign ke `pointer` tanpa cast, da
 mirip-pointer yang tidak bisa nil, jadi `var p: pointer = nil` adalah `expected non-nil value`.
 
 Saat kasus nil benar-benar di luar jangkauan sistem tipe — handle FFI, invarian seperti "field status bilang
-sukses berarti pointer-nya terpasang" — lo keluar dengan `unchecked`, yang diterima pada `ref`, `ptr`,
+sukses berarti pointer-nya terpasang" — kamu keluar dengan `unchecked`, yang diterima pada `ref`, `ptr`,
 `pointer`, `cstring` dan tipe prosedural, dan mematikan pelacakan nil untuk tipe itu (`doc/language.md:867-877`,
 `doc/lenientnils.md:102-115`):
 
@@ -256,10 +256,10 @@ type Handle = object
 var x: Handle      # fine: an unchecked pointer has a default value
 ```
 
-Pakai di tempat lo bisa membuktikan not-nil dengan cara lain, dan tidak di tempat lain. Ia satu-satunya ejaan di
-chapter ini yang menyerahkan jaminan alih-alih memenuhinya.
+Pakai di tempat kamu bisa membuktikan not-nil dengan cara lain, dan tidak di tempat lain. Ia satu-satunya ejaan di
+bab ini yang menyerahkan jaminan alih-alih memenuhinya.
 
-## Delta Nim 2
+## Nim 2 delta
 
 > **Apa yang Nim 2 lakukan.** Setiap `ref`, `ptr`, `pointer` dan `cstring` bisa memuat nil, dan setiap deklarasi
 > mendapat zeroed storage, jadi `var x: ref int` di module level legal dan diam-diam nil. Membacanya adalah
@@ -270,7 +270,7 @@ chapter ini yang menyerahkan jaminan alih-alih memenuhinya.
 > dengan pointer not-nil tidak punya default value, dan dereference tanpa guard tidak compile. Bentuk nullable
 > dieja `nil T`.
 >
-> **Apa yang patah kalau lo pertahankan kebiasaannya.** Buffer module-level, field object dan variabel
+> **Apa yang patah kalau kamu pertahankan kebiasaannya.** Buffer module-level, field object dan variabel
 > prosedural yang dulu mengandalkan zeroing sekarang butuh nilai awal. Helper yang menerima nil berarti
 > "tidak ada" butuh `nil T` di signature-nya. Dan jalan keluarnya jujur soal harganya: di bawah
 > `{.feature: "lenientnils".}` (`doc/lenientnils.md:141-155`) kode lama compile lagi, tanpa satu pun diagnostik
@@ -296,7 +296,7 @@ $ nimony c -r samples/13-references-pointers-nil/refs.nim
 Lima barisnya adalah counter setelah dua panggilan `bump`, total list, total list kosong yang dikirim sebagai
 `nil`, nilai boxed plus satu, dan lokal yang ditulis lewat `p[]`.
 
-## Latihan
+## Cek
 
 1. Deklarasikan `var g: nil Node = nil` di module level dan baca `g.data` di dalam proc di bawah `if g != nil:`.
    Hasil yang diharapkan: ia **tidak** compile, dan pesannya `cannot analyze expression is not nil: g`.

@@ -236,3 +236,20 @@ with. "Replacement" is what the book uses instead, not a like-for-like swap.
 | `std/re` | not at the pin; the regex module is `std/rex` | `std/rex` (imports at the pin; no call probed) | probes `i16-re`, `i30-rex` |
 | `std/seqs` | never a module: absent at the pin and in Nim 2.4.0 | `system` for `add`/`setLen`/`delete`, `std/sequtils` for the rest | probes `i06-seqs`, `nim2/n1` |
 | `async` / `await` | replaced by `.passive`; `std/asyncdispatch` is absent and `await` is an undeclared identifier | `.passive` plus `delay`/`suspend`, and a `Continuation` as the handle | `doc/differences.md:8-9` at `4ba90a7`; probes `p15`, `p16` |
+
+## Indonesian edition vocabulary
+
+The Indonesian edition (`id.md`) keeps a term in English when the reader meets the same word in a path, a
+command or a file name. These are fixed for every chapter; a new term is added here in the same change that
+introduces it.
+
+| English | Indonesian edition | Fixed where |
+| --- | --- | --- |
+| chapter, `Chapter N` | bab, `Bab N` | body prose and `## Untuk apa bab ini` |
+| appendix | lampiran, `Lampiran A` | headings and cross-references |
+| Samples (section) | `## Samples` | heading; English kept |
+| sample (the artifact) | sample | prose and `samples/`; never *sampel* |
+| Checks (section) | `## Cek` | heading |
+| Nim 2 delta (section) | `## Nim 2 delta` | heading, same as `en.md` |
+| Chapter checklist (section) | `## Chapter checklist` | source-only; stripped by `tools/strip-status.py`, do not rename |
+| the reader | kamu | one voice; no *lo*, *lu*, *kau*, *Anda*, *kalian*, and no first-person narrator |

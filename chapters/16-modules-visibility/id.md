@@ -15,15 +15,15 @@ glossary_added: [module, export marker, attached routine, re-export, include]
 
 # Module dan Visibilitas
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Semua program sampai sekarang cuma satu berkas. Program sungguhan tidak begitu, dan alasannya bukan kerapian:
-batas berkas adalah tempat bahasa memutuskan siapa boleh memanggil apa. Keputusan itulah seluruh isi chapter ini.
+batas berkas adalah tempat bahasa memutuskan siapa boleh memanggil apa. Keputusan itulah seluruh isi bab ini.
 Nimony tidak punya manifest paket, tidak punya header module, dan tidak punya deklarasi namespace. Sebuah berkas
 adalah module, namanya adalah namanya, dan satu `*` pada deklarasi adalah yang membuat berkas lain bisa melihatnya.
 
 Urutan di bawah mengikuti pembaca yang memecah satu berkas jadi dua: bagaimana berkas kedua ikut ter-compile,
-apa yang sebenarnya dibawa `import`, apa yang tetap privat dan apa kata compiler saat lo meraihnya, lima ejaan
+apa yang sebenarnya dibawa `import`, apa yang tetap privat dan apa kata compiler saat kamu meraihnya, lima ejaan
 import dan apa yang disembunyikan masing-masing, lalu aturan yang jarang ditemui pembaca di bahasa lain — sebuah
 panggilan juga melihat routine yang menempel ke tipe argumennya, diimpor atau tidak.
 
@@ -93,7 +93,7 @@ main.nim(3, 1) Error: undeclared identifier: 'secret'
 Itu pesan yang sama dengan nama yang tidak dideklarasikan, dan hanya itu diagnostiknya. Tidak ada baris "declared
 here but not exported" untuk dibaca, jadi pembaca memeriksa deklarasi untuk `*` lebih dulu.
 
-Penanda itu dipasang pada tiap deklarasi yang mau lo lepaskan dari module: `proc`, `type`, `const`, `let` atau
+Penanda itu dipasang pada tiap deklarasi yang mau kamu lepaskan dari module: `proc`, `type`, `const`, `let` atau
 `var`. Untuk field object ia dipasang terpisah, dan field adalah tempat aturannya paling mudah dilihat:
 
 ```nim
@@ -114,7 +114,7 @@ echo p.x
 tidak, jadi pemanggil bisa memegang `Point` dan tidak bisa membaca separuhnya. Enum berbeda: mengekspor tipenya
 membuat anggotanya bisa dipakai dengan nama, dan tidak ada penanda untuk mengekspor satu anggota tanpa saudaranya.
 
-Aturan field punya satu sisi lunak yang perlu diketahui sebelum lo bergantung padanya. Pemanggilan constructor
+Aturan field punya satu sisi lunak yang perlu diketahui sebelum kamu bergantung padanya. Pemanggilan constructor
 dari luar module tidak harus menyebut field privatnya:
 
 ```nim
@@ -296,18 +296,18 @@ proc bump() =
 ```
 
 Saran di pesan itu adalah jalur keempat dan ia nyata: serahkan global itu — atau salah satu field atau elemennya —
-ke parameter `var` atau `ptr` sebuah routine `.sync`, yang boleh routine tulisan lo sendiri:
+ke parameter `var` atau `ptr` sebuah routine `.sync`, yang boleh routine tulisan kamu sendiri:
 `proc own(p: var int) {.sync.}` lalu `own(counter)` build dan menaikkan nilainya. `.sync` dipercaya, bukan diperiksa.
 Jadi jalurnya adalah statement level module, `{.cast(assumeSync).}:`, `{.feature: "assumeSync".}`, dan routine
-`.sync`. Keempatnya janji yang lo buat, bukan pemeriksaan yang dibuang compiler.
+`.sync`. Keempatnya janji yang kamu buat, bukan pemeriksaan yang dibuang compiler.
 
 ## Dua tempat manual tidak cocok dengan pin
 
 Statement import diterima di dalam body routine, padahal `doc/language.md` bilang ia hanya boleh di level top, dan
-ia berlaku untuk seluruh module: panggilan sesudah routine yang memuat import itu juga build. Chapter ini mengajar
+ia berlaku untuk seluruh module: panggilan sesudah routine yang memuat import itu juga build. Bab ini mengajar
 bentuk top-level. Yang lain lebih buruk. Operand `export` yang bukan nama memutar front end tanpa output alih-alih
 gagal, seperti yang bagian `export` sebutkan. Keduanya ada di catatan review dan di `ERRATA.md`; tidak satu pun
-mengubah apa yang diajarkan chapter ini.
+mengubah apa yang diajarkan bab ini.
 
 ## Nim 2 delta
 
@@ -322,7 +322,7 @@ routine kecuali pemeriksaannya dimatikan untuk akses itu.
 
 *Apa yang rusak kalau kebiasaannya dibawa.* Module yang disalin dari Nim 2 gagal build pada `echo` sampai
 `std/syncio` diimpor, dan import yang diganti nama sebagai cara menyembunyikan nama tidak menyembunyikannya —
-`import util as u` tetap membuat `greet` bisa dipanggil. Raih `from` atau `except` saat yang lo maksud adalah
+`import util as u` tetap membuat `greet` bisa dipanggil. Raih `from` atau `except` saat yang kamu maksud adalah
 mempersempit.
 
 ## Samples
@@ -347,16 +347,16 @@ dan menjalankannya bersama sisa buku dan tidak membandingkan stdout, jadi enam b
 
 ## Cek
 
-1. Pecah program satu berkas jadi dua, ekspor hanya routine yang dibutuhkan yang lain. Baca pesan yang lo dapat
+1. Pecah program satu berkas jadi dua, ekspor hanya routine yang dibutuhkan yang lain. Baca pesan yang kamu dapat
    sebelum menambahkan `*`, lalu tambahkan dan pastikan tidak ada yang lain berubah.
-2. Ambil `Point` dari chapter ini dan bangun satu dari `main` tanpa menyebut `x`. Cetak `p.y`, lalu tambahkan
-   routine di module yang mencetak `p.x` dan terangkan kenapa nilai yang lo lihat adalah `0`.
+2. Ambil `Point` dari bab ini dan bangun satu dari `main` tanpa menyebut `x`. Cetak `p.y`, lalu tambahkan
+   routine di module yang mencetak `p.x` dan terangkan kenapa nilai yang kamu lihat adalah `0`.
 3. Ubah `import util` jadi `from util import nil` dan buat tiap panggilan berkualifikasi. Lalu hapus kualifikasi
    dari panggilan yang argumennya tipe yang diekspor itu dan terangkan kenapa ia tetap build.
 4. Buat dua module saling mengimpor, baca pesan siklusnya, lalu tambahkan `{.cyclic.}` di tempat yang diminta.
-   Sebutkan apa yang harus lo ubah di module kedua, bukan cuma yang pertama.
+   Sebutkan apa yang harus kamu ubah di module kedua, bukan cuma yang pertama.
 5. Ekspor sebuah `var` dan tulis dari body routine. Baca pesannya, lalu perbaiki dengan `{.cast(assumeSync).}` dan
-   tulis apa yang lo janjikan ke compiler.
+   tulis apa yang kamu janjikan ke compiler.
 
 ## Chapter checklist
 

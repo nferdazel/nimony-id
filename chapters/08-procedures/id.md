@@ -15,15 +15,15 @@ glossary_added: ["proc", "func", "result", "var parameter", "out parameter", "si
 
 # Prosedur, Parameter, dan Hasil
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
-Semua chapter sebelumnya adalah program yang tersusun dari statement. Routine memberi satu rangkaian statement
+Semua bab sebelumnya adalah program yang tersusun dari statement. Routine memberi satu rangkaian statement
 sebuah nama dan signature, supaya bagian lain buku ini bisa memanggilnya alih-alih mengulanginya. Nimony punya
 dua deklarasi untuk itu: `proc`, yang boleh melakukan apa saja, dan `func`, yang tidak boleh menyentuh apa pun di
 luar argumen dan hasilnya sendiri.
 
-Pekerjaan chapter ini adalah seluruh batas sebuah pemanggilan — bagaimana argumen datang, bagaimana hasil keluar,
-dan bentuk parameter mana yang dipakai. Overloading dan method dispatch ada di Chapter 9; chapter ini
+Pekerjaan bab ini adalah seluruh batas sebuah pemanggilan — bagaimana argumen datang, bagaimana hasil keluar,
+dan bentuk parameter mana yang dipakai. Overloading dan method dispatch ada di Bab 9; bab ini
 mengasumsikan satu routine per nama.
 
 ## `proc` adalah blok statement dengan nama
@@ -98,7 +98,7 @@ echo f(2, 3)
 ```
 
 Itu mencetak `5` tanpa satu pun `return`. Karena `result` adalah variabel biasa, pengisiannya bisa dipecah ke
-beberapa cabang, dan aturan Chapter 3 berlaku untuknya: setiap jalur yang sampai ke akhir harus sudah menulisnya.
+beberapa cabang, dan aturan Bab 3 berlaku untuknya: setiap jalur yang sampai ke akhir harus sudah menulisnya.
 Routine yang tidak pernah menulisnya gagal di-build:
 
 ```
@@ -162,7 +162,7 @@ echo pad(7, 2)
 dipanggil**, bukan sekali saat deklarasi (`doc/language.md:2234-2241`). Ilustrasinya butuh penghitung di level
 modul, dan pin ini menolak itu dari `proc` biasa dengan `unsynchronized access to global variable`; karena itu
 demonstrasinya tercatat di `ERRATA.md` dan tidak ditampilkan di sini, dan aturan bukunya adalah aturan
-`CONTRIBUTING.md`: chapter yang menampilkan state mutable level modul menyebut aturan `.sync` di pemakaian
+`CONTRIBUTING.md`: bab yang menampilkan state mutable level modul menyebut aturan `.sync` di pemakaian
 pertama.
 
 Satu bentuk tidak boleh ditulis di pin ini: default yang ditulis dalam bentuk parameter sebelumnya.
@@ -219,7 +219,7 @@ Argumennya harus sebuah place, bukan nilai. `bump(7)` ditolak:
 Error: cannot pass 7 to var/out T parameter
 ```
 
-Aturannya sama dengan yang dipakai Chapter 3 untuk assignment: yang di kiri harus variabel yang punya
+Aturannya sama dengan yang dipakai Bab 3 untuk assignment: yang di kiri harus variabel yang punya
 penyimpanan. `let` juga tidak bisa.
 
 ## Parameter `out`
@@ -262,7 +262,7 @@ let t = divmod(8, 5)
 echo t[0], " ", t[1]
 ```
 
-`1 3`. Tuple-nya dibangun di body ekspresi dan di-index di call site. Chapter 10 membahas akses tuple dengan
+`1 3`. Tuple-nya dibangun di body ekspresi dan di-index di call site. Bab 10 membahas akses tuple dengan
 benar; yang penting di sini adalah pilihannya: parameter kalau routine-nya juga punya efek samping yang harus
 dilaporkan, tuple kalau nilainya adalah seluruh jawabannya.
 
@@ -396,9 +396,9 @@ Itu mencetak `5`. Seluruh modul ada dalam cakupan resolusi nama, jadi `proc` tid
 seperti prototype di C. Nama yang tidak ada di mana pun adalah error lain, dilaporkan sebagai `undeclared
 identifier` — pencarian seluruh modul itulah yang membuat pemanggilan di atas deklarasinya bekerja.
 
-## Sample
+## Samples
 
-`samples/08-procedures/procedures.nim` — setiap konstruk di chapter ini, berurutan, di commit yang di-pin:
+`samples/08-procedures/procedures.nim` — setiap konstruk di bab ini, berurutan, di commit yang di-pin:
 
 ```
 $ nimony c -r samples/08-procedures/procedures.nim
@@ -430,7 +430,7 @@ jalan, lalu ekspresi terakhir body menjadi hasilnya, jadi label dan nilainya men
 `override ran` sebelum `override 1` adalah `func` ber-`{.sideEffect.}` yang mencetak sebelum nilainya dipakai.
 `sink after abc` adalah parameter `sink` yang meninggalkan variabel pemanggil apa adanya.
 
-## Latihan
+## Cek
 
 1. Tulis `proc double(x: int): int` dengan body blok `x * 2`, lalu bentuk satu ekspresi dari routine yang sama.
    Harapan: nilai yang sama dari keduanya.

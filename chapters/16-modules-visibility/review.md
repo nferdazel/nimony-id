@@ -15,7 +15,7 @@ Sample output diffed against the block in `en.md` §Samples: `diff` empty, 6 lin
 `modules.nim` plus `support/{shapes,report,notes}.nim`; `tools/verify-samples.sh` compiles only `samples/*/*.nim`,
 so the `support/` files are inputs, not samples.
 
-Probes live in `/Users/sachiel/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch16-probes/`
+Probes live in `~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch16-probes/`
 (`p01`–`p45`, `p08b`, `p08c`, `p11a`/`p11b`, `p12b`, `p22b`, `p24b`, `p26b`, `p26c`, `p37`–`p44`, `h1`–`h3`,
 `nim2/n1`, `nim2/n2`). Each probe is a directory whose `main.nim` was run with
 `~/.local/opt/nimony/4ba90a7/bin/nimony c -r main.nim`; the Nim 2 probes used `nim c -r --hints:off`.
@@ -73,7 +73,7 @@ hides the thing being tested (that mistake cost me the first run of the whole se
 | 45 | `{.sync.}` on your own routine does not silence the check | p08b | `proc bump*() {.sync.}` → the same `unsynchronized access` error at `inc counter` | Mutable globals across a module boundary |
 | 46 | `{.feature: "assumeSync".}` switches it off for the whole module | p45 | `2`, exit 0; the rule is stated at `src/nimony/contracts_fir.nim:4105-4109` and `src/nimony/features.nim:59-63` | Mutable globals across a module boundary |
 | 47 | `import` inside a routine is accepted and takes effect for the whole module | p23, p41 | p23 builds and prints `hello ada`; p41 also prints `hello outside` from a call outside the proc | Two places the manual does not match the pin |
-| 48 | A missing module is reported as `file not found`, naming the toolchain's `src/lib` path | p25, h1 | `main.nim(2, 1) Error: file not found: /Users/…/4ba90a7/src/lib/help.nim` | Two places the manual does not match the pin |
+| 48 | A missing module is reported as `file not found`, naming the toolchain's `src/lib` path | p25, h1 | `main.nim(2, 1) Error: file not found: ~/…/4ba90a7/src/lib/help.nim` | Two places the manual does not match the pin |
 | 49 | Nim 2 has no attached-routine lookup for an ordinary call | nim2/n1 | Nim 2.4.0: `main.nim(3, 1) Error: undeclared identifier: 'show'`, exit 1 | Nim 2 delta |
 | 50 | Nim 2 needs no import before `echo` | nim2/n2 | Nim 2.4.0: `plain echo`, exit 0 | Nim 2 delta |
 

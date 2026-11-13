@@ -15,7 +15,7 @@ glossary_added: ["if expression", "case expression", "when", "exhaustive case", 
 
 # Percabangan yang Mengembalikan Nilai
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Di banyak bahasa, cabang adalah statement: dia menjalankan kode lalu selesai. Di Nimony keyword yang sama juga
 menghasilkan **nilai**, jadi `if` dan `case` bisa berdiri di kanan `let`. Itu menghapus satu kelas kode
@@ -24,7 +24,7 @@ menghasilkan **nilai**, jadi `if` dan `case` bisa berdiri di kanan `let`. Itu me
 Ada dua aturan yang ikut fitur ini, dan keduanya ditegakkan compiler, bukan konvensi: `if` expression wajib
 punya `else`, dan `case` atas tipe ordinal wajib menutup setiap nilai yang bisa dia tampung.
 
-Chapter ini juga membahas dua cara keluar dari loop lebih awal, karena default-nya berubah dari Nim 2: `break`
+Bab ini juga membahas dua cara keluar dari loop lebih awal, karena default-nya berubah dari Nim 2: `break`
 tanpa label hanya keluar dari loop terdalam, jadi keluar dari dua loop bersarang butuh `block` berlabel.
 
 ## `if` sebagai statement
@@ -136,7 +136,7 @@ of green: "g"
 Error: not all cases are covered; missing: {blue}
 ```
 
-Pesan itu hadiah: tambahkan nilai yang dia sebut dan chapter soal fall-through tak sengaja tidak pernah terjadi.
+Pesan itu hadiah: tambahkan nilai yang dia sebut dan bab soal fall-through tak sengaja tidak pernah terjadi.
 Ketika selector-nya bukan enum — `int`, `char` — compiler tidak bisa mendaftar apa yang absen, jadi pesannya
 telanjang (`src/nimony/sem.nim:2748`):
 
@@ -311,7 +311,7 @@ let width = when sizeof(int) == 8: 64 else: 32
 echo width        # 64
 ```
 
-## `block`: expression dengan nama yang bisa kau tinggalkan
+## `block`: expression dengan nama yang bisa kamu tinggalkan
 
 `block` mengelompokkan statement, dan yang bernama bisa ditinggalkan lebih awal (`doc/language.md:1946-1974`):
 
@@ -371,7 +371,7 @@ Dua aturan menjaga ini tetap lurus:
 Block bernama bukan pengganti procedure. Kalau jalan keluarnya membawa nilai dari perhitungan yang layak diberi
 nama, tulis proc-nya.
 
-## Delta Nim 2: `break` berlabel, dan tidak ada `elif` di `case`
+## Nim 2 delta: `break` berlabel, dan tidak ada `elif` di `case`
 
 Dua kebiasaan dari Nim 2 berhenti bekerja di sini.
 
@@ -387,9 +387,9 @@ Satu delta lagi, ke arah sebaliknya: bentuk **expression** `if`/`case`/`when` ad
 nilai, bukan trik. Kode Nim 2 yang mendeklarasikan variabel lalu mengisinya di tiap cabang biasanya bisa
 dipadatkan jadi satu `let`.
 
-## Sample
+## Samples
 
-`samples/06-branching/branching.nim` — setiap konstruksi di chapter ini, berurutan:
+`samples/06-branching/branching.nim` — setiap konstruksi di bab ini, berurutan:
 
 ```
 B
@@ -409,7 +409,7 @@ a
 bersarang. `10` adalah block expression yang menjumlah `1..4`; `1` adalah labelled break yang menemukan
 `i * j == 4` sekali; `3` adalah unlabelled break yang menghitung satu pasang per baris.
 
-## Latihan
+## Cek
 
 1. Tulis `let y = if false: 9`. Harapan: ``Error: cannot prove that `x has been initialized``. Tambahkan
    `else: 0` dan harapkan `0`.
@@ -419,7 +419,7 @@ bersarang. `10` adalah block expression yang menjumlah `1..4`; `1` adalah labell
    tanpa nilai yang disebut.
 4. Tulis `case` atas `char` dengan `of 'a'..'z'` dan `of 'A'..'Z'`. Harapan: `not all cases are covered` yang
    telanjang sama. Tambahkan `else: discard` dan harapkan compile.
-5. Tulis bentuk `elif`-di-`case` dari chapter ini. Harapan: tiga error — `not all cases are covered`, lalu
+5. Tulis bentuk `elif`-di-`case` dari bab ini. Harapan: tiga error — `not all cases are covered`, lalu
    `` `elif` branch in a `case` is not supported; use `else:` with a nested `if` ``, lalu yang sama untuk
    `else` sesudahnya. Tulis ulang sebagai `else:` plus `if` dan harapkan compile.
 6. Tulis `let r = case "zzz"` dengan `of "go": 111` dan `of "stop": 222`, tanpa `else`, dan satu `echo` di tiap

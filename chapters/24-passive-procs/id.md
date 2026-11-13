@@ -15,7 +15,7 @@ glossary_added: [passive proc, continuation, park, scheduler, state function, tr
 
 # Passive Proc dan Concurrency
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Nimony punya satu mekanisme untuk pekerjaan yang berhenti sejenak: pragma `.passive`. Passive proc dikompilasi
 jadi state machine yang bisa berhenti di titik pilihan, menyerahkan nilai balik ke siapa pun yang menjalankannya,
@@ -24,11 +24,11 @@ halaman differences mengatakannya lugas, "instead of `async` write `passive`" (`
 halaman design menaruh passive proc di tempat Nim 2 menaruh async sekaligus thread procedure
 (`doc/design.md:97-101`).
 
-Dua hal tidak boleh lo anggap, karena dua-duanya tidak benar di pin. Passive proc tidak otomatis concurrent:
+Dua hal tidak boleh kamu anggap, karena dua-duanya tidak benar di pin. Passive proc tidak otomatis concurrent:
 dengan scheduler default, panggilan dari kode biasa menjalankan satu rantai state sampai habis (`advance`
 memindahkan satu state), jadi dua passive proc bergiliran hanya kalau kode yang menggerakkannya bergiliran. Dan
 proc yang park tidak melanjutkan dirinya sendiri: harus ada yang memegang continuation-nya dan menjalankannya
-lagi. Chapter ini mengajarkan suspend, resume, dan batas scheduler, dan menyebut di mana batasnya alih-alih
+lagi. Bab ini mengajarkan suspend, resume, dan batas scheduler, dan menyebut di mana batasnya alih-alih
 mengisyaratkan pekerjaan jalan paralel.
 
 ## Procedure yang bisa berhenti sejenak
@@ -50,7 +50,7 @@ jadi panggilan `complete` (`src/hexer/cps.nim:116-200`), dan `complete` menjalan
 pemanggil sampai selesai — atau, kalau coroutine-nya park, sampai siapa pun yang memegang continuation-nya
 melanjutkannya (`lib/std/system.nim:340-370`).
 
-Passive proc yang memanggil passive proc juga jalur normal, dan urutannya urutan yang lo tulis:
+Passive proc yang memanggil passive proc juga jalur normal, dan urutannya urutan yang kamu tulis:
 
 ```nim
 proc inner(n: int): int {.passive.} =
@@ -102,12 +102,12 @@ Itu defaultnya, dan layak dibaca sebagai aturan, bukan kebetulan. `complete` mem
 sebagai pemanggil coroutine-nya, lalu men-trampoline coroutine itu di thread ini sampai selesai *atau park*, dan
 kalau park dia menunggu yang melanjutkannya (`lib/std/system.nim:340-370`). Coroutine yang park dan tidak pernah
 dilanjutkan apa pun mengubah `complete` jadi tunggu tanpa akhir: program mencetak semuanya sampai park lalu diam.
-Itu bukan deadlock yang bisa dilihat compiler, dan itu cara paling umum program passive pertama lo hang.
+Itu bukan deadlock yang bisa dilihat compiler, dan itu cara paling umum program passive pertama kamu hang.
 
-Jadi: `complete` untuk coroutine yang tidak bisa park. Kalau callee-nya bisa park, lo yang menggerakkannya, dan
+Jadi: `complete` untuk coroutine yang tidak bisa park. Kalau callee-nya bisa park, kamu yang menggerakkannya, dan
 itu bagian berikutnya.
 
-## Park di titik yang lo pilih
+## Park di titik yang kamu pilih
 
 `delay()` tanpa argumen menangkap sisa proc yang sedang jalan, dari titik panggilannya sampai titik suspend
 berikutnya, sebagai continuation (`lib/std/system.nim:272-275`). `suspend()` mem-park coroutine-nya (`:281-283`).
@@ -182,13 +182,13 @@ disimpan: stack frame, variabel, dan posisinya kembali bersama-sama.
 
 Tidak ada apa pun di bahasa yang memilih interleaving. `advance` memanggil scheduler yang aktif, dan defaultnya
 `trivialTick`, yang menjalankan tepat continuation yang diberikan (`lib/std/system.nim:285-286`). Ganti dengan
-`setScheduler` (`:295-298`) dan lo bisa menghitung atau membelokkan setiap langkah; scheduler penghitung di
+`setScheduler` (`:295-298`) dan kamu bisa menghitung atau membelokkan setiap langkah; scheduler penghitung di
 sekitar proc yang echo, suspend, lalu echo lagi melihat dua tick. Yang tidak bisa dilakukan scheduler sendirian
 adalah membuat coroutine yang park jadi runnable lagi, karena titik resume-nya tinggal di coroutine, bukan di
 scheduler.
 
 Interleaving karena itu sifat driver, bukan sifat pragma. Park dua worker, lalu jalankan continuation
-tersimpannya dalam urutan yang lo pilih:
+tersimpannya dalam urutan yang kamu pilih:
 
 ```nim
 drive(delay(worker("a", 0)))
@@ -209,7 +209,7 @@ b 2
 Dua-duanya dimulai, dua-duanya park, dan paruh kedua masing-masing jalan setelah paruh pertama keduanya. Tukar
 dua `drive` terakhir itu dan `b 2` datang lebih dulu. Sample buku ini mengambil bentuk yang sama dengan dua
 worker, dan di sana `worker c end` datang sebelum `worker b end` karena driver melanjutkan `c` lebih dulu.
-Scheduler yang menentukan, dan di sini scheduler-nya adalah lo.
+Scheduler yang menentukan, dan di sini scheduler-nya adalah kamu.
 
 Pin juga membawa thread pool, `std/threadpool`, dengan `initPool`, `submit(continuation)`, dan `shutdownPool`
 (`lib/std/threadpool.nim:114`, `:198`, `:376`, `:417`). Continuation yang diserahkan ke pool jalan di worker,
@@ -217,7 +217,7 @@ dan begitulah modul IO di-resume dari polling thread. Dia scheduler, bukan janji
 ke pool dua worker tetap bisa selesai bergantian, seperti probe-nya, karena pekerjaan non-blocking jalan langsung
 sampai habis di worker mana pun yang mengambilnya. Pekerjaan yang benar-benar memblokir itu tempat overlap
 kelihatan — dua task yang masing-masing `sleep(200)` selesai bersamaan dalam waktu sekitar itu, bukan dua kali
-lipat — jadi overlap adalah sifat dari apa yang dikerjakan task-nya, dan chapter ini tidak pernah menjanjikannya
+lipat — jadi overlap adalah sifat dari apa yang dikerjakan task-nya, dan bab ini tidak pernah menjanjikannya
 dari pragmanya saja. Halaman passive-procs memperingatkan bahwa scheduler yang men-dispatch continuation tak
 terkait di dalam trampoline menahan stack frame perantara tetap hidup (`doc/passive_procs.md:149-161`). Buku ini
 tidak mengajarkan bahwa menyerahkan dua proc membuat mereka overlap. Dia mengajarkan di mana keputusannya tinggal.
@@ -276,7 +276,7 @@ sepanjang panggilan (`src/hexer/cps.nim:155-200`). Pembungkus heap menandai fram
 frame itu sendiri; jalur stack membiarkan field itu nil. Penanda itulah seluruh tesnya: `deallocFrame`
 membebaskan frame saat `callee` tidak nil dan tidak melakukan apa pun selain itu (`lib/std/system.nim:706-709`).
 Bentuk stack aman justru karena pemanggilnya diam di tempat sepanjang panggilan, dan bentuk itu salah untuk
-coroutine yang mau lo park lalu lanjutkan nanti, di mana frame-nya akan hidup lebih lama dari pemanggilnya.
+coroutine yang mau kamu park lalu lanjutkan nanti, di mana frame-nya akan hidup lebih lama dari pemanggilnya.
 
 Trampoline itulah yang menjaga rantai panjang tidak menghabiskan stack: setiap state kembali ke loop alih-alih
 memanggil state berikutnya (`doc/passive_procs.md:468-471`). Loop berisi seratus ribu panggilan passive biasa
@@ -318,9 +318,9 @@ itu ke tempat yang mengharapkan `proc (x: int): int {.nimcall.}` ditolak dengan 
 lain. Rutenya pembungkus kecil non-passive yang memanggil passive proc-nya, dan di situ juga tunggu `complete`
 jadi kelihatan.
 
-Satu aturan lagi datang dari janji single-threaded Chapter 16 dan berlaku tanpa perubahan: passive proc yang
+Satu aturan lagi datang dari janji single-threaded Bab 16 dan berlaku tanpa perubahan: passive proc yang
 menyentuh variabel mutable di level modul kena pemeriksaan global unsynchronized, karena coroutine-nya bisa jalan
-di thread lain. Probe chapter ini kena saat menyimpan `delay()` ke `Continuation` di level modul:
+di thread lain. Probe bab ini kena saat menyimpan `delay()` ke `Continuation` di level modul:
 
 ```
 Error: unsynchronized access to global variable 'resumeCont'; pass it to a `.sync` routine or use
@@ -332,7 +332,7 @@ itu janji yang dibuat pool milik compiler untuk dirinya sendiri (`lib/std/thread
 simpan continuation-nya di `ref object` milik driver — sel heap bukan milik siapa pun selain driver, jadi tidak
 butuh janji — atau simpan di dalam driver-nya. `assumeSync` untuk global yang memang harus tetap global.
 
-## Delta Nim 2
+## Nim 2 delta
 
 *Apa yang Nim 2 lakukan:* proc `async`, `await`, future dari `std/asyncdispatch`, dan `thread`/`spawn` untuk
 kerja paralel. Callback atau future adalah pegangan ke pekerjaan yang belum selesai.
@@ -342,7 +342,7 @@ menggantikan future; `delay` dan `complete` menggantikan spawn task; dan pragma 
 dulu dilakukan thread procedure, karena continuation yang sama bisa diserahkan ke pool. `std/asyncdispatch` tidak
 ada di pin, dan `await` adalah identifier yang tidak dideklarasikan.
 
-*Apa yang rusak kalau lo mempertahankan kebiasaan lama:* `import std / [asyncdispatch]` jadi berkas yang tidak
+*Apa yang rusak kalau kamu mempertahankan kebiasaan lama:* `import std / [asyncdispatch]` jadi berkas yang tidak
 ketemu; `await` gagal di pemakaian pertama; dan korban sebenarnya adalah model mental, karena `complete`
 memblokir. Kode Nim 2 menunggu lalu jalan terus, sementara panggilan passive dari kode biasa menunggu seluruh
 rantai, termasuk park-nya. Kode yang ditulis seolah panggilannya kembali lebih awal akan hang, bukan lanjut.
@@ -376,7 +376,7 @@ melanjutkan mereka dalam urutan yang dia pilih; dan programnya keluar `0`, dan i
 Sample-nya memakai `{.feature: "assumeSync".}` karena continuation resume-nya adalah variabel di level modul,
 seperti yang aturan di atas minta.
 
-## Latihan
+## Cek
 
 1. Tulis proc `.passive` yang mengembalikan `x + 1` lalu panggil dari kode biasa. Harapan: nilainya, tanpa park.
 2. Bangun panggilan yang sama dengan `delay`, cetak satu baris, lalu `complete`. Harapan: baris cetakannya lebih

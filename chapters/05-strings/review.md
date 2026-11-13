@@ -13,7 +13,7 @@ and is fixed by removing that count: seventeen claims were probed by the editor 
 Aksara ran the verifier at the pin after writing `strings.nim`:
 
 ```
-toolchain /Users/sachiel/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
+toolchain ~/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
 PASS samples/02-pinned-toolchain/hello.nim exit=0
 PASS samples/03-values-names-mutability/values.nim exit=0
 PASS samples/04-numbers-types-conversion/numbers.nim exit=0

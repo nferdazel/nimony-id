@@ -15,7 +15,7 @@ glossary_added: [template, hygienic template, injection, constant expression, co
 
 # Template dan Evaluasi Compile-Time
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Ada dua cara menulis sesuatu sekali saja, dan keduanya bukan alat yang sama. Template menghapus pengulangan di
 sumber: compiler mengganti body-nya di tiap call site, dengan nama di dalamnya terikat ke tempat nama itu ditulis.
@@ -48,11 +48,11 @@ main.nim(4, 41) Error: Type mismatch at [position]
 Plain(n: 1) + Plain(n: 1)
 ```
 
-Baris kedua pesan itu adalah sumber hasil penggantian, bukan panggilan, dan trace-nya menunjuk baris yang harus lo
+Baris kedua pesan itu adalah sumber hasil penggantian, bukan panggilan, dan trace-nya menunjuk baris yang harus kamu
 betulkan. Jadi template diperiksa di tempat ia dipakai, terhadap argumen yang dipakai bersamanya, bukan sekali di
 definisinya.
 
-## Nama yang dideklarasikannya bukan nama lo
+## Nama yang dideklarasikannya bukan nama kamu
 
 ```nim
 template bump(): untyped =
@@ -108,9 +108,9 @@ Itu paling penting di sebuah library. Template tidak bisa dibajak pemanggil yang
 dengan ejaan sama, dan itulah gunanya menulis template secara higienis; harganya, template juga tidak bisa meminjam
 apa pun dari pemanggil.
 
-## Yang lo masukkan tidak bisa melihat yang dideklarasikan template
+## Yang kamu masukkan tidak bisa melihat yang dideklarasikan template
 
-Block yang lo lewatkan bukan teks yang ditempel sesudah deklarasi template. Ia ditulis di call site dan diperiksa di
+Block yang kamu lewatkan bukan teks yang ditempel sesudah deklarasi template. Ia ditulis di call site dan diperiksa di
 sana.
 
 ```nim
@@ -146,7 +146,7 @@ echo limit        # 3
 
 `{.inject.}` pada deklarasi di dalam template mempertahankan namanya alih-alih menggantinya, jadi scope pemanggil
 melihat `report` dan `limit` sesudah ekspansi. `{.gensym.}` menyatakan sebaliknya secara eksplisit, dan berguna di
-tempat lo ingin default-nya terlihat di sumber. Kedua pragma dibaca oleh `symBinding`
+tempat kamu ingin default-nya terlihat di sumber. Kedua pragma dibaca oleh `symBinding`
 (`src/nimony/semuntyped.nim:183-191`) dan diterapkan di `addDecl` (`:214-232`). Field pada object adalah pengecualian
 yang berlaku tetap: nama field di-inject, bukan diganti nama, karena field bukan local.
 
@@ -160,7 +160,7 @@ pilihan terakhir, bukan sebagai cara mengeluarkan nama dari template.
 
 ## Tipe parameter mana yang ditulis
 
-`untyped` adalah pilihan yang bekerja untuk sebuah block atau untuk ekspresi apa pun yang mau lo ganti, dan itulah
+`untyped` adalah pilihan yang bekerja untuk sebuah block atau untuk ekspresi apa pun yang mau kamu ganti, dan itulah
 yang dipakai sample. Alternatifnya masing-masing punya satu tugas:
 
 - **Tipe sungguhan** kalau argumen harus diperiksa sebelum penggantian. `template addOne(x: int): int = x + 1`
@@ -240,7 +240,7 @@ per panggilan.
 currently undocumented". Buku tidak bisa mengutip batas yang tidak didokumentasikan, jadi bagian ini hanya mengklaim
 apa yang ditunjukkan pin ini.
 
-Panggilan ke routine yang lo tulis di-fold, dan body-nya boleh memuat alur kontrol biasa: `const Nine = square(3)`
+Panggilan ke routine yang kamu tulis di-fold, dan body-nya boleh memuat alur kontrol biasa: `const Nine = square(3)`
 adalah `9`; `for` dengan `if` di dalamnya `30`; `while` yang mengakumulasi `6`; rekursi `120` untuk `fact(5)`.
 Container dan string juga dibangun selama evaluasi: `seq` yang ditumbuhkan dengan `add` memberi `4` dan `9` untuk
 panjang dan elemen terakhirnya, dan string yang ditumbuhkan dengan `&` memberi `xxxx` dan panjang `4`.
@@ -286,7 +286,7 @@ untuk dua template yang ditolak pin ini. `macro` adalah cara biasa untuk membang
 body terikat di tempat ia ditulis. Parameter `typed` diterima dan tidak bisa dipakai, jadi `untyped` atau tipe
 sungguhan adalah jalurnya. `macro` dengan parameter `untyped` masih build dan jalan di pin ini, sementara
 `doc/differences.md` mendaftar macro sebagai digantikan plugin: permukaan kompatibilitas, bukan teknik yang diajarkan
-buku ini (Chapter 19). `const` dihitung oleh evaluator yang batasnya tidak didokumentasikan manual, jadi jaga
+buku ini (Bab 19). `const` dihitung oleh evaluator yang batasnya tidak didokumentasikan manual, jadi jaga
 constant expression pada bentuk-bentuk di atas.
 
 *Apa yang rusak kalau kebiasaan itu dibawa.* Template berparameter `typed` hasil port gagal di pemakaian pertamanya

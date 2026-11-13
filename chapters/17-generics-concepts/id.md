@@ -15,13 +15,13 @@ glossary_added: [type parameter, static parameter, concept inheritance, Self, de
 
 # Generic dan Concept
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Sebuah routine generic adalah satu potong sumber yang menjadi beberapa routine, satu per tipe yang memakainya.
 Concept adalah constraint yang menentukan tipe mana yang boleh dipakai sama sekali. Nimony memeriksa keduanya di
 definisi, bukan dengan menempel teks lalu berharap: body generic diperiksa tipenya sekali, terhadap apa yang
 dijanjikan parameternya, dan concept diperiksa sebagai sekumpulan panggilan terhadap tipenya saat instansiasi. Itu
-sebabnya error di chapter ini datang sebelum program berjalan, dan sebabnya pesannya menyebut sebuah constraint
+sebabnya error di bab ini datang sebelum program berjalan, dan sebabnya pesannya menyebut sebuah constraint
 alih-alih hasil ekspansi template.
 
 ## Type parameter pada proc
@@ -36,7 +36,7 @@ echo id("s")      # s
 ```
 
 Tipenya diinfer dari argumen, dan routine-nya diinstansiasi sekali per tipe. Instansiasinya juga bisa ditulis
-eksplisit saat inferensi bukan yang lo mau:
+eksplisit saat inferensi bukan yang kamu mau:
 
 ```nim
 echo id[int](3)   # 3
@@ -60,7 +60,7 @@ echo b.v          # 3
 ```
 
 Bentuk eksplisitnya menamai instance-nya, `Box[int](v: 3)`. `Box(v: 3)` yang telanjang juga build, karena tipe
-field-nya adalah `T` dan argumennya yang menentukan; tulis instance-nya saat lo mau panggilannya menyebut `T` mana
+field-nya adalah `T` dan argumennya yang menentukan; tulis instance-nya saat kamu mau panggilannya menyebut `T` mana
 yang dihasilkan. Constraint boleh duduk di type parameter juga, dan tiap instance lalu harus memenuhinya:
 
 ```nim
@@ -96,7 +96,7 @@ echo fill[3](7).len   # 3
 ```
 
 Dua baris yang memulai `s` bukan upacara. `var s: seq[int]` lalu `s.add x` ditolak dengan `cannot prove that s has
-been initialized`, yang merupakan aturan definite assignment Chapter 3 dan bukan urusan parameter static; `seq`
+been initialized`, yang merupakan aturan definite assignment Bab 3 dan bukan urusan parameter static; `seq`
 kosong yang dibangun dari literal memberi body sebuah nilai yang bisa dibuktikan sudah ditulis.
 
 Bentuk kurung siku adalah cara nilainya disuplai, karena tidak ada argumen untuk menginfernya. Body boleh memakai
@@ -145,7 +145,7 @@ echo show("a")    # str: a
 echo show(2)      # int: 2
 ```
 
-Pilih bentuk yang diperiksa. `{.untyped.}` adalah janji bahwa tiap instansiasi ter-compile, dibuat sebelum lo
+Pilih bentuk yang diperiksa. `{.untyped.}` adalah janji bahwa tiap instansiasi ter-compile, dibuat sebelum kamu
 melihat satu pun.
 
 ## Concept: constraint adalah daftar panggilan
@@ -181,7 +181,7 @@ proc find[T; C: Findable[T]](x: C; elem: T): int = ...
 ```
 
 Dengan `MyCollection` yang menyediakan `items`, `find(myCollection, 3)` mencetak `2` (`doc/language.md:4429-4441`).
-Parameter `C: Findable[T]` juga bukan hiasan; bagian terakhir chapter ini menunjukkan apa yang dilakukan ejaan
+Parameter `C: Findable[T]` juga bukan hiasan; bagian terakhir bab ini menunjukkan apa yang dilakukan ejaan
 `x: Findable[T]` sebagai gantinya.
 
 ## Saat sebuah tipe tidak memenuhinya
@@ -223,7 +223,7 @@ proc describe[T: Aged](x: T): string = name(x) & " " & $age(x)
 `Person` dengan kedua routine memenuhi `Aged`, dan `describe` mencetak `ada 3`. Tipe yang punya `age` tapi tidak
 punya `name` gagal di requirement warisannya, dan pesannya menamai anaknya: `P2 does not match constraint Aged`.
 Requirement induknya yang gagal, tapi pesannya tidak bilang yang mana dari keduanya, jadi bacalah constraint yang
-lo tulis, bukan yang lo warisi.
+kamu tulis, bukan yang kamu warisi.
 
 ## `Self` dan `var Self`
 
@@ -245,7 +245,7 @@ run(c)            # c.v becomes 2
 Qualifier-nya tidak ditegakkan saat concept dipenuhi. Requirement `var Self` menerima kandidat yang mengambil
 nilai, dan mutasi yang dijanjikan requirement itu tidak pernah terjadi; requirement `Self` biasa menerima kandidat
 `var`, dan mutasinya terjadi. Yang ditegakkan adalah panggilan di body-nya sendiri: `run[T](x: var T)` bisa
-meneruskan `x`, dan `run[T](x: T)` tidak bisa — `cannot pass x to var/out T parameter`. Tulis qualifier yang lo
+meneruskan `x`, dan `run[T](x: T)` tidak bisa — `cannot pass x to var/out T parameter`. Tulis qualifier yang kamu
 maksud, lalu biarkan panggilan di body yang jadi pemeriksanya, bukan requirement-nya.
 
 ## Dua aturan manual yang tidak dijaga pin ini
@@ -269,7 +269,7 @@ f(3)              # took it
 
 Panggil dengan tipe kedua yang memenuhi dan build-nya mati di backend dengan `Symbol not found in NIF module:
 Addable.0` dan sebuah `AssertionDefect`. Jadi deklarasinya diterima, instansiasi pertamanya jalan, dan programnya
-tidak bisa dipakai. Itu defect, bukan fitur untuk dipelajari; chapter ini menulis constraint-nya di type parameter,
+tidak bisa dipakai. Itu defect, bukan fitur untuk dipelajari; bab ini menulis constraint-nya di type parameter,
 `[T: Addable]`, setiap kali.
 
 Contoh manual yang berhubungan, `proc find[T](x: Findable[T]; elem: T)`, gagal satu langkah lebih awal dan karena
@@ -326,7 +326,7 @@ yang sama.
 4. Tulis concept dengan dua requirement dan `concept of` sebuah concept ketiga. Hapus salah satu routine induk
    dari tipe itu dan sebutkan constraint mana yang dinamai pesannya.
 5. Tulis `proc f(x: Addable)`, panggil sekali dengan `int`, lalu dengan tipe kedua yang memenuhi. Catat apa yang
-   terjadi di tiap langkah dan bentuk mana yang seharusnya lo tulis.
+   terjadi di tiap langkah dan bentuk mana yang seharusnya kamu tulis.
 
 ## Chapter checklist
 

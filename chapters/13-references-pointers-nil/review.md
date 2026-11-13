@@ -5,7 +5,7 @@ Manuscript: `chapters/13-references-pointers-nil/en.md` (status `drafting`, 2,37
 Sample: `samples/13-references-pointers-nil/refs.nim`
 Pin: `4ba90a781b0b22d0821efaa153c129c37cef6143` (nimony 0.6.3), toolchain `~/.local/opt/nimony/4ba90a7`
 Host compiler for Nim 2 contrasts: `~/.local/opt/nim-2.4.0` (Nim 2.4.0)
-Probe sources: `/Users/sachiel/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch13-probes/`
+Probe sources: `~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch13-probes/`
 Prepared: 2026-11-13. Reviewer: Momo. Nothing here is a verdict; request is one line per question A–F and a
 verdict per claim.
 

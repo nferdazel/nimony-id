@@ -42,6 +42,11 @@ at 1.
 6. **Chapter checklist** — the dated line described below. It stays in the source as the process's record;
    the build strips it, so it is never printed as book content.
 
+The Indonesian edition uses the same six sections, in the same order, with these exact headings:
+`## Untuk apa bab ini`, the body's own headings, `## Nim 2 delta`, `## Samples`, `## Cek`, `## Chapter
+checklist`. They are listed in `GLOSSARY.md`; `en.md` keeps the English ones. A chapter that needs a different
+name for one of the six is a template change, not a chapter decision.
+
 ## Claim provenance
 
 Every claim the chapter teaches belongs to one of two classes, and the text says which:

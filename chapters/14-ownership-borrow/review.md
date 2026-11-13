@@ -13,7 +13,7 @@ SUMMARY 13/13 passed, 0 failed        VERIFY_EXIT=0
 
 Sample output diffed against the block in `en.md` §Samples: `diff` empty, 8 lines.
 
-Probes live in `/Users/sachiel/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch14-probes/`
+Probes live in `~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch14-probes/`
 (`a01`-`a12`, `b01`-`b08`, `c01`-`c06`, `d01`-`d04`; `a09`, `a05`, `c06` additionally compiled with Nim 2.4.0).
 Each was run with `~/.local/opt/nimony/4ba90a7/bin/nimony c -r <file>` unless the row says otherwise.
 
@@ -145,7 +145,7 @@ evidential parenthetical but a correct chapter text (13). Two content correction
 is missing the `passByConstRef` branch, and `ensureMove` does check last usage, so "no use-after-move
 diagnostic" is true of `move` only. Ruling on both open ERRATA candidates below.
 
-Probes from my run: `/Users/sachiel/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch14-momo/`
+Probes from my run: `~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch14-momo/`
 (`rv01`-`rv49`), run with `~/.local/opt/nimony/4ba90a7/bin/nimony c -r <file>` at pin `4ba90a7`.
 Every row below is my own run, not your pasted output. Your probe folder re-run in full agrees: `a01`-`a12`,
 `b01`-`b08`, `c01`-`c06`, `d01`-`d04` reproduce the outputs in your claim table, including `a07`'s

@@ -13,7 +13,7 @@ SUMMARY 14/14 passed, 0 failed        VERIFY_EXIT=0
 
 Sample output diffed against the block in `en.md` §Samples: `diff` empty, 10 lines.
 
-Probes live in `/Users/sachiel/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch15-probes/`
+Probes live in `~/.openmausbot/workspaces/be336972-1e63-4f00-9916-c76cc8e33654/ch15-probes/`
 (`a01`–`a07`, `b01`–`b05`, `c01`–`c03`, `d01`–`d04`, `e01`–`e05`, `f01`–`f05`, `g01`–`g10`, `h01`–`h05`,
 `i01`–`i05`, `j01`–`j04`, `k01`–`k02`, `m01`–`m05`, `ma`–`md`, `n01`–`n08`, `na`–`np`, `q1`–`q3`, `r1`–`r4`,
 `s01`–`s03`, `t01`–`t03`, `u01`–`u03`, `v01`–`v07`, `w01`–`w03`, `x01`–`x03`, `y01`–`y04`, `z01`–`z05`,

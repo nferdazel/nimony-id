@@ -8,14 +8,14 @@ Technical review: Momo, 2026-11-12. Nine claims; six PASS, three CORRECT-with-wo
 Run by Momo during the review, from the pinned install path:
 
 ```
-toolchain /Users/sachiel/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
+toolchain ~/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
 PASS samples/02-pinned-toolchain/hello.nim exit=0
 SUMMARY 1/1 passed, 0 failed
 ```
 
 Exit code `0`. Earlier the same three lines were reproduced by Aksara from `/tmp`, to prove the verifier
 resolves its own paths. Verifier author: Raka (Team Lead, Team A). Install path
-`/Users/sachiel/.local/opt/nimony/4ba90a7`, host compiler `/Users/sachiel/.local/opt/nim-2.4.0`.
+`~/.local/opt/nimony/4ba90a7`, host compiler `~/.local/opt/nim-2.4.0`.
 
 ## Claim verdicts
 

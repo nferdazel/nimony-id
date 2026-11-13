@@ -15,7 +15,7 @@ glossary_added: ["sum type", "discriminator", "exhaustive case"]
 
 # Sum Type dan `case` yang Exhaustive
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Sebuah bentuk bisa lingkaran, persegi panjang, atau segitiga, dan masing-masing butuh data berbeda untuk
 menjelaskannya. Godaannya satu object dengan semua field dan flag `kind`, di mana separuh field mati pada nilai
@@ -27,7 +27,7 @@ alternatif mana nilai ini. Tiap alternatif punya field sendiri, dan field altern
 nilai itu sama sekali. `case` atas discriminator lalu mendaftar setiap alternatif, dan compiler menolak
 membangun `case` yang melewatkan satu.
 
-Penolakan itulah inti chapter ini. Ia cek saat compile, dan itulah alasan memilih bentuk ini dibanding flag:
+Penolakan itulah inti bab ini. Ia cek saat compile, dan itulah alasan memilih bentuk ini dibanding flag:
 alternatif baru mematahkan setiap `case` yang lupa menanganinya, saat build, bukan di production.
 
 ## Bentuk sebuah varian
@@ -51,7 +51,7 @@ type
 
 `kind` adalah discriminator-nya, dan tipenya harus ordinal — enum, integer, `bool`. Selector `string` ditolak
 dengan `selector must be of an ordinal type` (`ch12-probes/c40.nim`, `src/nimony/sem.nim:3207`). Holey enum,
-yang Chapter 11 tunjukkan dengan ordinal eksplisit dan celah, ditolak karena alasan yang sama: tes yang
+yang Bab 11 tunjukkan dengan ordinal eksplisit dan celah, ditolak karena alasan yang sama: tes yang
 menerima tipe di sini menolak tipe bercelah (`src/nimony/typeprops.nim:17-33`), dan barisnya datang terbungkus:
 
 ```
@@ -120,10 +120,10 @@ echo Shape(kind: Rectangle, width: 1.0).height   # 0.0
 echo Shape(kind: Rectangle).width                # 0.0
 ```
 
-Discriminator dicek terhadap field yang lo sebut, dan ada tiga penolakan yang layak dikenali dari pesannya
+Discriminator dicek terhadap field yang kamu sebut, dan ada tiga penolakan yang layak dikenali dari pesannya
 (`src/nimony/sem.nim:4559-4578`):
 
-| Yang lo tulis | Yang dikatakan compiler |
+| Yang kamu tulis | Yang dikatakan compiler |
 | --- | --- |
 | `Shape(kind: Circle, width: 3.0)` | `a case selecting discriminator 'kind' with value 'Circle' appears in the object construction, but the field(s) 'width' are in conflict with this value.` (`c4.nim`) |
 | `Shape(kind: Circle, radius: 1.0, width: 3.0)` | `The fields 'radius' and 'width' cannot be initialized together, because they are from conflicting branches in the case object.` (`c5.nim`) |
@@ -148,7 +148,7 @@ diperbolehkan — `Shape(kind: k)` build dan field cabangnya mulai dari default 
 
 ## Mencocokkan dengan `case`
 
-Statement `case` dari Chapter 6 adalah alatnya di sini. Ia mengambil discriminator dan mendaftar alternatifnya
+Statement `case` dari Bab 6 adalah alatnya di sini. Ia mengambil discriminator dan mendaftar alternatifnya
 (`doc/language.md:1776-1840`):
 
 ```nim
@@ -238,7 +238,7 @@ echo s.radius    # 3.0 — the radius slot now holds the width
 Probe `c9.nim`. Pada `let`, assignment yang sama ditolak lebih awal dengan `cannot mutate expression s.kind`
 (`c36.nim`). Layout di bawah inilah alasannya tidak ada yang mengecek: cabang-cabangnya union tanpa tag yang
 dibaca saat akses, dan `FieldDefect`, nama Nim 2 untuk cek semacam ini, tidak muncul di mana pun di bawah
-`lib/` atau `src/`. Guard-nya kerjaan lo. `case` adalah cara menulisnya; apa yang dibaca cabang harus cabang
+`lib/` atau `src/`. Guard-nya kerjaan kamu. `case` adalah cara menulisnya; apa yang dibaca cabang harus cabang
 yang cocok dengan `kind`.
 
 `sizeof` menunjukkan layout tempat biayanya berasal: satu byte untuk discriminator, lalu cabang terbesar,
@@ -306,14 +306,14 @@ konstruksi dan `case` yang sama (`c25.nim`).
 > host).
 > *Apa yang Nimony lakukan* → keduanya tidak dicek. Pembacaan mengembalikan storage union-nya, dan assignment
 > hanyalah penulisan field biasa (`c7.nim`, `c9.nim`).
-> *Apa yang rusak kalau lo mempertahankan kebiasaan lama* → kode yang bersandar pada defect itu untuk menangkap
+> *Apa yang rusak kalau kamu mempertahankan kebiasaan lama* → kode yang bersandar pada defect itu untuk menangkap
 > cabang yang salah sekarang mencetak angka yang masuk akal, dan port yang men-switch `kind` pada nilai yang
 > sudah ada mempertahankan byte lama. Jaga dengan `case` sebelum setiap pembacaan cabang; jangan bergantung
 > pada compiler untuk menangkap sisanya.
 
 ## Samples
 
-Satu berkas membuktikan chapter ini: `samples/12-sum-types-case/sumtypes.nim`.
+Satu berkas membuktikan bab ini: `samples/12-sum-types-case/sumtypes.nim`.
 
 ```
 ~/.local/opt/nimony/4ba90a7/bin/nimony c -r samples/12-sum-types-case/sumtypes.nim
@@ -358,9 +358,9 @@ tidak. Lalu `2.0` dan `99.0`: salinannya berubah, aslinya tidak, dan `Rectangle`
 discriminator salinan dan kesamaan field-per-field. Empat terakhir adalah tree-nya: `Branch`, dua anak, nilai
 leaf pertama, dan `6` — jumlah tiga `id`-nya.
 
-## Latihan
+## Cek
 
-1. Deklarasikan `Shape` dari chapter ini lalu konstruksi `Circle` dan `Rectangle`. Harapan: keduanya build;
+1. Deklarasikan `Shape` dari bab ini lalu konstruksi `Circle` dan `Rectangle`. Harapan: keduanya build;
    lingkaran tidak punya `width` dan persegi tidak punya `radius`.
 2. Beri `ShapeKind` anggota keempat lalu build ulang tanpa menyentuh `area`. Harapan:
    `not all cases are covered; missing: {<anggota baru>}` di kepala `case`.
@@ -382,7 +382,7 @@ leaf pertama, dan `6` — jumlah tiga `id`-nya.
 11. Tulis `case` atas `ShapeKind` yang mengulang `of Circle` dua kali. Harapan: `value already handled`.
 12. Tulis `of Cirlce`. Harapan: `undeclared identifier: Cirlce` plus daftar yang hilang.
 13. Cetak `sizeof(ShapeKind)` dan `sizeof(Shape)` untuk versi tiga cabang. Harapan: `1` dan `32`.
-14. Bangun tree `Node` dari chapter ini dan cetak `total`. Harapan: `6`.
+14. Bangun tree `Node` dari bab ini dan cetak `total`. Harapan: `6`.
 
 ## Checklist chapter
 

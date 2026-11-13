@@ -15,12 +15,12 @@ glossary_added: [ErrorCode, raises pragma, except arm, canraise, ref exception]
 
 # Error sebagai Nilai
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
-Chapter 8 memberi lo routine yang selalu mengembalikan apa yang signature-nya janjikan. Chapter ini soal
+Bab 8 memberi kamu routine yang selalu mengembalikan apa yang signature-nya janjikan. Bab ini soal
 routine yang tidak bisa begitu: yang pemanggilnya harus diberi tahu bahwa pekerjaannya tidak jadi. Nimony punya
 tepat dua cara mengatakan itu, sebuah nilai enum dan sebuah objek `ref`, dan yang polos tidak membawa data sama
-sekali. Mencari ke mana payload-nya pergi adalah sebagian besar isi chapter ini.
+sekali. Mencari ke mana payload-nya pergi adalah sebagian besar isi bab ini.
 
 Bentuk yang jadi dasar bahasa ini: sebuah routine **mengembalikan** `ErrorCode` saat gagal itu biasa dan
 pemanggil diharapkan memutuskan, dan **me-raise** `ErrorCode` saat gagal harus menginterupsi seluruh rantai
@@ -63,8 +63,8 @@ nomornya. Nama itu adalah seluruh diagnostiknya. Tidak ada string pesan yang men
 ada yang bisa ditambahi konteks, dan tidak ada tempat untuk menaruh posisi sumber.
 
 Dan code yang dikembalikan tidak bisa dibuang tanpa sengaja: panggilan telanjang di posisi statement ditolak
-dengan ``Error: expression of type `ErrorCode` must be discarded``. Kalau memang mengabaikannya yang lo mau,
-tandai routine-nya `{.discardable.}`; kalau tidak, compiler baru saja memaksa lo memutuskan, dan itulah gunanya
+dengan ``Error: expression of type `ErrorCode` must be discarded``. Kalau memang mengabaikannya yang kamu mau,
+tandai routine-nya `{.discardable.}`; kalau tidak, compiler baru saja memaksa kamu memutuskan, dan itulah gunanya
 mengembalikan code.
 
 ## Kegagalan yang menginterupsi
@@ -178,7 +178,7 @@ Ini cara yang biasa untuk memberi panggilan yang bisa gagal sebuah fallback tanp
 
 ## Inisialisasi `result` sebelum `try`
 
-Satu jebakan ada di interaksinya dengan pemeriksaan definite assignment Chapter 8. Ketika satu-satunya
+Satu jebakan ada di interaksinya dengan pemeriksaan definite assignment Bab 8. Ketika satu-satunya
 assignment ke `result` ada di dalam body `try`, pemeriksa tidak bisa membuktikan assignment itu terjadi —
 body-nya bisa me-raise sebelum mencapainya. Build berhenti dengan:
 
@@ -239,13 +239,13 @@ and nothing converts one into the other
 
 Jadi sebuah routine me-raise code atau me-raise exception `ref`, dan rantai yang harus menyeberang dari satu ke
 yang lain melakukannya eksplisit: tangkap code-nya, `raise` objek `ref` yang dibangun di arm `except`. Konversi
-itu pernyataan di source lo, bukan perilaku compiler.
+itu pernyataan di source kamu, bukan perilaku compiler.
 
 Satu baris di halaman itu salah, dan baris sebelahnya tidak. `doc/porting.md:106` memberi bentuk tangkapnya
 sebagai `except IOError:` dengan "no `as`, no `.msg`"; di pin ini `as` wajib — `except IOError:` tidak compile —
 dan `.msg` memang ada, di keluarga `ref`. Baris konstruksi di `:105` adalah kolom Nimony yang menjelaskan apa
 yang dilakukan kode Nim 2, dan ia benar soal Nim 2: `newException(IOError, "text")` adalah yang dibawa sebuah
-port, dan `:121` menyuruh lo mengonversinya. Dikonversi apa adanya, ia tidak jalan, karena `IOError` adalah
+port, dan `:121` menyuruh kamu mengonversinya. Dikonversi apa adanya, ia tidak jalan, karena `IOError` adalah
 nilai, bukan tipe; panggilannya ditolak dengan ``expected: typedesc[T] but got: ErrorCode``. `newException` ditulis
 untuk tipe `object of Exception` (`lib/std/system.nim:717-722`); untuk sebuah code, raise-nya *adalah* nilainya.
 
@@ -276,7 +276,7 @@ kehilangan kegagalannya. Jangan pakai fitur ini untuk membungkam compiler.
 ## Keluar dari program
 
 Ketika sebuah kegagalan tidak bisa dipulihkan di tempat ia ditangkap, `quit` mengakhiri program dengan pesan dan
-exit code 1. Pesannya pergi ke standard output, bukan standard error — layak diketahui sebelum lo mem-pipe hasil
+exit code 1. Pesannya pergi ke standard output, bukan standard error — layak diketahui sebelum kamu mem-pipe hasil
 sebuah program.
 
 ```nim
@@ -288,7 +288,7 @@ except ErrorCode as e:
 
 `src/lib/compat2.nim:17-28` membungkus pola ini persis sebagai `onRaiseQuit(call)`, dan komentar di situ
 menerangkan kenapa ia ada: untuk menghentikan `raises` menyebar lewat setiap lapisan tanpa diam-diam menelan
-error-nya. Chapter 21 membahas exit code dan argumen dengan benar; untuk chapter ini, `quit` adalah cara sebuah
+error-nya. Bab 21 membahas exit code dan argumen dengan benar; untuk bab ini, `quit` adalah cara sebuah
 `main` mengubah code yang tertangkap jadi exit yang bukan nol.
 
 ## Nim 2 delta
@@ -302,7 +302,7 @@ Default-nya non-raising, dan routine yang me-raise mengatakannya dengan `{.raise
 untuk pembaca yang butuh payload, tapi ia keluarga terpisah, ia harus mewarisi `Exception`, dan ia tidak
 terkonversi ke atau dari `ErrorCode`.
 
-*Apa yang rusak kalau lo pertahankan kebiasaannya.* Tiga hal, dalam urutan yang ditemui sebuah port. `.msg` pada
+*Apa yang rusak kalau kamu pertahankan kebiasaannya.* Tiga hal, dalam urutan yang ditemui sebuah port. `.msg` pada
 code yang ditangkap adalah compile error. `newException(IOError, ...)` tidak build. Dan setiap routine di
 sepanjang jalur yang me-raise harus dianotasi atau menangkap, jadi modul yang tidak pernah mendeklarasikan
 `{.raises.}` tidak akan compile sama sekali — dan itu compiler memberi tahu di mana keputusannya harus ditaruh.

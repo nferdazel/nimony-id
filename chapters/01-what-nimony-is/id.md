@@ -18,7 +18,7 @@ yang ditambal, dan ini belum selesai. Dua fakta itu menentukan cara kamu membaca
 yang akan kamu pelajari sengaja dibuat berbeda dari Nim yang mungkin kamu temui di buku, tulisan blog, dan
 jawaban Stack Overflow, dan bahasa itu masih bergerak.
 
-Chapter ini tidak punya kode. Isinya model yang diasumsikan seluruh buku, plus apa yang harus kamu lakukan
+Bab ini tidak punya kode. Isinya model yang diasumsikan seluruh buku, plus apa yang harus kamu lakukan
 ketika dunia luar tidak setuju dengan kita.
 
 ## Satu garis bahasa, dua nama
@@ -59,37 +59,37 @@ menyebutnya format yang dipakai untuk berkomunikasi antar fase compiler, dan tia
 NIF. Halaman filosofi desain menjabarkan untungnya: dengan NIF, banyak transformasi jadi lebih sederhana dan
 bisa ditulis tanpa rekursi, dan plugin berjalan inkremental serta paralel seperti bagian lain pipeline
 (nim-lang.org/araq/nimony.html, dibaca 2026-11-12). Bacalah itu sebagai argumen desain, bukan sebagai sifat yang
-sudah terukur di pin ini — halamannya bertanggal 2025-05-10 dan ditulis dalam bentuk akan datang. Chapter 19
+sudah terukur di pin ini — halamannya bertanggal 2025-05-10 dan ditulis dalam bentuk akan datang. Bab 19
 membahas artinya ketika kamu menulis plugin. Untuk sekarang akibatnya lebih kecil dan lebih berguna: tahap-tahap
 compiler bisa dipisahkan, dan itulah sebabnya build berperilaku seperti kata README.
 
 ## Bahasa yang benar-benar akan kamu tulis
 
-Tujuh perbedaan menentukan sebagian besar isi buku ini. Semuanya punya chapter sendiri; tidak ada yang jadi
+Tujuh perbedaan menentukan sebagian besar isi buku ini. Semuanya punya bab sendiri; tidak ada yang jadi
 catatan kaki. Sebagian besar diperdebatkan di paruh desain dokumen perbedaan, bukan di daftar yang kapal hari
-ini, jadi sebuah chapter mengajarkan satu perbedaan hanya setelah perbedaan itu dibuktikan ulang di pin — untuk
-itulah ada baris `tech_review` di tiap chapter.
+ini, jadi sebuah bab mengajarkan satu perbedaan hanya setelah perbedaan itu dibuktikan ulang di pin — untuk
+itulah ada baris `tech_review` di tiap bab.
 
 **Nil-ability tinggal di dalam type.** Reference yang boleh nil ditulis `nil ref T`, dan reference yang tidak
 boleh nil adalah type yang berbeda. Men-dereference tanpa memeriksa adalah masalah waktu compile, bukan crash
-waktu jalan (Chapter 13).
+waktu jalan (Bab 13).
 
 **Alternatif adalah data.** `case` di dalam `object` mendapat sintaks baru, dan itulah yang memungkinkan
 pattern matching bawaan. Kamu memodelkan "salah satu dari bentuk-bentuk ini" sebagai type, bukan sebagai flag
-plus komentar (Chapter 12).
+plus komentar (Bab 12).
 
 **Generic diperiksa, dan concept adalah cara membatasinya.** Kamu menulis `proc f[T: Concept](x: T)`, dan
-batasannya diperiksa waktu compile, bukan ditemukan saat instansiasi (Chapter 17).
+batasannya diperiksa waktu compile, bukan ditemukan saat instansiasi (Bab 17).
 
 **Konkurensi kehilangan warnanya.** Di tempat Nim 2 menulis `async`, Nimony menulis `passive`; di tempat Nim 2
-menulis `await`, kamu tidak menulis apa pun. Event loop dan multi-threading berbagi satu model (Chapter 24).
+menulis `await`, kamu tidak menulis apa pun. Event loop dan multi-threading berbagi satu model (Bab 24).
 
 **Side effect dideklarasikan, bukan disimpulkan.** `func`, `iterator`, dan `converter` bebas side effect secara
-default; `proc` tidak; tidak ada inferensi (Chapter 8 dan 15).
+default; `proc` tidak; tidak ada inferensi (Bab 8 dan 15).
 
 **Accessor bersifat polimorfik.** Nim 2 butuh satu accessor untuk container mutable dan satu lagi untuk yang
 immutable. Nimony mendeklarasikan satu, ``func `[]`(x: Container): var Element``, dan membiarkan type system
-melacak apakah penulisan diizinkan (Chapter 9).
+melacak apakah penulisan diizinkan (Bab 9).
 
 **Aturan kecilnya juga berubah**, dan inilah yang diam-diam merusak kode yang kamu salin dari internet:
 `string` kehilangan terminating zero dan tidak lagi terkonversi ke `cstring` tanpa salinan; identifier
@@ -101,7 +101,7 @@ Dua di antaranya punya restore switch per-module: `{.feature: "ignoreStyle".}` d
 tidak punya saklar apa pun, dan `{.keepOverflowFlag.}` bukan mode kompatibilitas — itu block yang membuat
 `overflowFlag()` melaporkan `+`, `-`, atau `*` bertanda terakhir yang membungkus, supaya kamu bisa mendeteksi
 pembungkusan yang baru saja terjadi. Deteksi bukan restorasi. Buku ini mengajarkan perilaku default di keempat
-kasus tadi (Chapter 3, 4, 5, dan 6).
+kasus tadi (Bab 3, 4, 5, dan 6).
 
 > **Nim 2 delta — ini bukan pengganti yang tinggal ditukar**
 >
@@ -131,9 +131,9 @@ parameter `untyped` melewatkan kode lebih dulu.
 
 Bacalah itu sebagai tepi peta, bukan sebagai daftar tugasmu. Kalau ada teknik yang kamu kenal bergantung pada
 salah satu fitur di atas, jawaban di buku ini adalah penggantinya, bukan akal-akalan yang berpura-pura fitur itu
-ada. Satu tempat yang penggantinya benar-benar keterampilan baru, bukan sekadar ganti nama, adalah Chapter 19:
+ada. Satu tempat yang penggantinya benar-benar keterampilan baru, bukan sekadar ganti nama, adalah Bab 19:
 plugin bukan macro dengan nama baru, dan makin cepat kamu berhenti meraih `macro`, makin tidak menyakitkan
-chapter itu.
+bab itu.
 
 ## Kenapa setiap klaim di sini membawa commit
 
@@ -143,35 +143,35 @@ untuk membangun.
 
 Jadi buku ini memaku satu commit — `4ba90a781b0b22d0821efaa153c129c37cef6143`, 12 November 2026 — yang dibangun
 dari tarball resmi Nim 2.4.0, bukan paket Homebrew, yang tidak bisa membangun `nifler` dan karena itu tidak bisa
-mem-parse apa pun (Chapter 2 menuntun pemasangan dan jebaknya). Setiap sample compile dan jalan lewat
+mem-parse apa pun (Bab 2 menuntun pemasangan dan jebaknya). Setiap sample compile dan jalan lewat
 `nimony c`. Backend native `nimony n` tidak ada di pin ini dan berada di luar cakupan, bukan "menyusul".
 
 Dua aturan menyusul dari situ, dan keduanya akan kamu temui sambil membaca:
 
 1. Klaim tentang bahasa hanya sekuat sumbernya di pin: berkas di repositori Nimony, sample yang dikompilasi dan
    dijalankan, atau review dari Engineering yang menyebut salah satunya. Di tempat buku ini belum bisa
-   menyelesaikan sebuah pertanyaan, chapter-nya tetap terbuka dan mengatakannya.
-2. Ketika pin bergerak dan chapter yang sudah beku rusak, kerusakannya dicatat di errata, bukan ditambal diam-diam.
-   Kamu bisa mencocokkan errata dengan chapter yang sedang kamu baca dan tahu persis mana yang lebih tua.
+   menyelesaikan sebuah pertanyaan, bab-nya tetap terbuka dan mengatakannya.
+2. Ketika pin bergerak dan bab yang sudah beku rusak, kerusakannya dicatat di errata, bukan ditambal diam-diam.
+   Kamu bisa mencocokkan errata dengan bab yang sedang kamu baca dan tahu persis mana yang lebih tua.
 
 ## Cara membaca sisa buku ini
 
-Chapter-chapter berjalan dalam satu urutan, karena tiap chapter bersandar pada yang sebelumnya. Tiga konvensi
+Bab-bab berjalan dalam satu urutan, karena tiap bab bersandar pada yang sebelumnya. Tiga konvensi
 layak diketahui sekarang.
 
-**Delta box.** Di tempat kebiasaan Nim 2 benar-benar menyesatkan, chapter memuat box bernama "Nim 2 delta": *apa
+**Delta box.** Di tempat kebiasaan Nim 2 benar-benar menyesatkan, bab memuat box bernama "Nim 2 delta": *apa
 yang dulu dilakukan Nim 2 → apa yang dilakukan Nimony → apa yang rusak kalau kamu mempertahankan kebiasaannya*.
 Box itu hanya muncul di tempat ia berguna, dan tidak pernah jadi jalur utama. Kalau kamu belum pernah menulis
-Nim, lewati saja; chapter-nya mengajarkan Nimony tanpanya. Kalau sudah, baca box-nya dulu, lalu kembali dan baca
-chapter-nya seolah kamu belum membacanya.
+Nim, lewati saja; bab-nya mengajarkan Nimony tanpanya. Kalau sudah, baca box-nya dulu, lalu kembali dan baca
+bab-nya seolah kamu belum membacanya.
 
 **Sample adalah bukti.** Setiap blok kode yang diklaim berjalan sudah dikompilasi dan dijalankan di pin. Di
 tempat sebuah sample hanya ilustrasi dan bukan hasil verifikasi, teksnya mengatakan begitu.
 
-**Istilah dibekukan.** Kata yang punya makna khusus ada di glossary buku, dan chapter yang butuh istilah baru
+**Istilah dibekukan.** Kata yang punya makna khusus ada di glossary buku, dan bab yang butuh istilah baru
 menambahkannya saat itu juga. Kalau sebuah istilah terasa licin, itu bug, bukan pilihan gaya.
 
-Chapter 2 memasang toolchain dan membuat satu program berjalan. Semua setelahnya mengasumsikan itu sudah
+Bab 2 memasang toolchain dan membuat satu program berjalan. Semua setelahnya mengasumsikan itu sudah
 beres, karena buku tentang compiler yang tidak bisa mengompilasi hanyalah opini yang sangat panjang.
 
 ---

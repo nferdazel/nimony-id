@@ -76,8 +76,8 @@ melakukan hal lain, dan yang ini yang mahal.
 | --- | --- | --- | --- |
 | Overload `var T` (dihapus) | Dua accessor `[]`, satu pada `var Container` yang mengembalikan `var Element`, satu pada `Container` yang mengembalikan `lent Element`. | Satu accessor, polimorfik pada lokasi; pasangan `var`/non-`var` jadi satu ambiguitas. | Bab 9; `doc/differences.md:31-43` |
 | Hasil `var` (berubah) | Dikembalikan dari field inline milik parameter by-value. | Ditolak dengan `cannot borrow from b.v` kecuali hasilnya punya jalur pinjam: parameter `var`, `out` atau `lent`, atau indireksi seperti field `seq`. | Bab 9; `src/nimony/derefs.nim:466-468`, `:258-314` |
-| Tulis lewat indeks (dihapus) | Otomatis lewat overload `var`. | Butuh `[]=` yang kau deklarasikan sendiri; tanpanya assignment gagal dengan daftar kandidat bawaan. | Bab 9; `src/nimony/semcall.nim:1436` |
-| `echo` pada tipe buatan sendiri (berubah) | Menemukan dan memakai `$` milikmu, mencetak `P1`. | Menulis nilainya sendiri; `$` milikmu adalah rutin yang kau panggil, jadi tulis `echo $p`. | Bab 11; `doc/language.md:466-471` |
+| Tulis lewat indeks (dihapus) | Otomatis lewat overload `var`. | Butuh `[]=` yang kamu deklarasikan sendiri; tanpanya assignment gagal dengan daftar kandidat bawaan. | Bab 9; `src/nimony/semcall.nim:1436` |
+| `echo` pada tipe buatan sendiri (berubah) | Menemukan dan memakai `$` milikmu, mencetak `P1`. | Menulis nilainya sendiri; `$` milikmu adalah rutin yang kamu panggil, jadi tulis `echo $p`. | Bab 11; `doc/language.md:466-471` |
 | Membaca field varian (berubah) | `FieldDefect: field 'width' is not accessible …` kalau cabangnya tidak aktif. | Tidak diperiksa: bacaannya mengembalikan isi union. | Bab 12; watch list |
 | Meng-assign discriminator (berubah) | `FieldDefect: assignment to discriminant changes object branch`. | Penulisan field biasa; byte lamanya tetap. | Bab 12; watch list |
 

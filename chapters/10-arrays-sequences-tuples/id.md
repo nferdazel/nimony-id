@@ -15,9 +15,9 @@ glossary_added: ["openArray", "view", "place", "tuple unpacking", "value semanti
 
 # Array, Seq, dan Tuple
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
-Chapter 9 memilih routine berdasarkan tipe argumen. Chapter ini memilih container berdasarkan apa yang harus
+Bab 9 memilih routine berdasarkan tipe argumen. Bab ini memilih container berdasarkan apa yang harus
 dilakukan data. Tiga bentuk menutupi sebagian besar kebutuhan: `array` kalau panjangnya sudah diketahui sebelum
 program jalan, `seq` kalau tumbuh selama program jalan, dan `tuple` kalau bagian-bagiannya adalah sekumpulan
 field tetap dengan tipe berbeda.
@@ -181,7 +181,7 @@ blue
 
 Array-nya tiga elemen karena `Color` punya tiga nilai, dan `low` serta `high` mengembalikan nilai bertipe indeks
 — dicetak lewat `$`-nya, itu sebabnya terbaca sebagai nama, bukan angka. Elemen yang tidak pernah ditulis terbaca
-sebagai zero value-nya, pendefaultan yang sama dengan `var` di level modul (Chapter 3); `five[4]` di sample
+sebagai zero value-nya, pendefaultan yang sama dengan `var` di level modul (Bab 3); `five[4]` di sample
 mencetak `0` justru karena itu.
 
 Array bisa ditulis di sebuah indeks hanya kalau array-nya sendiri bisa ditulis. `[]` bawaan mengembalikan `var T`
@@ -272,7 +272,7 @@ Angka dan huruf setelah `T.` adalah nama mangled untuk instansiasi itu. Itu nama
 rilis, jadi jangan mencocokkan sufiksnya; bagian yang perlu dibaca adalah `could not infer type`.
 
 `let e: seq[int] = @[]` terbangun. Panjang sequence kosong adalah `0` dan `high`-nya `-1`
-(`lib/std/system/seqimpl.nim:354-358`); beda dengan array, sequence kosong adalah nilai normal yang bisa lo
+(`lib/std/system/seqimpl.nim:354-358`); beda dengan array, sequence kosong adalah nilai normal yang bisa kamu
 tumbuhkan.
 
 Sequence menyalin seperti value lain: assignment menyalin elemennya, dan routine yang menerima sequence by-value
@@ -323,7 +323,7 @@ echo s.len
 2
 ```
 
-Ini aturan parameter `var` yang sama dengan yang dinyatakan Chapter 8, dilihat dari sisi container: argumen `add`
+Ini aturan parameter `var` yang sama dengan yang dinyatakan Bab 8, dilihat dari sisi container: argumen `add`
 harus sebuah place, dan parameter by-value bukan place.
 
 Mengindeks sequence diperiksa berbeda dari array. `[]` untuk `seq` membawa klausa `requires`,
@@ -421,7 +421,7 @@ compiler mencoba bentuk `^`, `BackwardsIndex`, yang bukan tipe argumennya. Intin
 array menerima indeks integer, dan tidak ada overload yang menerima array plus rentang.
 
 Perkirakan juga derau lanjutan: binding yang gagal meninggalkan `sl` tanpa tipe, jadi `sl.len` dan `sl[0]`
-masing-masing menghasilkan error sendiri dengan daftar kandidatnya sendiri. Dari situ asal 59 baris kalau lo
+masing-masing menghasilkan error sendiri dengan daftar kandidatnya sendiri. Dari situ asal 59 baris kalau kamu
 hitung semuanya — tiga daftar, bukan satu.
 
 Jalur array adalah `toOpenArray`, converter yang membangun `openArray` (`lib/std/system/openarrays.nim:25`). Itu
@@ -445,7 +445,7 @@ panjang (`lib/std/system/openarrays.nim:6-9`), dan `[]`-nya mengembalikan `var T
 (`lib/std/system/openarrays.nim:10`). Pemeriksaan read-only setuju, lewat aturan khusus: sebuah `let` itu
 readonly kecuali tipenya view, dan di situ compiler memeriksa ulang dari apa view itu dibangun
 (`src/nimony/derefs.nim:399-407`, komentar di `:406`). Jadi ini jalan di atas storage `var` dan ditolak di atas
-array `let`. Ini satu-satunya tempat di chapter ini di mana nama `let` masih berujung ke penulisan, dan itu
+array `let`. Ini satu-satunya tempat di bab ini di mana nama `let` masih berujung ke penulisan, dan itu
 memang inti sebuah view.
 
 Tipe yang sama dipakai routine untuk menerima kedua container tanpa konversi (`doc/language.md:412-425`):
@@ -488,10 +488,10 @@ Tanpa `var`, penulisannya ditolak: `v[0] = 0` menjadi panggilan `[]=`, yang para
 openArray[T]` (`lib/std/system/openarrays.nim:13`), dan error-nya `cannot pass v to var/out T parameter`.
 Lewatkan view sebagai `var` kalau routine memang dimaksudkan mengubahnya.
 
-Satu aturan dari Chapter 9 berlaku di sini, dan chapter ini tidak mengulangnya: `[]` bawaan untuk array dan untuk
+Satu aturan dari Bab 9 berlaku di sini, dan bab ini tidak mengulangnya: `[]` bawaan untuk array dan untuk
 sequence mengembalikan `var T` (`lib/std/system.nim:25`, `lib/std/system/seqimpl.nim:239`), itu sebabnya dua
-container ini bisa ditulis tanpa mendeklarasikan `[]=`. Container yang lo tulis sendiri mengikuti aturan di
-Chapter 9, bukan salinannya di sini.
+container ini bisa ditulis tanpa mendeklarasikan `[]=`. Container yang kamu tulis sendiri mengikuti aturan di
+Bab 9, bukan salinannya di sini.
 
 ## Tuple: field, urutan, dan salinan
 
@@ -528,7 +528,7 @@ Yang tidak jalan adalah sintaks konstruktor object. `Person(name: "Ada", age: 36
 Error: expected type symbol for object constructor
 ```
 
-Tuple memakai bentuk tanda kurung; sintaks panggilan bernama-field milik `object`, yang dibahas Chapter 11.
+Tuple memakai bentuk tanda kurung; sintaks panggilan bernama-field milik `object`, yang dibahas Bab 11.
 
 Nama tinggal di tipe, bukan di literal. Tuple yang ditulis tanpa tipe yang diharapkan hanya punya field
 posisional, jadi meminta nama gagal:
@@ -642,17 +642,17 @@ diperbolehkan di konstruksi tuple mana pun (`doc/language.md:499-510`); tipenya 
 
 ## Memilih
 
-- Panjang diketahui saat lo menulis program, satu tipe elemen, tanpa pertumbuhan: `array`. Utamakan bentuk jumlah
+- Panjang diketahui saat kamu menulis program, satu tipe elemen, tanpa pertumbuhan: `array`. Utamakan bentuk jumlah
   `array[N, T]`; pakai rentang hanya kalau indeksnya sendiri bermakna.
 - Panjang ditentukan saat program jalan, satu tipe elemen: `seq`. Tumbuhkan dengan `add`, baca dengan `[]`.
 - Sekumpulan field tetap dengan tipe berbeda, biasanya dikembalikan routine atau disimpan sebagai satu baris:
   `tuple`.
 - Routine yang harus menerima kedua container: ambil `openArray[T]`. Tambahkan `var` hanya kalau harus menulis
   balik.
-- Slice `seq` adalah salinan; slice `array` ditulis `toOpenArray` dan merupakan view. Putuskan mana yang lo
+- Slice `seq` adalah salinan; slice `array` ditulis `toOpenArray` dan merupakan view. Putuskan mana yang kamu
   butuh sebelum menulis kurung sikunya.
 
-## Sample
+## Samples
 
 `samples/10-arrays-sequences-tuples/collections.nim` — tiga bentuk, slicing dua arah, dan unpacking, di commit
 yang di-pin:
@@ -709,7 +709,7 @@ panjang sumber yang tidak berubah; `1`, `0`, `2` adalah slice yang di-clamp, yan
 panggilan `openArray`. `2` dan `99` adalah panjang view dan elemen array yang ia ubah. Sisanya tuple: `Ada`,
 `36`, `36`, `37` untuk field bernama, akses posisional dan salinannya, lalu tiga unpacking.
 
-## Latihan
+## Cek
 
 1. Tulis `let a = [10, 20, 30]` dan cetak `a.len`, `a.low`, `a.high`. Harapan: `3`, `0`, `2`.
 2. Tulis `let f = [1.0, 2, 3]` dan cetak `f[1]`. Harapan: `2.0`.

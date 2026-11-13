@@ -15,19 +15,19 @@ glossary_added: ["pinned toolchain"]
 
 # Toolchain yang Disematkan
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Nimony sedang aktif dikembangkan, dan bahasa yang berubah tiap minggu akan diam-diam membatalkan buku mana pun
 yang menyebut "Nimony" tanpa menyebut yang mana. Jadi buku ini menamai satu commit — `4ba90a781b0b`, yang
 dilaporkan compiler sebagai `0.6.3` — dan setiap pernyataan di dalamnya benar untuk commit itu atau ditandai
 sebagai niat desain.
 
-Chapter ini memberimu compiler persis itu, dari source, lalu membuat satu program berjalan lewat compiler
+Bab ini memberimu compiler persis itu, dari source, lalu membuat satu program berjalan lewat compiler
 tersebut. Ada juga satu halaman untuk dua jalan pintas yang terlihat masuk akal dan tidak bekerja: memasang Nim
 dari package manager sistem, dan meminta backend native dari Nimony. Keduanya menghasilkan toolchain yang
 kelihatan terpasang dan tidak mengompilasi apa pun.
 
-Lakukan chapter ini sekali. Chapter-chapter berikutnya mengasumsikan path-nya sudah ada dan verifier mencetak
+Lakukan bab ini sekali. Bab-bab berikutnya mengasumsikan path-nya sudah ada dan verifier mencetak
 `SUMMARY n/n passed`.
 
 ## Pin adalah commit, bukan rilis
@@ -75,11 +75,11 @@ nim c -r src/hastur/hastur build all
 
 `build all` memakan waktu 1m02s di mesin macOS arm64 tempat buku ini dipaku. Exit `0` mengisi `bin/` dengan
 pipeline: `nifler`, `nimsem`, `lengc`, `nifmake`, `niflink`, `nimony`, `hastur` dan sisanya. Nama-nama itu
-kembali ke model mental Chapter 1 — NIF masuk, NIF keluar, tahap demi tahap — dan sekarang kamu punya satu
+kembali ke model mental Bab 1 — NIF masuk, NIF keluar, tahap demi tahap — dan sekarang kamu punya satu
 salinan tiap tahap di disk.
 
 Pasang di tempat yang tetap. Build di bawah direktori temp sistem memang jalan dan itu sebuah kesalahan: macOS
-menghapus folder temp menurut jadwalnya sendiri, dan toolchain yang hilang di tengah chapter membawa serta
+menghapus folder temp menurut jadwalnya sendiri, dan toolchain yang hilang di tengah bab membawa serta
 verifikasimu. Taruh di path tetap seperti `~/.local/opt/nimony/4ba90a7`, dinamai menurut commit.
 
 Periksa:
@@ -148,13 +148,13 @@ hello, world
 
 Itulah seluruh loop yang dipakai sisa buku ini: `c` mengompilasi, `-r` menjalankan hasilnya. Dua detail layak
 diketahui sekarang, karena keduanya menjelaskan kejutan-kejutan berikutnya. `std/syncio` diimpor secara
-eksplisit — Nimony tidak menaruh `echo` di scope secara gratis. Dan `echo` menulis satu baris; Chapter 4 sampai
+eksplisit — Nimony tidak menaruh `echo` di scope secara gratis. Dan `echo` menulis satu baris; Bab 4 sampai
 ke pertanyaan apa itu `string` di pin ini, yang bukan seperti yang diasumsikan kode Nim 2.
 
-## Verifikasi seluruh buku, bukan cuma chapter-mu
+## Verifikasi seluruh buku, bukan cuma bab-mu
 
-Buku ini menyimpan sample di `samples/NN-slug/` dan membuktikannya dengan satu skrip, supaya klaim di Chapter
-14 tidak bergantung pada chapter mana yang kebetulan kamu baca:
+Buku ini menyimpan sample di `samples/NN-slug/` dan membuktikannya dengan satu skrip, supaya klaim di Bab
+14 tidak bergantung pada bab mana yang kebetulan kamu baca:
 
 ```
 $ ./tools/verify-samples.sh
@@ -165,7 +165,7 @@ SUMMARY 23/23 passed, 0 failed
 ```
 
 Path disingkat jadi `~`, dan baris per sample tidak semuanya ditampilkan. Ringkasannya menghitung semua sample
-di buku, jadi angkamu dan angka yang tercetak di bagian Samples sebuah chapter akan beda; yang harus sama adalah
+di buku, jadi angkamu dan angka yang tercetak di bagian Samples sebuah bab akan beda; yang harus sama adalah
 `0 failed`.
 
 Skrip memeriksa commit sebelum mengompilasi apa pun, mengompilasi dan menjalankan setiap sample lewat
@@ -174,10 +174,10 @@ Skrip memeriksa commit sebelum mengompilasi apa pun, mengompilasi dan menjalanka
 pemasanganmu; ringkasan hijau adalah satu-satunya bukti yang diterima buku ini bahwa sebuah sample bekerja.
 
 Satu batas yang jujur: verifier membuktikan compile, run, dan exit code. Ia tidak membandingkan stdout. Di
-tempat sebuah chapter mengajarkan output yang bisa diamati, chapter-nya menyebutkan output yang diharapkan dan
+tempat sebuah bab mengajarkan output yang bisa diamati, bab-nya menyebutkan output yang diharapkan dan
 pemeriksaan yang membuktikannya.
 
-## Sample
+## Samples
 
 - `samples/02-pinned-toolchain/hello.nim` — dibuktikan oleh `tools/verify-samples.sh`:
 
@@ -185,7 +185,7 @@ pemeriksaan yang membuktikannya.
   PASS samples/02-pinned-toolchain/hello.nim exit=0
   ```
 
-## Latihan
+## Cek
 
 1. Build pin di path tetap lalu jalankan `nimony --version`. Harapan: `0.6.3 [macosx; arm64]`. Kalau versinya
    lain, kamu checkout commit yang lain — jalankan `git rev-parse HEAD` dan bandingkan.

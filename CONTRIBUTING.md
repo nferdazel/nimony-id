@@ -14,8 +14,9 @@ what the language does on `master`; it has a strong interest in anything at the 
 | A proposal for a new chapter | issue first; chapters are one job each and the outline is the contract |
 | A third language | issue first; a translation needs a structural decision, not just text |
 
-Chapters 1–7 are `frozen`. A frozen chapter is not rewritten. If the pin moved and a sample broke, the break
-goes to [`ERRATA.md`](ERRATA.md) — that file exists precisely so a frozen chapter stays frozen.
+All 24 chapters and Appendices A–C are `frozen`. A frozen chapter is not rewritten. If the pin moved and a
+sample broke, the break goes to [`ERRATA.md`](ERRATA.md) — that file exists precisely so a frozen chapter stays
+frozen.
 
 ## Before you send
 
@@ -57,7 +58,9 @@ This repository is public and everything in it is published twice: as Markdown o
 `nimony.qouver.com`. Three rules follow.
 
 1. **No path from your machine.** Use `$NIMONY_HOME`, `~/.local/opt/...` or a path relative to the repository
-   root. A transcript may show a real install path only where the chapter is about that install.
+   root. A transcript may show a real install path only where the chapter is about that install. A review
+   artifact beside a chapter is a transcript too: a workspace path in it is written home-relative (`~/...`) and
+   the rest of the command is left exactly as it ran.
 2. **No secret, token, private URL or personal data**, in prose or in a sample. `.gitignore` already covers
    `nimcache/`, `_book/`, `.quarto/`, `.build/` and `tools/verify-samples.log`; a build artefact in a diff is
    a mistake, not a shortcut.

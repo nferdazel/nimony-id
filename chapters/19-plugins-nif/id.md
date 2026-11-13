@@ -15,14 +15,14 @@ glossary_added: [plugin, NIF, template plugin, module plugin, for-loop plugin, p
 
 # Plugin dan Pipeline NIF
 
-## Untuk apa chapter ini
+## Untuk apa bab ini
 
 Macro dulu adalah routine yang jalan di dalam compiler dan mengembalikan kode. Nimony tidak punya routine
 semacam itu: `doc/differences.md:19` bilang macro diganti compiler plugin. Plugin adalah program Nim terpisah
 yang dikompilasi compiler, dijalankan sebagai subprocess, dan dikirimi satu pohon, lalu menjawab dengan pohon.
 Semua yang bisa dilihat plugin dan semua yang bisa ia hasilkan adalah NIF, representasi yang sama dengan yang
 dipakai fase-fase compiler sendiri untuk saling bicara. Itu inti desainnya, dan itu juga yang membuat plugin
-lebih gampang dinalar daripada macro: input dan outputnya adalah file yang bisa lo buka.
+lebih gampang dinalar daripada macro: input dan outputnya adalah file yang bisa kamu buka.
 
 ## Plugin itu template tanpa body
 
@@ -237,7 +237,7 @@ variabelnya datang tanpa tipe dan body yang menyebut `i` sudah berupa node error
 
 Jadi jenis ini bisa dipakai untuk transformasi body asal iterator-nya bilang apa yang ia hasilkan, dan body yang
 diterima plugin sudah diperiksa penuh, dan itulah yang membuat penulisan ulang sadar-tipe mungkin. Dokumentasi
-mendaftar jenis ini di satu baris tabel (`doc/plugins.md:8-20`) tanpa aturan maupun contoh, jadi chapter ini
+mendaftar jenis ini di satu baris tabel (`doc/plugins.md:8-20`) tanpa aturan maupun contoh, jadi bab ini
 menyebut scope dan syaratnya sekaligus, bukan mengajarkan jenisnya.
 
 Import plugin adalah yang paling lain, dan layak dipisahkan di kepala pembaca. `import (path/foo) {.plugin:
@@ -321,7 +321,7 @@ deps/note.nim(7, 25) Error: cannot call a routine marked as `.raises` outside of
 
 ## Apa yang NIF beli di sebuah build
 
-Job kedua chapter ini adalah alasan desain ini ada, dan versi jujurnya lebih kecil dari "NIF bikin build
+Job kedua bab ini adalah alasan desain ini ada, dan versi jujurnya lebih kecil dari "NIF bikin build
 cepat". Tiga sifat yang bekerja, dan ketiganya sifat format, bukan sifat sistem plugin.
 
 Deklarasi dan pemakaian adalah token kind yang berbeda (`doc/design.md:75-81`). Compiler bisa menjawab "ini
@@ -339,9 +339,9 @@ menjalankan graph, bukan daftar: nifmake adalah "a make-like tool that is used b
 and incremental compilation" (`src/nifmake/nifmake.nim:7-9`), menjadwalkan dari ready queue (`:458-470`), dan
 baris perintah di build yang gagal berbunyi `nifmake -j run`. Plugin adalah node lain di graph itu. Karena itu
 ia tidak menyerialkan build yang ia ikuti: ia dibangun sekali, di-cache per input, dan dipakai bersama oleh
-setiap module yang memanggilnya. Bagian paralelnya milik build graph, bukan milik plugin. Tidak ada di chapter
+setiap module yang memanggilnya. Bagian paralelnya milik build graph, bukan milik plugin. Tidak ada di bab
 ini yang membuat plugin konkuren, dan plugin yang menulis file bersama dari dua module sekaligus adalah bug yang
-lo tulis sendiri.
+kamu tulis sendiri.
 
 Biaya NIF sama konkretnya. Penulis plugin bekerja dengan tag sebuah IR compiler, bukan dengan AST yang dirancang
 untuk manusia, dan inputnya snapshot yang dibekukan: plugin tidak bisa bertanya ke compiler kecuali dengan
@@ -380,8 +380,8 @@ nifler2: cannot read the input file
 FAILURE: .../nifler2 --portablePaths --deps parse .../src/lib/deps/nothere.nim ...
 ```
 
-Baca path di baris itu: ia memberi tahu di mana compiler mencari. Path yang mulai dengan direktori proyek lo
-adalah yang lo maksud; path di bawah `src/lib` toolchain berarti string pragmanya di-resolve sebagai module
+Baca path di baris itu: ia memberi tahu di mana compiler mencari. Path yang mulai dengan direktori proyek kamu
+adalah yang kamu maksud; path di bawah `src/lib` toolchain berarti string pragmanya di-resolve sebagai module
 library, dan file plugin-nya tidak ada di path yang disebut.
 
 Bentuk keempat tidak punya pesan compiler sama sekali. Plugin yang namanya resolve tapi executable-nya tidak ada
@@ -404,7 +404,7 @@ me-resolve ke sesuatu yang tidak ada di situ.
 subprocess, membaca NIF dan menulis NIF. Tidak ada API pohon in-process, tidak ada `NimNode`, dan tidak ada cara
 menyerahkan callback ke compiler.
 
-*Apa yang rusak kalau lo mempertahankan kebiasaan itu.* Macro yang diport dan membangun hasilnya dengan memanggil
+*Apa yang rusak kalau kamu mempertahankan kebiasaan itu.* Macro yang diport dan membangun hasilnya dengan memanggil
 proc helper di module yang sama sekarang jadi program yang harus memuat input, mentransformasinya, dan
 menyimpannya, dan helper-nya harus ada di dalam plugin, bukan di module yang memakainya. Macro yang
 mengembalikan `NimNode` tidak akan kompilasi sama sekali. Di pin, `macro` dengan parameter `untyped` masih bisa
@@ -432,7 +432,7 @@ keempat yang dicek sample ini.
 ## Cek
 
 1. Tulis template plugin yang menerima satu argumen `untyped` dan mengembalikannya apa adanya, lalu panggil
-   dengan ekspresi yang nilainya lo cetak. Jelaskan kenapa output program adalah ekspresinya, bukan input
+   dengan ekspresi yang nilainya kamu cetak. Jelaskan kenapa output program adalah ekspresinya, bukan input
    plugin-nya.
 2. Ubah parameternya ke `typed` dan decode kedua input yang di-cache dengan `tools/niftools bif2nif`. Sebutkan
    tiga perbedaan di antara keduanya, satu di antaranya harus berupa simbol.
