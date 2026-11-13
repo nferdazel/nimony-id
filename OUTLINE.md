@@ -269,8 +269,22 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 ### Chapter 22: The C Boundary
 - **Job:** Bind a C function, map its types, and cross the `cstring` boundary deliberately.
 - **Prerequisites:** 13, 20
-- **Nim 2 delta:** yes — strings and `cstring` no longer line up the way Nim 2 code assumed.
-- **Status:** planned
+- **Nim 2 delta:** yes — only a string literal converts to `cstring` (`toCString` for a `var`), `$` for `cstring`
+  comes from `std/strutils`, there is no `allocCStringArray`, and `ptr`/`pointer`/`cstring` are non-null unless
+  the type is written `nil cstring`.
+- **Status:** frozen 2026-11-13 — draft 2026-11-13 (Aksara), 48 claims probed at the pin, tech review by Momo
+  the same day (42 stood as written, 3 cited the wrong line, 3 corrected, zero open). Momo re-ran the verifier
+  himself: `21/21 passed` at `4ba90a7`, sample output 11 lines byte-identical. Corrections in the text: `header`
+  is not what puts a prototype in front of C, Nimony writes one itself and the header supplies the real
+  declaration (proof: `major` prints `0` with `<sys/types.h>`, and fails to link with an undefined `_major`
+  without it); the `sizeof(struct stat)` failure is the C compiler's, with a header, and a link error without
+  one; declaring `array[2, cstring]` is refused before any assignment, and `isNil(slots[0])` fails the way
+  `!= nil` does. `id.md` written from the final text. ERRATA rows: the raw `cstring` literal gap, the
+  conversion example at `doc/language.md:332-341` the pin refuses, and a watch row for the callback `const`
+  split (Nim 2 fails identically). The two findings that shape the chapter: `cstring"…"` is a generalized
+  literal and therefore raw (`cstring"a\nb"` is four bytes, `"a\nb"` is three, `p17`), and a callback's `void*`
+  parameters are emitted without C's `const`, so `qsort` is refused by clang until the proc is cast through
+  `pointer` (`p05`, `p11`).
 
 ### Chapter 23: Testing and the Sample Verifier
 - **Job:** Write checks that run under the pin and use the book's sample verifier so a chapter's claims stay reproducible.
