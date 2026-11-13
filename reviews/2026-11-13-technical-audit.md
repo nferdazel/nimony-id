@@ -1,17 +1,17 @@
 # Technical audit, 2026-11-13
 
-Compiler-level truth and quoted-output fidelity for the whole book. Audited at repository HEAD `773ace5`, `VERSION`
-`0.1.20`, pin `4ba90a781b0b22d0821efaa153c129c37cef6143` (`nimony 0.6.3`, `~/.local/opt/nimony/4ba90a7`). The
-brief named `v0.1.18` / `63eeff8`; `git diff 63eeff8..HEAD -- 'chapters/*/en.md'` touches one file (Chapter 23, nine
-lines), so every check below was re-run at HEAD rather than carried over.
+Compiler-level truth and quoted-output fidelity for the whole book. Audited at repository HEAD `b645f97`, `VERSION`
+`0.1.21`, pin `4ba90a781b0b22d0821efaa153c129c37cef6143` (`nimony 0.6.3`, `~/.local/opt/nimony/4ba90a7`). The
+brief named `v0.1.18` / `63eeff8`. First pass at `773ace5` (`0.1.20`) found three failing blocks; this pass re-ran
+them at `0.1.21`, where Chapters 7 and 24 were edited, and re-ran the citation and block checks against HEAD.
 
-Verdict: no quoted diagnostic was found false, and every chapter's full expected-output block matches a fresh run
-of its sample. Three blocks do not survive the page: Chapter 7's crash block silently drops the three lines the
-program prints before the assertion, and two Chapter 24 blocks cannot be built as printed (`innerCont` is never
-declared; the two-worker sketch uses names that exist only in the sample). Those three are FAILs below, with the
-observed output. The two defects from the first pass (the `review.md` pointers in Appendices A/B, and Chapter 23's
-unqualified `{.assert.}` sentence) are fixed in `0.1.20` and verified fixed here. Everything not re-run is marked
-*open*, not cleared.
+Verdict: at `0.1.21` no chapter carries a failing output block. No quoted diagnostic was found false, and every
+chapter's full expected-output block matches a fresh run of its sample. The three FAILs from the `0.1.20` pass are
+fixed in the text and were re-verified here by running the fixed blocks (Chapter 7 now prints `a`, `b`, `c` before
+the assertion; Chapter 24's chain block declares `innerCont` and prints its five lines as printed; the two-worker
+sketch is now the sample's own five lines). The two defects from the first pass (the `review.md` pointers in
+Appendices A/B, and Chapter 23's unqualified `{.assert.}` sentence) remain fixed and were re-checked. Everything not
+re-run is marked *open*, not cleared.
 
 ## What was re-run
 
@@ -26,7 +26,7 @@ SUMMARY 23/23 passed, 0 failed
 - **Other output blocks.** Every remaining block that claims program output was either matched against the sample
   run or rebuilt: the immediately preceding code block was compiled at the pin, and where the failing shape is
   described in prose rather than shown, the shape was reconstructed (12 reconstructions). Across the 159 chapter
-  blocks and the 3 in Appendix B: **91 have a fresh run behind them, 65 stay open, 3 fail.** The open ones are
+  blocks and the 3 in Appendix B: **94 have a fresh run behind them, 65 stay open, 0 fail.** The open ones are
   shell sessions, NIF dumps, multi-file module cases or excerpts that need declarations made earlier in the
   chapter.
 - **Transcripts.** Thirteen `$ nimony` transcripts executed from the repository root: **12 byte-exact**. The
@@ -51,7 +51,7 @@ output/transcript block in the chapter: matched against a fresh run or rebuilt, 
 | 4 | `numbers.nim` | none | sample runs | 0 / 0 / 0 | No fenced output block; every quoted result is a trailing `#` comment in a code block. Not covered by this check, not cleared. |
 | 5 | `strings.nim` | `en.md:325` | matches | 1 / 2 / 0 | Full block matches. The two leftovers are a shell transcript and a `let block = """…` code block the checker misclassified as output. |
 | 6 | `branching.nim` | `en.md:393` | matches | 5 / 2 / 0 | Full block matches. Two `not all cases are covered` messages rebuilt and matched. |
-| 7 | `loops.nim` | `en.md:378` | matches | 13 / 1 / 1 | **FAIL** at `en.md:143-145`: the block shows only the assertion line, but the program prints `a`, `b`, `c` first (observed below). The rest matched. |
+| 7 | `loops.nim` | `en.md:378` | matches | 14 / 1 / 0 | Full block matches. Fixed in `0.1.21`: `en.md:143-150` now prints `a`, `b`, `c` after the abort line and says why the abort line comes first (re-run below). The block still elides the absolute path prefix and the driver's `FAILURE:` line, which Chapter 21 explains is the driver's line, not the program's. |
 | 8 | `procedures.nim` | `en.md:396` | matches | 6 / 1 / 0 | Full block matches. `cannot pass 7 to var/out T parameter` rebuilt and matched. |
 | 9 | `overloading.nim` | `en.md:362` | matches | 10 / 2 / 0 | Full block matches. The `[]=` rejection rebuilt and matched; the borrow rejection at `:291` matched on re-run. |
 | 10 | `collections.nim` | `en.md:655` | matches | 29 / 5 / 0 | Full block matches. Every array/seq/tuple diagnostic in the chapter that could be rebuilt matched; five NIF/candidate-list blocks open. |
@@ -68,44 +68,43 @@ output/transcript block in the chapter: matched against a fresh run or rebuilt, 
 | 21 | `files.nim` | `en.md:233` | matches | 1 / 1 / 0 | Full block matches (16 lines). File-system side effects are not re-run by this check; open. |
 | 22 | `cinterop.nim` | `en.md:253` | matches | 1 / 1 / 0 | Full block matches. The clang callback block is open (host toolchain and `qsort` ABI). |
 | 23 | `testing.nim` | `en.md:291` | matches | 4 / 3 / 0 | Full block matches. `[Assertion Failure] got 2`, the `when`/`{.error.}` line and `FAILURE:` after `quit 3` rebuilt and matched. |
-| 24 | `passive.nim` | `en.md:359` | matches | 2 / 8 / 2 | **FAIL** `en.md:226-250`: `innerCont` is never declared, run stops at `Error: undeclared identifier: innerCont`; **FAIL** `en.md:188-205`: sketch uses `worker`, `resumeA`, `resumeB` (and `drive`) that exist only in the sample. |
+| 24 | `passive.nim` | `en.md:359` | matches | 4 / 8 / 0 | Full block matches. Fixed in `0.1.21`: the chain block at `en.md:228-250` declares `var innerCont: Continuation` and prints its five lines in the order shown (re-run below); the two-worker sketch at `en.md:193-199` is now the sample's own five lines with the sample's output. Copying the chain block alone still needs the module-level `assumeSync` rule taught later in the chapter, which the prose names at `en.md:226`. |
 | A2 | — | — | — | 0 / 3 / 0 | Appendix B quotes three shell sessions (`task verify`, toolchain line); not program output, open. |
 
-### FAIL evidence
+### Fixed in `0.1.21`, re-verified
 
-**`chapters/07-loops-ranges/en.md:143-145`** — the block presents the crash as its own output:
-
-```
-…/stringimpl.nim(686, 37): i < len(s) [AssertionDefect]
-```
-
-Observed from the chapter's own program (`for i in 0..len(word): echo word[i]` over `"abc"`):
+**`chapters/07-loops-ranges/en.md:143-150`** — the block now shows the abort line and the three lines the program
+printed before it, and the prose says why the abort line comes first. Fresh run of the chapter's own shape
+(`let word = "abc"`, `for i in 0..len(word): echo word[i]`) at the pin:
 
 ```
 …/lib/std/system/stringimpl.nim(686, 37): i < len(s) [AssertionDefect]
 a
 b
 c
-FAILURE: nimcache/c/mai3r4ykk/main
+FAILURE: nimcache/c/craebhlm8/crash
 ```
 
-Three printed lines are silently dropped. The prose says "builds and then dies", not "ends with"; the block has to
-say it elides, or show the three lines. Same defect in `id.md` (Raka's `2026-11-13-code-block-coverage.md`, id.md:139-145).
+The block keeps `a`, `b`, `c` in that order after the abort line; the absolute path prefix and the driver's
+trailing `FAILURE:` line are elided, which the book does throughout.
 
-**`chapters/24-passive-procs/en.md:226-250`** — the chain-of-passive-procs block:
+**`chapters/24-passive-procs/en.md:228-250`** — the chain block now declares `var innerCont: Continuation`. Built
+with the chapter's own `{.feature: "assumeSync".}` rule and the sample's `drive`, it prints exactly the block:
 
 ```
-main.nim(5, 3) Error: undeclared identifier: innerCont
+outer 1
+inner 1
+outer parked
+inner 2
+outer 2
 ```
 
-`innerCont = delay()` is a module-level assignment with no declaration anywhere in the chapter, the sample, or the
-pin's library, so the block that claims `outer 1 / inner 1 / outer parked / inner 2 / outer 2` cannot run. Raka
-reached the same finding at `id.md:229-244`; adding `var innerCont: Continuation` makes all five lines appear as
-printed.
+Without the feature line the compiler rejects the module-level write (`unsynchronized access to global variable
+'innerCont'`), which is the module-level rule the chapter teaches at `en.md:330` and points to at `en.md:226`.
 
-**`chapters/24-passive-procs/en.md:188-205`** — the two-worker sketch calls `drive(delay(worker("a", 0)))`,
-`drive(resumeA)`, `drive(resumeB)`; `worker`, `resumeA` and `resumeB` are declared only in the chapter sample, so
-the sketch does not build in place. Raka's finding again (id.md:193-199).
+**`chapters/24-passive-procs/en.md:193-199`** — the two-worker sketch is now the sample's own last five lines; the
+sample run prints `worker b start` / `worker c start` / `both parked` / `worker b end` / `worker c end`, which is
+the block's output.
 
 ## Table B — contradiction sweep, per chapter
 
@@ -143,13 +142,12 @@ hand. This finds textual drift from the rulings, not a fresh semantic review of 
 
 ## Findings
 
-1. **Chapter 7 drops three printed lines — medium.** Evidence above. Text change to a frozen chapter: either show
-   `a`/`b`/`c` before the assertion or label the block as elided, plus an ERRATA line. Owner: Aksara.
-2. **Chapter 24's chain block cannot be built — medium.** `en.md:226-250`, `id.md` same shape. Needs
-   `var innerCont: Continuation` in the block or a note that the declaration lives in the sample. Owner: Aksara;
-   wording by Momo.
-3. **Chapter 24's two-worker sketch is not self-contained — low-medium.** Names come only from the sample. Same
-   handoff as finding 2.
+1. **Fixed in `0.1.21`: Chapter 7 dropped three printed lines — medium.** `en.md:143-150` now shows `a`, `b`, `c`
+   and explains the order; re-run above. `id.md` carries the same fix.
+2. **Fixed in `0.1.21`: Chapter 24's chain block could not be built — medium.** `en.md:228-250` declares
+   `var innerCont: Continuation` and prints as written; re-run above.
+3. **Fixed in `0.1.21`: Chapter 24's two-worker sketch was not self-contained — low-medium.** It is now the
+   sample's own five lines with the sample's output.
 4. **Fixed in `0.1.20`: Appendix A/B promised a `review.md` that 7 chapters did not have.** Verified at HEAD: 24
    `chapters/*/review.md` exist, `a1/en.md:28` and `a2/en.md:141` now resolve.
 5. **Fixed in `0.1.20`: Chapter 23 said `{.assert.}` as a statement is accepted without saying it must be
@@ -159,8 +157,10 @@ hand. This finds textual drift from the rulings, not a fresh semantic review of 
 
 ## Not proven by this audit
 
-- **65 output blocks stay open, and 3 fail.** Shell sessions, build logs, NIF dumps, multi-file module cases, and excerpts
-  that depend on declarations made earlier in the chapter. Each is listed by chapter in Table A; none is cleared.
+- **65 output blocks stay open; none fail.** Shell sessions, build logs, NIF dumps, multi-file module cases, and
+  excerpts that depend on declarations made earlier in the chapter. Each is listed by chapter in Table A; none is
+  cleared. The citation and block checks were re-run at `0.1.21`: still 469 line-numbered citations, 0 missing
+  files and 0 ranges out of bounds.
 - **Chapter 4's outputs are inline `#` comments**, not fenced blocks; this audit did not run those comments as
   assertions.
 - **The 469 citations were checked for existence and bounds, not read.** A range can be in bounds and still have
