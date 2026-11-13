@@ -170,7 +170,15 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Job:** Split a program across files, mark what leaves a module with `*`, and import selectively.
 - **Prerequisites:** 8
 - **Nim 2 delta:** no
-- **Status:** planned
+- **Status:** frozen 2026-11-13 — draft 2026-11-13 (Aksara), tech_review Momo 2026-11-13 (48 of 50 claims
+  stand; #37 and #42 corrected, none open), editorial_pass 2026-11-13; `id.md` written from that final text;
+  sample `samples/16-modules-visibility/modules.nim` (four files under `support/`) passes 15/15 at `4ba90a7`.
+  Two content corrections landed: an `export` operand that is not a name spins the front end with no diagnostic
+  (minimal repro `export 3`, not the path as such), and the shared-global check is syntactic — "refused" holds for
+  a direct write, and a `let` pointer to the global escapes it. Two prose corrections: `.sync` is a real fourth
+  route through a `var` parameter (including your own proc), and a one-sided `from` does not settle an ambiguity
+  while the other side is a plain import. ERRATA: import-in-a-proc is a documentation defect, the `export`
+  operand is a compiler defect, the missing-module message is a gap, and the alias escape is a watch row.
 
 ### Chapter 17: Generics and Concepts
 - **Job:** Parameterize routines, types and constraints that are checked structurally, using concepts instead of implicit type-class generics.

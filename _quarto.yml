@@ -29,6 +29,7 @@ book:
     - chapters/13-references-pointers-nil/en.md
     - chapters/14-ownership-borrow/en.md
     - chapters/15-errors-as-values/en.md
+    - chapters/16-modules-visibility/en.md
   search: true
   sidebar:
     style: docked
