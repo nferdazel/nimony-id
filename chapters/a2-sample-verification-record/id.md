@@ -112,7 +112,7 @@ itu yang mengatakan apa itu Nimony, dan sample di sana berarti harus jalan sebel
 
 ## Bab mana di belakang sample mana
 
-| Bab | Sampel | Catatan |
+| Bab | Sample | Catatan |
 | --- | --- | --- |
 | 2 | `samples/02-pinned-toolchain/hello.nim` | Membuktikan build dan run, bukan apa pun tentang bahasanya. |
 | 3 | `samples/03-values-names-mutability/values.nim` | |
@@ -144,7 +144,7 @@ jelaskan.
 
 ## Menambah sample
 
-Sampel baru adalah satu berkas, `samples/NN-slug/nama.nim`, dengan output yang diharapkan tercetak di bagian
+Sample baru adalah satu berkas, `samples/NN-slug/nama.nim`, dengan output yang diharapkan tercetak di bagian
 **Samples** bab itu dan diulang di catatan review. Ia dibuktikan oleh perintah yang sama, dan barisnya bergabung ke
 blok output di atas. Tidak ada sample yang dikecualikan, dan tidak ada bab yang beku di atas sample yang dijalankan
 dengan tangan.
