@@ -30,6 +30,7 @@ book:
     - chapters/14-ownership-borrow/en.md
     - chapters/15-errors-as-values/en.md
     - chapters/16-modules-visibility/en.md
+    - chapters/17-generics-concepts/en.md
   search: true
   sidebar:
     style: docked

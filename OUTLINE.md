@@ -185,14 +185,28 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Prerequisites:** 12, 16
 - **Nim 2 delta:** yes — implicit generics through type classes are not available.
 - **Proof gate:** **CLOSED 2026-11-12** (Momo, pin `4ba90a7`). A concept constrains a generic proc and the conforming call runs; a non-conforming type is rejected naming the type, the constraint and where it was declared (`NoAdd does not match constraint Addable (declared in …)`). Do not promise the `missing: proc …` detail for every failure — this shape does not print it.
-- **Status:** planned
+- **Status:** **FROZEN 2026-11-13.** `en.md` final after the tech review (24 of 30 claims stood; 4, 15, 18 and 19
+  corrected, 17 and 24 narrowed, and the `[N]` sentence rewritten), `id.md` written from that final text, both
+  `frozen`. Verifier 17/17 at pin `4ba90a7` (`samples/17-generics-concepts/generics.nim`; 17 because Chapter 18's
+  sample is already in the folder). Two content corrections landed: `Box(v: 3)` builds, so the field does tell `T`,
+  and the manual's `proc find[T](x: Findable[T]; elem: T)` is refused at its definition, not at the call. Rulings of
+  record in `ERRATA.md`: `doc/language.md:4477-4499` (the `var T` restriction) and `:4472` (`process` is never
+  declared) are documentation defects, a concept in a plain parameter position is a compiler defect
+  (`src/nimony/sigmatch.nim:1825-1827` matches it on purpose, `g24` asserts in the backend), and `:4324`
+  (`var Self`) is a watch row because the qualifier is not enforced at satisfaction. Further changes go to
+  `ERRATA.md`, not to the chapter.
 
 ### Chapter 18: Templates and Compile-Time Evaluation
 - **Job:** Remove repetition with hygienic templates and evaluate work at compile time with `const`.
 - **Prerequisites:** 17
 - **Nim 2 delta:** yes — templates are the supported repetition tool; `macro` still compiles at this pin but
   is compatibility surface, not a technique the book teaches.
-- **Status:** planned
+- **Status:** drafting 2026-11-13 (Aksara) — 2,561 words, 45 claims, sample
+  `samples/18-templates-compiletime/templates.nim` passes 17/17 in the book verifier at `4ba90a7`; `review.md` is
+  next up now that Chapter 17 is frozen. Two manual shapes the pin does not keep: the `untyped` code-block example fails because the
+  template's own proc is hygienic (`undeclared identifier: 'p'`), and a `typed` template parameter passes the
+  meta-type into the body so every use fails (`got: typed but wanted: int64`). The const evaluator folds array `.len`
+  but not a seq's.
 
 ### Chapter 19: Plugins and the NIF Pipeline
 - **Job:** Replace the macro habit with plugins that operate on NIF, and explain what NIF buys in incremental and parallel builds.

@@ -75,9 +75,9 @@ pin strip is this book's.
 
 ## Status
 
-Chapters 1 to 14 are in the book at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`. Chapters 1
+Chapters 1 to 17 are in the book at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`. Chapters 1
 to 8 carry the review notes below; chapters 9 to 14 were reviewed at the same pin, 9 to 11 before the 0.1.5
-release and 12 to 14 after it.
+release, 12 to 14 after it, and 15 to 17 on 2026-11-13.
 
 - Chapter 1, `chapters/01-what-nimony-is/` — draft 2026-11-12, tech_review Momo 2026-11-12,
   editorial_pass 2026-11-12. No code samples; the compile gate does not apply.
@@ -98,7 +98,7 @@ release and 12 to 14 after it.
   as its fallback, side effects included — a defect at the pin, so the chapter requires `else` on every string
   `case` expression. The `elif`-in-`case` rejection also produces a third error line with an ordinal selector.
 
-The verifier prints `SUMMARY 13/13 passed, 0 failed` (samples 02–14).
+The verifier prints `SUMMARY 16/16 passed, 0 failed` (samples 02–17).
 
 - Chapter 7, `chapters/07-loops-ranges/` — draft 2026-11-12, tech_review Momo 2026-11-12, editorial_pass
   2026-11-12. With `samples/07-loops-ranges/loops.nim`. Its review corrected two claims: `countup` takes
