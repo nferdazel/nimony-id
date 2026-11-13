@@ -166,7 +166,8 @@ Totals: **159 blocks, 153 verified, 2 records, 2 failing, 2 not output.**
 
 ### Applied in `0.1.24`
 
-Findings 1 to 5 were fixed in both editions, with no pin change:
+The findings above describe the files as audited; each bullet records what replaced them. Findings 1 to 5 were
+fixed in both editions, with no pin change:
 
 - **Finding 1 (Chapter 19).** The source is now `var a = 2` / `shape(a + 1)` / `typedShape(a + 1)`, in
   `chapters/19-plugins-nif/{en,id}.md` and in `samples/19-plugins-nif/plugins.nim`. The two blocks print
@@ -175,6 +176,9 @@ Findings 1 to 5 were fixed in both editions, with no pin change:
   `~`-positions and the absolute `arithmetics.nim` path; the blocks elide them as the sentence above them says).
   The paragraph now counts three changes rather than four, and the arity sentence says the compiler's `add` has
   the same three slots the validator demands. `tools/verify-samples.sh` still prints `SUMMARY 23/23 passed`.
+  Two follow-up corrections in `e0cce38` cover text the first pass missed: the inline example in both editions
+  now names the wrapper, `(stmts ignore (infix \2B notDeclared 1))`, and `review.md:38`'s claim column reads
+  `(infix \2B a 1)`, matching its own evidence column instead of the `\+` form this finding records.
 - **Finding 2 (Chapter 23).** Quick-quoted `` `.sync` `` and `` `{.cast(assumeSync).}` `` in both editions.
 - **Finding 3 (Chapter 24).** Backticked assert in both editions, plus one clause saying the compiler prints the
   position `cps.nim(269, 5)` before the message and `[AssertionDefect]` after it, both elided.
