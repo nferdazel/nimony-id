@@ -29,8 +29,9 @@ wording of this one rests on a single commit.
 
 `ERRATA.md` in the book's repository. It has three parts:
 
-- **Open errata** — breaks found after a chapter froze. Empty as of this edition: no chapter has been falsified at
-  the pin since it shipped.
+- **Open errata** — breaks found after a chapter froze. One row as of this edition: Chapter 23 said a statement
+  `{.assert: cond.}` is accepted, when at the pin the claim must also be provable, and the sentence was corrected in
+  `v0.1.19`.
 - **Watch list** — issues known at the pin before any chapter shipped. These are constraints on how a chapter may
   be written, not corrections: a documented behaviour the pin does not have, a message that names the wrong reason,
   a check that does not exist. Each row names the evidence, the sentence the book is therefore allowed to print,

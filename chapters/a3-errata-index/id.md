@@ -29,8 +29,9 @@ diverifikasi, dan seluruh kalimat buku ini berdiri di atas satu commit.
 
 `ERRATA.md` di repositori buku. Isinya tiga bagian:
 
-- **Open errata** — kerusakan yang ditemukan setelah bab beku. Kosong pada edisi ini: belum ada bab yang
-  dibantah pin sejak ia terbit.
+- **Open errata** — kerusakan yang ditemukan setelah bab beku. Satu baris pada edisi ini: Bab 23 menyebut
+  `{.assert: cond.}` sebagai statement yang diterima, padahal di pin klaimnya juga harus terbukti, dan kalimatnya
+  dikoreksi di `v0.1.19`.
 - **Watch list** — masalah yang sudah diketahui di pin sebelum bab mana pun terbit. Ini batasan cara menulis bab,
   bukan koreksi: perilaku yang terdokumentasi tapi tidak ada di pin, pesan yang menyebut alasan keliru, atau
   pemeriksaan yang tidak eksis. Setiap baris menyebut buktinya, kalimat yang karena itu boleh dicetak buku, dan
