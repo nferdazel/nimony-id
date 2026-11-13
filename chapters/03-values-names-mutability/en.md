@@ -4,8 +4,8 @@ title: Values, Names, and Mutability
 job: Introduce `let`, `var`, `const`, lexical scope, and the fact that names are case-sensitive.
 nimony_version: 0.6.3
 nimony_commit: 4ba90a781b0b22d0821efaa153c129c37cef6143
-toolchain: /Users/sachiel/.local/opt/nimony/4ba90a7
-host_compiler: /Users/sachiel/.local/opt/nim-2.4.0
+toolchain: ~/.local/opt/nimony/4ba90a7
+host_compiler: ~/.local/opt/nim-2.4.0
 status: frozen
 tech_review: Momo 2026-11-12
 editorial_pass: 2026-11-12

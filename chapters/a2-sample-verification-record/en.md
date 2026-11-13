@@ -77,10 +77,10 @@ from the driver. Chapter 23 carries that finding.
 
 ## The run at the pin
 
-Full output of `./task verify`, 2026-11-13, macOS arm64, paths as printed:
+Full output of `./task verify`, 2026-11-13, macOS arm64, the home directory abbreviated to `~`:
 
 ```
-toolchain /Users/sachiel/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
+toolchain ~/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
 PASS samples/02-pinned-toolchain/hello.nim exit=0
 PASS samples/03-values-names-mutability/values.nim exit=0
 PASS samples/04-numbers-types-conversion/numbers.nim exit=0

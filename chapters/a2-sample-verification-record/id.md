@@ -77,10 +77,10 @@ bukan dari driver. Temuan itu ada di Bab 23.
 
 ## Run di pin
 
-Output lengkap `./task verify`, 2026-11-13, macOS arm64, path seperti tercetak:
+Output lengkap `./task verify`, 2026-11-13, macOS arm64, direktori home disingkat jadi `~`:
 
 ```
-toolchain /Users/sachiel/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
+toolchain ~/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
 PASS samples/02-pinned-toolchain/hello.nim exit=0
 PASS samples/03-values-names-mutability/values.nim exit=0
 PASS samples/04-numbers-types-conversion/numbers.nim exit=0

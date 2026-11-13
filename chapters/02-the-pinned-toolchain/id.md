@@ -4,8 +4,8 @@ title: The Pinned Toolchain
 job: Build the pinned commit from source with the official Nim 2.4.0 tarball, compile and run a first program with `nimony c`, and recognize why Homebrew Nim and `nimony n` are both dead ends here.
 nimony_version: 0.6.3
 nimony_commit: 4ba90a781b0b22d0821efaa153c129c37cef6143
-toolchain: /Users/sachiel/.local/opt/nimony/4ba90a7
-host_compiler: /Users/sachiel/.local/opt/nim-2.4.0
+toolchain: ~/.local/opt/nimony/4ba90a7
+host_compiler: ~/.local/opt/nim-2.4.0
 status: frozen
 tech_review: Momo 2026-11-12
 editorial_pass: 2026-11-12
@@ -157,11 +157,16 @@ Buku ini menyimpan sample di `samples/NN-slug/` dan membuktikannya dengan satu s
 14 tidak bergantung pada chapter mana yang kebetulan kamu baca:
 
 ```
-$ /Users/sachiel/.openmausbot/product/books/nimony-id/tools/verify-samples.sh
-toolchain /Users/sachiel/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
+$ ./tools/verify-samples.sh
+toolchain ~/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
 PASS samples/02-pinned-toolchain/hello.nim exit=0
-SUMMARY 1/1 passed, 0 failed
+...
+SUMMARY 23/23 passed, 0 failed
 ```
+
+Path disingkat jadi `~`, dan baris per sample tidak semuanya ditampilkan. Ringkasannya menghitung semua sample
+di buku, jadi angkamu dan angka yang tercetak di bagian Samples sebuah chapter akan beda; yang harus sama adalah
+`0 failed`.
 
 Skrip memeriksa commit sebelum mengompilasi apa pun, mengompilasi dan menjalankan setiap sample lewat
 `nimony c -r`, mencetak satu baris per berkas, dan keluar non-nol kalau ada sample yang gagal — `0` semua lulus,

@@ -4,8 +4,8 @@ title: The Pinned Toolchain
 job: Build the pinned commit from source with the official Nim 2.4.0 tarball, compile and run a first program with `nimony c`, and recognize why Homebrew Nim and `nimony n` are both dead ends here.
 nimony_version: 0.6.3
 nimony_commit: 4ba90a781b0b22d0821efaa153c129c37cef6143
-toolchain: /Users/sachiel/.local/opt/nimony/4ba90a7
-host_compiler: /Users/sachiel/.local/opt/nim-2.4.0
+toolchain: ~/.local/opt/nimony/4ba90a7
+host_compiler: ~/.local/opt/nim-2.4.0
 status: frozen
 tech_review: Momo 2026-11-12
 editorial_pass: 2026-11-12
@@ -151,11 +151,16 @@ The book keeps its samples in `samples/NN-slug/` and proves them with one script
 not depend on which chapter you happened to read:
 
 ```
-$ /Users/sachiel/.openmausbot/product/books/nimony-id/tools/verify-samples.sh
-toolchain /Users/sachiel/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
+$ ./tools/verify-samples.sh
+toolchain ~/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
 PASS samples/02-pinned-toolchain/hello.nim exit=0
-SUMMARY 1/1 passed, 0 failed
+...
+SUMMARY 23/23 passed, 0 failed
 ```
+
+Paths are abbreviated to `~`, and the per-sample lines are elided. The summary counts every sample in the book,
+so your number and the one printed in a given chapter's sample section will differ; what has to match is
+`0 failed`.
 
 The script checks the commit before it compiles anything, compiles and runs every sample through `nimony c -r`,
 prints one line per file, and exits non-zero if any sample fails — `0` all pass, `1` a sample failed, `2` the

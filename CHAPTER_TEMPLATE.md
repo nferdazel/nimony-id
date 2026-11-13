@@ -70,13 +70,15 @@ documented and still failed on a proc parameter.
    ./tools/verify-samples.sh          # from the repository root; $NIMONY_HOME overrides the default install
    ```
 
-   Exit `0` all samples pass, `1` a sample failed, `2` toolchain missing or wrong version/commit. Real output
-   at the pin, 2026-11-12 (paths abbreviated to `~`):
+   Exit `0` all samples pass, `1` a sample failed, `2` toolchain missing or wrong version/commit. Shape of the
+   output at the pin (paths abbreviated to `~`, per-sample lines elided); the count is the number of samples
+   that exist when you run it, so paste the real number, never this placeholder:
 
    ```
    toolchain ~/.local/opt/nimony/4ba90a7/bin/nimony 0.6.3 pin 4ba90a7
-   PASS samples/02-pinned-toolchain/hello.nim exit=0
-   SUMMARY 1/1 passed, 0 failed
+   PASS samples/NN-slug/name.nim exit=0
+   ...
+   SUMMARY n/n passed, 0 failed
    ```
 
    The verifier checks compile, run and exit code only. It does not compare stdout, so a chapter that teaches
