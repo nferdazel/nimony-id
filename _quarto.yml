@@ -27,6 +27,7 @@ book:
     - chapters/11-objects-enums-distinct/en.md
     - chapters/12-sum-types-case/en.md
     - chapters/13-references-pointers-nil/en.md
+    - chapters/14-ownership-borrow/en.md
   search: true
   sidebar:
     style: docked

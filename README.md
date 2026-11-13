@@ -53,8 +53,10 @@ match, nothing is released, which is the case for a docs or CI push. A content m
 without bumping `VERSION` has no tag to publish under and fails the job with that sentence, instead of
 leaving the release a chapter behind.
 
-The current release is `v0.1.5` on 2026-11-12: it gives the PDF its own cover — the pin strip, one hairline
-per character of `4ba90a7` — and carries chapters 1 to 11 in both editions. `v0.1.4` replaced `v0.1.3`,
+The current release is `v0.1.6` on 2026-11-13: it makes the parity check read the localized contents layout and
+compare the two editions by chapter set and order rather than by title, and it carries chapters 1 to 13 in both
+editions. `v0.1.5` on 2026-11-12 gave the PDF its own cover — the pin strip, one hairline per character of
+`4ba90a7` — with chapters 1 to 11. `v0.1.4` replaced `v0.1.3`,
 whose PDFs clipped the chapter 2 checksum and printed the editorial freeze record, with PDFs that keep every
 long token inside the text block and leave the record out; it was still one chapter short of the site, which
 is what the parity check now catches. `v0.1.1` never produced a release: both PDFs share one file name and a
@@ -73,8 +75,9 @@ pin strip is this book's.
 
 ## Status
 
-Chapters 1 to 11 are in the book at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`. Chapters 1
-to 8 carry the review notes below; chapters 9 to 11 were reviewed at the same pin before the 0.1.5 release.
+Chapters 1 to 14 are in the book at pin `4ba90a7` (`nimony 0.6.3`), each with `en.md` and `id.md`. Chapters 1
+to 8 carry the review notes below; chapters 9 to 14 were reviewed at the same pin, 9 to 11 before the 0.1.5
+release and 12 to 14 after it.
 
 - Chapter 1, `chapters/01-what-nimony-is/` — draft 2026-11-12, tech_review Momo 2026-11-12,
   editorial_pass 2026-11-12. No code samples; the compile gate does not apply.
@@ -95,7 +98,7 @@ to 8 carry the review notes below; chapters 9 to 11 were reviewed at the same pi
   as its fallback, side effects included — a defect at the pin, so the chapter requires `else` on every string
   `case` expression. The `elif`-in-`case` rejection also produces a third error line with an ordinal selector.
 
-The verifier prints `SUMMARY 7/7 passed, 0 failed` (samples 02–08).
+The verifier prints `SUMMARY 13/13 passed, 0 failed` (samples 02–14).
 
 - Chapter 7, `chapters/07-loops-ranges/` — draft 2026-11-12, tech_review Momo 2026-11-12, editorial_pass
   2026-11-12. With `samples/07-loops-ranges/loops.nim`. Its review corrected two claims: `countup` takes
@@ -115,7 +118,7 @@ The verifier prints `SUMMARY 7/7 passed, 0 failed` (samples 02–08).
 
 ## Drafting
 
-Nothing is drafting. Chapter 12 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md`
+Nothing is drafting. Chapter 15 onwards: `planned`. A chapter with an open **Proof gate** line in `OUTLINE.md`
 does not draft; a chapter without one may.
 
 ## License and contributions
