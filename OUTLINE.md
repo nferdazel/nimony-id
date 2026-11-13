@@ -299,9 +299,11 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
   `import std / [assertions]` because it is not in `system` (a01), a routine may not touch a mutable module-level
   variable by name, and `{.sync.}` on the routine does not lift that — a `var`/`ptr` parameter or an
   `{.cast(assumeSync).}:` block does (b10, s1, s2), and `nimony c -r` flattens a non-zero child exit to `1` while
-  the binary keeps the real code (e01). `{.assert: cond.}` works as a statement in a body and crashes the compiler
-  only in the routine-pragma position (v2, v4) — a compiler defect to file, not a documentation erratum. `id.md`
-  written from the final text.
+  the binary keeps the real code (e01). `{.assert: cond.}` works as a statement in a body, but only when the prover
+  can discharge the claim — a third correction, 2026-11-13, after Momo's whole-book audit found
+  `{.assert: x mod 2 == 0.}` failing `cannot prove assertion` in a body — and crashes the compiler only in the
+  routine-pragma position (v2, v4) — a compiler defect to file, not a documentation erratum. `id.md` written from
+  the final text.
 
 ### Chapter 24: Passive Procs and Concurrency
 - **Job:** Suspend and resume work with passive procs, the single mechanism standing in for both async and threaded procedures, and state the scheduling limit instead of implying parallelism.
