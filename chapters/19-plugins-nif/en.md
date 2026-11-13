@@ -94,7 +94,7 @@ ignore(notDeclared + 1)
 echo "survived"
 ```
 
-That builds and prints `survived`, because the argument is never resolved: the plugin was handed `(infix \2B notDeclared 1)` and answered with something else. Change the parameter to `typed` and the same call still builds if the plugin still drops it, which is the useful lesson: the parameter kind decides what the plugin is given, not when the argument is checked. An argument the plugin passes through is checked when the plugin's output is checked.
+That builds and prints `survived`, because the argument is never resolved: the plugin was handed `(stmts ignore (infix \2B notDeclared 1))` and answered with something else. Change the parameter to `typed` and the same call still builds if the plugin still drops it, which is the useful lesson: the parameter kind decides what the plugin is given, not when the argument is checked. An argument the plugin passes through is checked when the plugin's output is checked.
 
 The wrapper is worth memorising because every plugin writes against it. The input is a `(stmts <template name> <argument>...)` node, and `callArgs` exists to skip both the wrapper and the name (`src/nimony/lib/plugins.nim:1095-1105`). A plugin given two arguments calls `callArgs` once and iterates from there.
 

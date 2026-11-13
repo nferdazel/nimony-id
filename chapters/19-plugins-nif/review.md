@@ -35,7 +35,7 @@ add
 | 2 | A plugin is a template that lacks a body and carries `{.plugin: "path".}`. | doc read | `doc/language.md:5307-5309` | `doc/language.md:5307-5309` |
 | 3 | The quick-start plugin builds and prints `Hello, world!`. | `p01` | `Hello, world!`, exit 0 | `doc/plugins.md:24-63` |
 | 4 | A plugin is compiled to native code with `-d:nimonyPlugin`; the compiler writes the input, runs the executable, reads the output. | `p10a` (plugin build command in the failure), doc read | `nimsem --base:deps --d:nimonyPlugin --path:... --isMain ...` in the failing build line | `doc/design.md:86-90`, `src/nimony/semos.nim:973-1020` |
-| 5 | An `untyped` argument arrives as raw source, before resolution: `(infix \+ a~2 1)`. | `p05` decode | `(stmts@F,6,main.nim keep (infix \2B a~2 1@2))` | probe decode; `doc/plugins.md:193-225` |
+| 5 | An `untyped` argument arrives as raw source, before resolution: `(infix \2B a 1)`. | `p05` decode | `(stmts@F,6,main.nim keep (infix \2B a~2 1@2))` | probe decode; `doc/plugins.md:193-225` |
 | 6 | A `typed` argument arrives lowered and resolved: `(add (i 64)a.0.<mod> 1)`, symbol carries its type. | `p04` decode | `(stmts@F,6,main.nim keep (add (i@G,p,.../arithmetics.nim 64)a.0.mai3r4ykk~2 1@2))` | probe decode; `doc/plugins.md:226-273` |
 | 7 | Each call site is a separate invocation; the same call site reuses the cached output. | `p20`, `p10a` build 2 | `p20`: two `shape_*.in.nif` files for two calls; `p10a` second build prints `first` again, no rerun | `src/nimony/semos.nim:1000-1015` |
 | 8 | An `untyped` argument containing an undeclared identifier builds when the plugin drops it. | `p02` | `dropped before name resolution` then `survived`, exit 0 | probe `p02` |

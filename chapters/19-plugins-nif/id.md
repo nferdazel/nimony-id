@@ -120,7 +120,7 @@ echo "survived"
 ```
 
 Itu bisa dibangun dan mencetak `survived`, karena argumennya tidak pernah di-resolve: plugin dikirimi
-`(infix \2B notDeclared 1)` dan menjawab dengan hal lain. Ubah parameternya ke `typed` dan panggilan yang sama
+`(stmts ignore (infix \2B notDeclared 1))` dan menjawab dengan hal lain. Ubah parameternya ke `typed` dan panggilan yang sama
 tetap bisa dibangun kalau plugin tetap membuangnya, dan itulah pelajarannya: jenis parameter menentukan apa
 yang dikirim ke plugin, bukan kapan argumennya diperiksa. Argumen yang diteruskan plugin diperiksa saat output
 plugin diperiksa.
