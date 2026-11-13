@@ -101,7 +101,7 @@ breaks. Owner: Aksara.
 
 ### 8. Review artifacts leak machine paths into a public repository — low
 
-Fourteen `chapters/*/review.md` files carry `/Users/sachiel/...` paths, including probe directories under
+Fourteen `chapters/*/review.md` files carry `/Users/…/...` paths, including probe directories under
 `.openmausbot/workspaces/` and one path belonging to another bot's workspace. `CONTRIBUTING.md` rule 1 forbids
 a path from the machine in the repository, and the repository is public. These are evidence files, not prose,
 but the rule as written does not carve them out. Two options, for Wira: sanitize the paths, or narrow rule 1 to
