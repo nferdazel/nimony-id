@@ -157,7 +157,12 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Prerequisites:** 8, 13
 - **Nim 2 delta:** yes — no `raise`/`try`/`except` exception hierarchy.
 - **Proof gate:** **CLOSED 2026-11-12** (Momo, pin `4ba90a7`). An `ErrorCode`-returning proc, a `{.raises.}` proc, `except ErrorCode as e` and the no-raise path compile and run; calling a `{.raises.}` proc outside `try` is rejected with `cannot call a routine marked as `.raises` outside of a `try`..`except` block`.
-- **Status:** planned
+- **Status:** frozen 2026-11-13 — draft 2026-11-13 (Aksara), tech_review Momo 2026-11-13 (42/42 claims stand,
+  no open claim; two sentence-level corrections: the `porting.md` construction row is the Nim 2 column and only
+  row `:106` is wrong, and the `ref`-arm escape has a cause in `emitDispatcher`), editorial_pass 2026-11-13;
+  `id.md` written in the same pass; sample `samples/15-errors-as-values/errors.nim` passes 14/14 at `4ba90a7`.
+  Three ERRATA rows added: catch shape (documentation defect, one row), two bound `except ErrorCode as` arms
+  (compiler defect, repro `mc2`), `canraise` (defect candidate plus documentation gap)
 
 ## Part V — Scale
 
