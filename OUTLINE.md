@@ -319,9 +319,11 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 
 ## Back matter
 
-- **Appendix A — Nim 2 to Nimony delta table:** one consolidated table of everything removed or changed at the pin, each row citing `doc/differences.md` or a Nimony source file.
-- **Appendix B — Sample verification record:** the exact command, pin, and output format every chapter must reproduce.
-- **Appendix C — Errata index:** pointer to `ERRATA.md`.
+- **Appendix A — Nim 2 to Nimony delta table:** one consolidated table of everything removed or changed at the pin, each row citing `doc/differences.md` or a Nimony source file. **FROZEN 2026-11-13** — `chapters/a1-nim2-delta-table/{en,id}.md`; assembled only from Chapters 3-24, so it adds no claim and needs no new technical review; the rows it deliberately omits are named in its last section.
+- **Appendix B — Sample verification record:** the exact command, pin, and output format every chapter must reproduce. **FROZEN 2026-11-13** — `chapters/a2-sample-verification-record/{en,id}.md`; carries the `23/23 passed` run of 2026-11-13 verbatim and the chapter-to-sample map.
+- **Appendix C — Errata index:** pointer to `ERRATA.md`. **FROZEN 2026-11-13** — `chapters/a3-errata-index/{en,id}.md`; restates the errata rule, the three parts of `ERRATA.md`, and the one filed upstream defect (`nim-lang/nimony#2985`, fix in `#2988`).
+
+The three appendices live under `chapters/aN-slug/` so the bilingual staging in `tools/build-site.sh` treats them like a chapter pair; they are listed under `book.appendices` in `_quarto.yml`, so the PDF letters them A, B, C and never numbers them as chapters 25-27.
 
 ## Rules the outline enforces
 

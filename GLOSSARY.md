@@ -210,6 +210,10 @@ Terms that will otherwise be ambiguous across chapters. Each term has a one-line
 | state function | One generated function per stretch of a passive proc between suspension points; the C backend names them `…s0`, `…s1`. | `src/hexer/cps.nim:73-92` at `4ba90a7`; probe `p17` (generated C) |
 | trampoline | The loop in `run`/`complete` that asks the scheduler for the next state instead of calling it on the stack, so chain depth does not grow the C stack. | `lib/std/system.nim:345-355` at `4ba90a7`; `doc/passive_procs.md:94-106`, `:468-471`; probe `p21` |
 
+| delta box | The boxed section a chapter ends with where a Nim 2 habit actively misleads: what Nim 2 did, what Nimony does, what breaks if the habit is kept. It is never the main path, and Appendix A consolidates every box into one table. | Chapter 1 defines the shape; `OUTLINE.md` decides per chapter which ones exist; `CHAPTER_TEMPLATE.md` fixes the order |
+| erratum | A break found in a frozen chapter. The chapter is not rewritten to follow a newer compiler: the break is recorded against the chapter, with what broke, the version or commit it broke on, and the date. A frozen chapter with no row has nothing found against it. | `ERRATA.md`; the rule is restated in Appendix C |
+| watch row | An issue known at the pin before a chapter shipped: a documented behaviour the pin does not have, a message naming the wrong reason, or a check that does not exist. It binds how the chapter may be written and is not yet an erratum. | `ERRATA.md` watch list; e.g. the `range` guard (`Chapter 7`) and `unittest` (`Chapter 23`) rows |
+
 ## Retired in Nimony
 
 Terms a Nim 2 reader will look for. They stay listed: deleting them would hide the word the reader arrives

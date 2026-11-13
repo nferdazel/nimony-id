@@ -17,7 +17,7 @@ lives in `_quarto.yml` as `book.title` and `book.subtitle`.
 | `ERRATA.md` | Breaks found after a chapter froze; plus the watch list of known pin-level constraints. |
 | `DEVIATIONS.md` | Every place this book departs from the nim-id writing baseline. |
 | `DESIGN.md` | The design direction: the palette and type hierarchy the series shares, and the cover device that is this book's own. |
-| `chapters/` | One folder per chapter: `NN-slug/en.md` and `NN-slug/id.md`. Created with the first drafted chapter. |
+| `chapters/` | One folder per chapter: `NN-slug/en.md` and `NN-slug/id.md`. Created with the first drafted chapter. The back matter (Appendices A, B, C) sits in the same tree as `aN-slug/` pairs, listed under `book.appendices` so the PDF letters them A, B, C. |
 | `index.en.qmd`, `index.id.qmd` | The book's preface, one file per edition, same shape and the same pin statement. The Indonesian file is a translation, not a second preface. |
 | `CONTRIBUTING.md` | What a reader can send, the gate before sending it, and how a chapter change reaches `frozen`. |
 | `SECURITY.md` | What counts as a security report in a book repository, and what to send to Nimony instead. |
@@ -98,7 +98,7 @@ release, 12 to 14 after it, and 15 to 18 on 2026-11-13.
   as its fallback, side effects included — a defect at the pin, so the chapter requires `else` on every string
   `case` expression. The `elif`-in-`case` rejection also produces a third error line with an ordinal selector.
 
-The verifier prints `SUMMARY 17/17 passed, 0 failed` (samples 02–18).
+The verifier prints `SUMMARY 23/23 passed, 0 failed` (samples 02–24; Chapter 1 has none).
 
 - Chapter 7, `chapters/07-loops-ranges/` — draft 2026-11-12, tech_review Momo 2026-11-12, editorial_pass
   2026-11-12. With `samples/07-loops-ranges/loops.nim`. Its review corrected two claims: `countup` takes
