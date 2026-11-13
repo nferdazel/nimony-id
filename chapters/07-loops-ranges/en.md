@@ -143,9 +143,14 @@ for i in 0..len(word):
 
 ```
 …/stringimpl.nim(686, 37): i < len(s) [AssertionDefect]
+a
+b
+c
 ```
 
-The loop's range promises `i <= len(word)`, which is one value more than the index allows, so the assertion in
+The loop ran three times and printed `a`, `b`, `c` before it died at the last index; on this build the abort line
+is the first one you see, so both are shown here in that order. The loop's range
+promises `i <= len(word)`, which is one value more than the index allows, so the assertion in
 `[]` (`lib/std/system/stringimpl.nim:686`) stops the program at `i == len(word)`. Half-open is not a style
 preference in this pattern; it is the difference between provable and crashing.
 

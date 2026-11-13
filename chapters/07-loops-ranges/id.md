@@ -143,9 +143,13 @@ for i in 0..len(word):
 
 ```
 …/stringimpl.nim(686, 37): i < len(s) [AssertionDefect]
+a
+b
+c
 ```
 
-Rentang loop-nya menjanjikan `i <= len(word)`, satu nilai lebih banyak dari yang diizinkan index, jadi assertion
+Loop-nya jalan tiga kali dan mencetak `a`, `b`, `c` sebelum mati di index terakhir; di build ini baris abort
+yang muncul duluan, jadi keduanya ditulis di sini dengan urutan itu. Rentang loop-nya menjanjikan `i <= len(word)`, satu nilai lebih banyak dari yang diizinkan index, jadi assertion
 di `[]` (`lib/std/system/stringimpl.nim:686`) menghentikan program di `i == len(word)`. Setengah terbuka bukan
 selera gaya di pola ini; dia yang membedakan bisa dibuktikan dengan crash.
 

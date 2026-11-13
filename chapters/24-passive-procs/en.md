@@ -185,27 +185,28 @@ echoes, suspends and echoes again sees two ticks. What a scheduler cannot do by 
 coroutine runnable again, because the resume point lives in the coroutine, not in the scheduler.
 
 Interleaving is therefore a property of the driver, not of the pragma. Park two workers, then run their saved
-continuations in the order you choose:
+continuations in the order you choose. These five lines close the chapter's sample,
+`samples/24-passive-procs/passive.nim`, after its `double` and `solo` lines: `worker` and `drive` are defined
+earlier in that file, and `resumeA` and `resumeB` hold the two parks.
 
 ```nim
-drive(delay(worker("a", 0)))
-drive(delay(worker("b", 1)))
+drive(delay(worker("b", 0)))
+drive(delay(worker("c", 1)))
 echo "both parked"
 drive(resumeA)
 drive(resumeB)
 ```
 
 ```
-a 1
-b 1
+worker b start
+worker c start
 both parked
-a 2
-b 2
+worker b end
+worker c end
 ```
 
 Both were started, both parked, and the second half of each ran after the first half of both. Swap those last two
-`drive` calls and `b 2` comes first. The book's sample takes the same shape with two workers, and there
-`worker c end` comes before `worker b end` because the driver resumes `c` first. The scheduler decides, and here
+`drive` calls and `worker c end` arrives before `worker b end` instead. The scheduler decides, and here
 the scheduler is you.
 
 The pin also carries a thread pool, `std/threadpool`, with `initPool`, `submit(continuation)` and
@@ -221,9 +222,13 @@ procs makes them overlap. It teaches where the decision lives.
 
 ## A chain of passive procs
 
-When a passive proc calls another, the inner park propagates outward:
+When a passive proc calls another, the inner park propagates outward. The inner continuation has to survive the
+call, so it is saved into a module-level `var` — the same shape the sample uses, and the reason for `assumeSync`
+is the module-level rule further down:
 
 ```nim
+var innerCont: Continuation
+
 proc inner() {.passive.} =
   echo "inner 1"
   innerCont = delay()

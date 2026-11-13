@@ -188,28 +188,29 @@ adalah membuat coroutine yang park jadi runnable lagi, karena titik resume-nya t
 scheduler.
 
 Interleaving karena itu sifat driver, bukan sifat pragma. Park dua worker, lalu jalankan continuation
-tersimpannya dalam urutan yang kamu pilih:
+tersimpannya dalam urutan yang kamu pilih. Lima baris ini menutup sample bab ini,
+`samples/24-passive-procs/passive.nim`, setelah baris `double` dan `solo` di atasnya: `worker` dan `drive`
+dideklarasikan lebih awal di berkas itu, dan `resumeA` serta `resumeB` memegang kedua park-nya.
 
 ```nim
-drive(delay(worker("a", 0)))
-drive(delay(worker("b", 1)))
+drive(delay(worker("b", 0)))
+drive(delay(worker("c", 1)))
 echo "both parked"
 drive(resumeA)
 drive(resumeB)
 ```
 
 ```
-a 1
-b 1
+worker b start
+worker c start
 both parked
-a 2
-b 2
+worker b end
+worker c end
 ```
 
 Dua-duanya dimulai, dua-duanya park, dan paruh kedua masing-masing jalan setelah paruh pertama keduanya. Tukar
-dua `drive` terakhir itu dan `b 2` datang lebih dulu. Sample buku ini mengambil bentuk yang sama dengan dua
-worker, dan di sana `worker c end` datang sebelum `worker b end` karena driver melanjutkan `c` lebih dulu.
-Scheduler yang menentukan, dan di sini scheduler-nya adalah kamu.
+dua `drive` terakhir itu dan `worker c end` datang sebelum `worker b end`. Scheduler yang menentukan, dan di
+sini scheduler-nya adalah kamu.
 
 Pin juga membawa thread pool, `std/threadpool`, dengan `initPool`, `submit(continuation)`, dan `shutdownPool`
 (`lib/std/threadpool.nim:114`, `:198`, `:376`, `:417`). Continuation yang diserahkan ke pool jalan di worker,
@@ -224,9 +225,13 @@ tidak mengajarkan bahwa menyerahkan dua proc membuat mereka overlap. Dia mengaja
 
 ## Rantai passive proc
 
-Saat passive proc memanggil yang lain, park di dalamnya merambat ke luar:
+Saat passive proc memanggil yang lain, park di dalamnya merambat ke luar. Continuation yang di dalam harus hidup
+melewati pemanggilnya, jadi dia disimpan di `var` level modul — bentuk yang sama dengan sample-nya, dan alasan
+`assumeSync`-nya ada di aturan level modul di bawah:
 
 ```nim
+var innerCont: Continuation
+
 proc inner() {.passive.} =
   echo "inner 1"
   innerCont = delay()
