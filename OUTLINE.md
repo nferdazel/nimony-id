@@ -221,7 +221,16 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Nim 2 delta:** yes — the design replaces macros with plugins; a `macro` that still compiles at this pin is
   compatibility surface, not the sanctioned route.
 - **Proof gate:** **CLOSED 2026-11-12** (Momo, pin `4ba90a7`), both halves. A `typed` parameter receives semantically checked, lowered NIF — `a + 1` arrives as `(add (i 64)a.0.… 1)` with the operand already resolved to a symbol carrying its type — and the plugin's output replaces the call in the compiled program. An `untyped` parameter receives raw syntax before name resolution: a node containing an undeclared identifier compiles.
-- **Status:** planned
+- **Status:** **FROZEN 2026-11-13.** `en.md` final after the tech review (29 of 33 claims stood, three of those with a
+  corrected citation; four corrected), `id.md` written from that final text, both `frozen`. Verifier 18/18 at pin
+  `4ba90a7` (`samples/19-plugins-nif/plugins.nim`). Four passages changed with the verdict: a for-loop plugin's
+  variable is typed from the iterator's declared yield type and the body is transformable when one is declared, the
+  plugin executable lands in the running build's nimcache rather than the declaring module's, `errorTree` works
+  nested inside a builder (the assert was `tagText` on a symbol), and the arithmetic tags take a type node as slot 0
+  before the two operands. Rulings of record in `ERRATA.md`: `doc/plugins.md:8-20` (the for-loop row) and
+  `doc/plugins.md:673-678` ("and nothing else") are documentation defects, the missing-plugin message is a gap row,
+  and the `.nim`-extension candidate is withdrawn (`splitFile` strips it). Further changes go to `ERRATA.md`, not to
+  the chapter.
 
 ## Part VI — Programs
 
