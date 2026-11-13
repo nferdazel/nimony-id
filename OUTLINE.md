@@ -201,12 +201,19 @@ chapter carries the "Nim 2 delta" box where a Nim 2 habit actively misleads — 
 - **Prerequisites:** 17
 - **Nim 2 delta:** yes — templates are the supported repetition tool; `macro` still compiles at this pin but
   is compatibility surface, not a technique the book teaches.
-- **Status:** drafting 2026-11-13 (Aksara) — 2,561 words, 45 claims, sample
-  `samples/18-templates-compiletime/templates.nim` passes 17/17 in the book verifier at `4ba90a7`; `review.md` is
-  next up now that Chapter 17 is frozen. Two manual shapes the pin does not keep: the `untyped` code-block example fails because the
-  template's own proc is hygienic (`undeclared identifier: 'p'`), and a `typed` template parameter passes the
-  meta-type into the body so every use fails (`got: typed but wanted: int64`). The const evaluator folds array `.len`
-  but not a seq's.
+- **Proof gate:** **CLOSED 2026-11-13** (Momo, pin `4ba90a7`). `const Nine = square(3)` folds to `9`, a `for` with
+  an `if` folds to `30`, recursion folds to `120`, and `const Overflow = 127'i8 + 1'i8` is refused with
+  `expression overflow at compile time`. The evaluator does not fold `.len` of a seq reached through a named `const`;
+  do not promise a bounds error for an out-of-range constant index, it reports cannot-evaluate.
+- **Status:** **FROZEN 2026-11-13.** `en.md` final after the tech review (42 of 45 claims stood; 14 and 19
+  corrected, 41 narrowed), `id.md` written from that final text, both `frozen`. Verifier 17/17 at pin `4ba90a7`
+  (`samples/18-templates-compiletime/templates.nim`). Three prose passages changed with the verdict: `{.dirty.}` is
+  inert without `{.feature: "untyped".}` and then injects in both directions (`semdecls.nim:1183`), `varargs[untyped]`
+  is accepted and unreadable rather than refusing every use, and a routine that is folded does run its effects, so a
+  `writeFile` writes during compilation. Rulings of record in `ERRATA.md`: `doc/language.md:4566-4583` (the `untyped`
+  block example) and `doc/porting.md:255-262` (the quoted bare-call message) are documentation defects, a `typed`
+  template parameter is a compiler defect (`typedSlot(notDeclared)` builds; `m21` is the repro), and `{.dirty.}` is a
+  watch row. Further changes go to `ERRATA.md`, not to the chapter.
 
 ### Chapter 19: Plugins and the NIF Pipeline
 - **Job:** Replace the macro habit with plugins that operate on NIF, and explain what NIF buys in incremental and parallel builds.
