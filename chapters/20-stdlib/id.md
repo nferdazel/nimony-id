@@ -18,7 +18,7 @@ glossary_added: [proven module, Table, Keyable, HashSet, sequtils, atomic operat
 ## Untuk apa bab ini
 
 Sebuah bahasa hanya seberguna kode yang tidak perlu kamu tulis sendiri. Bab ini menyusuri bagian standard
-library yang terbukti jalan di commit yang dipin, dan memberi kamu tes yang menentukan apakah modul di luar
+library yang terbukti jalan di commit yang dipin, dan memberimu tes yang menentukan apakah modul di luar
 tur itu pantas masuk program kamu. Daftarnya pendek dengan sengaja. Sebuah modul layak diandalkan ketika
 programnya jalan, bukan ketika filenya ada, dan bukan ketika dokumentasi Nim 2 masih mengingatnya.
 
@@ -26,10 +26,10 @@ programnya jalan, bukan ketika filenya ada, dan bukan ketika dokumentasi Nim 2 m
 
 Tiga fakta kelihatan seperti izin, padahal bukan.
 
-File bernama `lib/std/<name>.nim` di checkout pin memberi tahu kamu bahwa modul itu dimaksudkan ada. Itu tidak
-memberi tahu kamu bahwa fungsi yang kamu mau diekspor dari sana, dan tidak memberi tahu kamu bahwa modulnya
-terkompilasi. `import std / <name>` yang berhasil memberi tahu kamu sedikit lebih banyak: filenya ketemu dan
-level atasnya ter-parse. Itu tidak memberi tahu kamu bahwa bagian yang kamu butuhkan jalan. Hanya run yang
+File bernama `lib/std/<name>.nim` di checkout pin memberitahumu bahwa modul itu dimaksudkan ada. Itu tidak
+memberitahumu bahwa fungsi yang kamu mau diekspor dari sana, dan tidak memberitahumu bahwa modulnya
+terkompilasi. `import std / <name>` yang berhasil memberitahumu sedikit lebih banyak: filenya ketemu dan
+level atasnya ter-parse. Itu tidak memberitahumu bahwa bagian yang kamu butuhkan jalan. Hanya run yang
 memberi tahu.
 
 Tesnya dua baris dan satu perintah:
@@ -180,7 +180,7 @@ error, bukan kejutan saat runtime. Itu aturan yang sama dengan `parseInt`, dan p
 tangkap `ErrorCode`, atau tanya `hasKey` dulu, atau pakai `getOrDefault`. Sample bab ini memakai
 ketiganya, dan itu gambaran yang jujur untuk kode tabel biasa di pin.
 
-Iterasi memberi kamu `pairs`, `keys`, `values`, `mpairs` dan `mvalues` (`lib/std/tables.nim:189-209`). Di pin,
+Iterasi memberimu `pairs`, `keys`, `values`, `mpairs` dan `mvalues` (`lib/std/tables.nim:189-209`). Di pin,
 urutan yang mereka jalani adalah urutan penyisipan: tabelnya menyimpan pasangan di sebuah sequence, `pairs`
 menjalani sequence itu (`lib/std/tables.nim:189-192`), dan `del` mempertahankan urutan dengan menggeser
 entri (`:211-213`). Sumbernya bilang begitu di komentar pada tabel berurut (`:252`), dan `initOrderedTable`
@@ -260,7 +260,7 @@ itu modul regex milik pin, belum terbukti di sini.
 
 Modulnya ada dan panggilannya tidak. `std/json` bisa di-import dan `parseJson` menerima string, tapi
 `node["a"]` ditolak dengan `JsonTree does not match constraint T` plus daftar kandidat penuh, karena `[]`
-bukan accessor untuk pohon yang sudah di-parse. Jalur bacanya `node{"a"}`, yang memberi kamu `JsonNode`, lalu
+bukan accessor untuk pohon yang sudah di-parse. Jalur bacanya `node{"a"}`, yang memberimu `JsonNode`, lalu
 `getInt`, `getStr` atau `kind` pada itu (`lib/std/json.nim:551`, `:383`, `:418-424`). Guide pin tidak punya
 bagian `json` sama sekali (`doc/stdlib.md:11-687`), jadi pembaca yang mencarinya tidak menemukan apa pun,
 dan bentuknya harus dipelajari dari satu run.

@@ -151,7 +151,7 @@ write stdout, P(x: 1)
 ...
 ```
 
-`echo` tidak menerapkan `$` untuk kamu. Tulis sendiri dan terapkan sendiri:
+`echo` tidak menerapkan `$` untukmu. Tulis sendiri dan terapkan sendiri:
 
 ```nim
 func `$`(v: Point): string =
@@ -165,7 +165,7 @@ terdokumentasi, bukan bug. Template `echo` di Nimony mengulang `unpack()` dan me
 konverter `$` (`doc/language.md:466-471`, `lib/std/syncio.nim:465-468`), dan `doc/porting.md:346-347` menyatakan
 object memang sengaja tidak punya `$` generik — definisikan satu untuk tipe object itu.
 
-> **Nim 2 delta — `echo` tidak lagi menerapkan `$` kamu**
+> **Nim 2 delta — `echo` tidak lagi menerapkan `$` milikmu**
 >
 > *Apa yang dilakukan Nim 2* → `echo p` menemukan overload `$` dan mencetak `P1`, dari source yang sama
 > (`~/.local/opt/nim-2.4.0`, probe `nim2check.nim`).

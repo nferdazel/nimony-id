@@ -17,7 +17,7 @@ glossary_added: [ErrorCode, raises pragma, except arm, canraise, ref exception]
 
 ## Untuk apa bab ini
 
-Bab 8 memberi kamu routine yang selalu mengembalikan apa yang signature-nya janjikan. Bab ini soal
+Bab 8 memberimu routine yang selalu mengembalikan apa yang signature-nya janjikan. Bab ini soal
 routine yang tidak bisa begitu: yang pemanggilnya harus diberi tahu bahwa pekerjaannya tidak jadi. Nimony punya
 tepat dua cara mengatakan itu, sebuah nilai enum dan sebuah objek `ref`, dan yang polos tidak membawa data sama
 sekali. Mencari ke mana payload-nya pergi adalah sebagian besar isi bab ini.

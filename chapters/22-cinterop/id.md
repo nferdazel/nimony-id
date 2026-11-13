@@ -114,7 +114,7 @@ seberapa besar object C-nya.
 ## String di batas
 
 `string` Nimony membawa panjang dan boleh berisi byte apa pun; `char*` C berhenti di byte nol pertama. Pin
-memberi kamu tiga jalan menyeberang, dan ketiganya tidak bisa saling menggantikan.
+memberimu tiga jalan menyeberang, dan ketiganya tidak bisa saling menggantikan.
 
 `cstring"..."` adalah literal di memori read-only, mentah seperti dijelaskan di atas. `toCString(s)` mengambil
 `var string` dan mengembalikan pointer ke byte string itu sendiri, jadi pandangannya bisa ditulis dan string-nya

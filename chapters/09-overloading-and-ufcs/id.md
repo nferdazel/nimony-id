@@ -327,7 +327,7 @@ b[0] = 9
 ... 10 more candidate lines
 ```
 
-Assignment meminta `[]=`, dan tanpa `[]=` milik kamu sendiri ia hanya bisa mencoba yang bawaan; header
+Assignment meminta `[]=`, dan tanpa `[]=` milikmu sendiri ia hanya bisa mencoba yang bawaan; header
 `Type mismatch at [position]` datang dari `src/nimony/semcall.nim:1436`, dan kandidat bawaan pertama adalah
 `lib/std/system.nim:32`. Deklarasikan setter-nya dan baris yang sama tercompile:
 

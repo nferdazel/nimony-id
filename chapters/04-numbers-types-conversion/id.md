@@ -53,7 +53,7 @@ baik saat compile time maupun runtime.
 
 Itulah seluruh bedanya dengan Nim 2, dan ini bukan konfigurasi: `doc/differences.md:24` mencatat bahwa overflow
 signed wrap **alih-alih** melempar `OverflowDefect`, dan bahwa backend C dikompilasi dengan `-fwrapv` supaya
-compiler C tidak boleh menganggap sebaliknya. Tidak ada yang dilempar untuk kamu selamatkan.
+compiler C tidak boleh menganggap sebaliknya. Tidak ada yang dilempar untuk kamu tangkap.
 
 Konsekuensinya mudah diucapkan dan mudah dilupakan: angka yang kelihatan mustahil adalah cacat di aritmetika-mu,
 bukan sinyal dari bahasa. Kalau sebuah nilai penting, periksa batasnya sebelum operasi, atau minta flag-nya.

@@ -31,7 +31,7 @@ program Nim 2 yang ditulis terhadap `os` berhenti ter-compile.
 ## Satu file, dibaca dan ditulis utuh
 
 Pasangan terkecil yang berguna adalah `writeFile` dan `readFile` (`lib/std/syncio.nim:590`, `:577`). Keduanya
-`{.raises.}`, dan itu compiler yang memberi tahu kamu kebenaran tentang disk:
+`{.raises.}`, dan itu compiler yang memberitahumu kebenaran tentang disk:
 
 ```nim
 import std / [syncio]
@@ -211,7 +211,7 @@ panggilannya, bukan loop-nya.
 
 ## Nim 2 delta
 
-*Apa yang Nim 2 lakukan:* `import std/os` memberi kamu `removeFile(file: string)`, yang diam saja ketika file tidak
+*Apa yang Nim 2 lakukan:* `import std/os` memberimu `removeFile(file: string)`, yang diam saja ketika file tidak
 ada — dia jalan sampai selesai pada path yang tidak eksis. `std/files` yang menerima path sudah ada, tapi bentuk
 string selalu dalam jangkauan.
 *Apa yang Nimony lakukan:* `std/os` tidak lagi membawa `removeFile`; sekarang `std/files.removeFile(file: Path)`

@@ -17,7 +17,7 @@ glossary_added: [ownership, borrow, alias, moved-from state, ensureMove]
 
 ## Untuk apa bab ini
 
-Bab 13 memberi kamu dua cara mencapai storage milik nama lain: `ref` yang dikelola dan `ptr` mentah. Bab
+Bab 13 memberimu dua cara mencapai storage milik nama lain: `ref` yang dikelola dan `ptr` mentah. Bab
 ini soal aturan yang datang bersama cara itu. Siapa yang bertanggung jawab atas sebuah nilai, kapan dua nama
 boleh menunjuk storage yang tumpang tindih, dan apa yang compiler tolak sebelum program kamu sempat jalan.
 
