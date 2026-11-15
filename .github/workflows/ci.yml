@@ -15,6 +15,40 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+
+  # Golden CI/CD contract: the same rules the server repo checks, run here so
+  # drift fails this repo's own build instead of waiting for a manual audit.
+  # The script is a byte-identical copy of the server repo's
+  # ops/scripts/contract-check.sh; fix it there and copy it out again.
+  contract:
+    name: "Contract: golden CI/CD rules"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: "Contract: check this repo"
+        run: ./ops/scripts/contract-check.sh .
+
+  security:
+    name: "Security (gitleaks)"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: "Check out"
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # The scanner walks history, so a shallow clone would only ever see
+          # the tip commit and report clean without looking.
+          fetch-depth: 0
+
+      - name: "Supply chain: scan for committed secrets"
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   book:
     name: "Book: verify samples and render"
     runs-on: ubuntu-24.04
