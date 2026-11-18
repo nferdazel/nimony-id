@@ -1,7 +1,7 @@
 # Contributing
 
 This repository is the source of *Nimony: A Pinned Guide*. Every statement in it is checked against one fixed
-Nimony commit — the pin, `4ba90a781b0b22d0821efaa153c129c37cef6143` (`nimony 0.6.3`). The book has no interest in
+Nimony commit, the pin, `4ba90a781b0b22d0821efaa153c129c37cef6143` (`nimony 0.6.3`). The book has no interest in
 what the language does on `master`; it has a strong interest in anything at the pin that the book got wrong.
 
 ## What you can send
@@ -15,7 +15,7 @@ what the language does on `master`; it has a strong interest in anything at the 
 | A third language | issue first; a translation needs a structural decision, not just text |
 
 All 24 chapters and Appendices A–D are `frozen`. A frozen chapter is not rewritten. If the pin moved and a
-sample broke, the break goes to [`ERRATA.md`](ERRATA.md) — that file exists precisely so a frozen chapter stays
+sample broke, the break goes to [`ERRATA.md`](ERRATA.md), that file exists precisely so a frozen chapter stays
 frozen.
 
 ## Before you send
@@ -41,13 +41,13 @@ both. CI runs the same command, so a green local run is the whole gate.
    the same section order and the same code blocks. `./task build` fails closed on an unpaired chapter folder.
 3. Every Nimony listing that is meant to compile has a home in the chapter's sample: it appears in the file the
    verifier runs, or the prose says it is an excerpt and where the whole is. Fragments, before/after shapes and
-   listings whose point is the diagnostic are marked as such where they appear and never added to `samples/` —
+   listings whose point is the diagnostic are marked as such where they appear and never added to `samples/`,
    the verifier fails any program that exits non-zero. A chapter with no Nimony code carries `samples: []` and
    no sample file. What the gate proves is one program per chapter, not every listing on the page: it judges
    exit status, not the lines printed.
 4. A new term goes into [`GLOSSARY.md`](GLOSSARY.md) in the same change that introduces it.
 5. Provenance is part of the sentence. A claim about behaviour cites the Nimony file and line at the pin, or it
-   is marked as design intent. "The documentation says so" is not proof of pin behaviour — the documentation
+   is marked as design intent. "The documentation says so" is not proof of pin behaviour, the documentation
    has been wrong before, and `ERRATA.md` records where.
 6. Module-level mutable state is a constraint, not a term. A plain `proc` that reads or writes a module-level
    `var` is rejected at the pin (`unsynchronized access to global variable …; pass it to a .sync routine or use
@@ -65,7 +65,7 @@ This repository is public and everything in it is published twice: as Markdown o
    root. A transcript may show a real install path only where the chapter is about that install. A review
    artifact beside a chapter is a transcript too: a workspace path in it is written home-relative (`~/...`) and
    the rest of the command is left exactly as it ran. A probe directory is named by a label, not by the workspace
-   it lived in — `probes/ch09/`, not a path under a home directory that belongs to one authoring machine.
+   it lived in: `probes/ch09/`, not a path under a home directory that belongs to one authoring machine.
 2. **No secret, token, private URL or personal data**, in prose or in a sample. `.gitignore` already covers
    `nimcache/`, `_book/`, `.quarto/`, `.build/` and `tools/verify-samples.log`; a build artefact in a diff is
    a mistake, not a shortcut.
@@ -76,7 +76,7 @@ This repository is public and everything in it is published twice: as Markdown o
 ## Versions and releases
 
 `VERSION` is the book's version; `./task version` prints it. `./task release` reads the commits since the last
-`v*` tag and bumps MAJOR on `type!:` or a `BREAKING CHANGE:` footer, MINOR on `feat:`, PATCH otherwise — this
+`v*` tag and bumps MAJOR on `type!:` or a `BREAKING CHANGE:` footer, MINOR on `feat:`, PATCH otherwise. This
 history uses plain imperative subjects, so most releases are PATCH. The script runs `./task check`, commits
 `chore: release X.Y.Z`, and creates the annotated tag `vX.Y.Z`. CI then refuses a tag that is not `v` plus the
 contents of `VERSION`, and attaches the rendered `_book` to the tag run.
@@ -102,7 +102,7 @@ Do not push to `main` directly. Open a pull request and let CI run `./task check
 prose states which chapters it touches and whether any frontmatter `status:` line moves.
 
 That rule is a convention, not a server-side gate. `main` carries the "Basic Branch Guardrail" ruleset, which
-refuses branch deletion and force-push only — ordinary pushes are still accepted, which is what lets
+refuses branch deletion and force-push only, ordinary pushes are still accepted, which is what lets
 `./task release` commit the version bump and tag on `main` directly. A rejected `git push --force` is the ruleset
 working; it is not a sign that the branch is broken.
 

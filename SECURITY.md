@@ -14,7 +14,7 @@ issues in older commits are not patched; they are recorded in [`ERRATA.md`](ERRA
 ## What to report here, privately
 
 - A secret, token or private path committed by mistake.
-- A sample, script or workflow step that does something other than what it says — especially anything that
+- A sample, script or workflow step that does something other than what it says, especially anything that
   fetches and executes code beyond the pinned toolchain and the actions named in `.github/workflows/`.
 - A build script or `tools/` change that could write outside the repository, or a render that could publish
   something unintended.
@@ -27,9 +27,9 @@ open a public issue first. Include the commit, the file, what you ran, and what 
 
 | Report | Where |
 | --- | --- |
-| A compiler or language bug at the pin | [nim-lang/nimony](https://github.com/nim-lang/nimony), at commit `4ba90a7` — the compiler is not ours to patch |
+| A compiler or language bug at the pin | [nim-lang/nimony](https://github.com/nim-lang/nimony), at commit `4ba90a7`, the compiler is not ours to patch |
 | A vulnerability in Nimony, in Nim, or in Quarto | that project's own security process |
-| A statement in the book that is wrong at the pin, a broken example, a typo | an ordinary issue — see [`CONTRIBUTING.md`](CONTRIBUTING.md) |
+| A statement in the book that is wrong at the pin, a broken example, a typo | an ordinary issue, see [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | A vulnerability in GitHub Actions or a third-party action we use | GitHub Security Lab, and tell us as well |
 
 The book does not vendor, bundle or redistribute the compiler, so a Nimony advisory does not have a version of
@@ -52,7 +52,7 @@ ours to fix. It does have a chapter that may need an errata row, and we will add
 ## What we do
 
 1. Confirm the report against the named commit, in private.
-2. If a secret was committed: rotate it first, then remove it from history — deleting the file is not enough.
+2. If a secret was committed: rotate it first, then remove it from history; deleting the file is not enough.
 3. If the fix changes what a frozen chapter teaches, the chapter text stays as it is and the correction goes to
    [`ERRATA.md`](ERRATA.md); only a broken sample is patched in place.
 4. Say what happened and what changed, once the fix is in `main`.
