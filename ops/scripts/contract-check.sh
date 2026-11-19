@@ -20,6 +20,15 @@
 #         github.actor == 'dependabot[bot]', and never on push
 #     W11 one gate command per workflow run: two jobs may not run the same
 #         check/test command with the same env
+#     W13 every workflow file declares a class (# class: A|B|C) and a
+#         concurrency: block; class A and B never cancel in progress on main
+#     W15 one push runs one gate graph: two class A files may not run the same
+#         gate command
+#     W19 third-party actions pinned to a full commit SHA (actions/* may keep a
+#         major tag); warn while the conversion is in progress
+#     W20 no runs-on: *-latest
+#     W22 every upload-artifact declares retention-days
+#     W24 actionlint over the workflows, when the binary is installed
 #     D1  deploy script exists and is reachable from the documented path
 #     D2  fail-closed ref guard, exact form: if [ "$REF" != "refs/heads/main" ]
 #     D3  flock concurrency lock
@@ -40,7 +49,8 @@
 #   container / frontend (DEPLOY-FLOW.md §13.7)
 #     C1  no paths:/paths-ignore: under on: (a filtered workflow creates no check-run)
 #     C2  gate tolerates `skipped` only for image-api / image-web
-#     C3  apps/web/ implies an image-web job and a quadlet on 127.0.0.1:<port>
+#     C3  apps/web/ is shipped: an image-web job, or a static-host target in
+#         apps/web/, plus a quadlet on 127.0.0.1:<port>
 #     C4  a changes job ships its path-filter test table
 #     C5  one Dockerfile name: apps/<part>/Dockerfile, never Containerfile*
 #     C6  buildx uses context: . with file: apps/<part>/Dockerfile
@@ -178,7 +188,8 @@ badid() {
 }
 
 # ------------------------------------------------- §13.7 additional rules ---
-# 9  frontend container shape: apps/web/ implies an image-web job and a quadlet
+# 9  frontend shape: apps/web/ ships via an image-web job or a static-host
+#    target, plus a quadlet
 #    publishing a loopback port
 # 10 no `paths:` / `paths-ignore:` under `on:` (a filtered workflow creates no
 #    check-run, and a deploy gate waiting for one hangs)
@@ -215,15 +226,29 @@ check_gate_skips() {
 }
 
 check_dockerfile() {
-  local d="$1" stray inapps
-  stray=$(find "$d" \( -name node_modules -o -name .git \) -prune -o \
-    -type f \( -name 'Containerfile*' -o -name '*.containerfile' \) -print 2>/dev/null | sed "s|^$d/||")
+  local d="$1" stray inapps tracked has
+  # A build cache carries generated Dockerfiles (nimble ships
+  # dist/nimble/tests/Dockerfile.debug inside .nim_runtime) and those are not the
+  # repository's own content: on 2026-11-18 that file reddened the contract job
+  # after `./task deps-install`. Scan tracked files when the directory is a work
+  # tree, and a pruned find otherwise.
+  if tracked=$(git -C "$d" ls-files 2>/dev/null) && [ -n "$tracked" ]; then
+    stray=$(printf '%s\n' "$tracked" |
+      grep -E '(^|/)(Containerfile[^/]*|[^/]*\.containerfile)$' || true)
+    inapps=$(printf '%s\n' "$tracked" |
+      grep -E '(^|/)Dockerfile' | grep -vE '^apps/[A-Za-z0-9_.-]+/Dockerfile$' || true)
+    has=$(printf '%s\n' "$tracked" | grep -E '(^|/)Dockerfile' || true)
+  else
+    stray=$(find "$d" \( -name node_modules -o -name .git -o -name .nim_runtime -o -name .cache -o -name .nimble \) -prune -o \
+      -type f \( -name 'Containerfile*' -o -name '*.containerfile' \) -print 2>/dev/null | sed "s|^$d/||")
+    inapps=$(find "$d" \( -name node_modules -o -name .git -o -name .nim_runtime -o -name .cache -o -name .nimble \) -prune -o \
+      -type f -name 'Dockerfile*' -print 2>/dev/null | sed "s|^$d/||" | grep -vE '^apps/[A-Za-z0-9_.-]+/Dockerfile$' || true)
+    has=$(find "$d" \( -name node_modules -o -name .git -o -name .nim_runtime -o -name .cache -o -name .nimble \) -prune -o \
+      -type f -name Dockerfile -print -quit 2>/dev/null)
+  fi
   [ -n "$stray" ] && badid C5 "container file naming: -> $(echo $stray | tr '\n' ' ')"
-  inapps=$(find "$d" \( -name node_modules -o -name .git \) -prune -o \
-    -type f -name 'Dockerfile*' -print 2>/dev/null | sed "s|^$d/||" | grep -vE '^apps/[A-Za-z0-9_.-]+/Dockerfile$' || true)
   [ -n "$inapps" ] && badid C5 "Dockerfile outside apps/<part>/ -> $(echo $inapps | tr '\n' ' ')"
-  if [ -z "$stray" ] && [ -z "$inapps" ] &&
-     [ -n "$(find "$d" \( -name node_modules -o -name .git \) -prune -o -type f -name Dockerfile -print -quit 2>/dev/null)" ]; then
+  if [ -z "$stray" ] && [ -z "$inapps" ] && [ -n "$has" ]; then
     ok "container file naming: apps/<part>/Dockerfile only"
   fi
 }
@@ -240,8 +265,17 @@ check_build_call() {
 check_web_container() {
   local d="$1" wf="$2" quad
   [ -d "$d/apps/web" ] || return 0
-  grep -lqE 'image-web:' $wf 2>/dev/null && ok "frontend: image-web job ada" ||
-    badid C3 "frontend: apps/web/ ada tapi tanpa job image-web"
+  # A container is one way to ship the SPA, not the only one. A static host
+  # target in apps/web/ is just as concrete, so name the file that proves it
+  # instead of failing a repo that never had a web image to begin with.
+  if grep -lqE 'image-web:' $wf 2>/dev/null; then
+    ok "frontend: image-web job ada"
+  elif [ -f "$d/apps/web/vercel.json" ] || [ -f "$d/apps/web/netlify.toml" ] ||
+       [ -f "$d/apps/web/wrangler.toml" ] || [ -f "$d/apps/web/firebase.json" ]; then
+    ok "frontend: web dikirim ke static host, bukan image"
+  else
+    badid C3 "frontend: apps/web/ ada tapi tanpa job image-web dan tanpa target static host"
+  fi
   quad=$(find "$d" \( -name node_modules -o -name .git \) -prune -o \
     -type f \( -name '*.container' -o -name '*.quadlet' \) -print 2>/dev/null)
   if [ -n "$quad" ] && grep -qE '^PublishPort=127\.0\.0\.1:[0-9]+:8080$' $quad 2>/dev/null; then
@@ -392,6 +426,143 @@ EOF
   fi
 }
 
+# ------------------------------------------------- W13/W15 (workflow file) ---
+# 13 every workflow file declares a class and a concurrency block; a gate (A) and a
+#    release (B) must not cancel an in-progress run on main, because the deploy
+#    reads that run's result
+# 15 one push = one gate graph: the same gate command may not run in two class A
+#    files of the same repo
+wf_class() { # "A" | "B" | "C" | empty
+  awk '/^# *class:[[:space:]]*[ABC][[:space:]]*$/ { gsub(/.*class:[[:space:]]*/,""); print; exit }' "$1"
+}
+
+check_workflow_class() {
+  local f="$1" cls cancel
+  cls=$(wf_class "$f")
+  if [ -z "$cls" ]; then
+    bad "$(basename "$f"): W13 tanpa deklarasi class (# class: A|B|C)"
+  else
+    ok "$(basename "$f"): W13 class $cls"
+  fi
+  if ! grep -qE '^concurrency:' "$f"; then
+    bad "$(basename "$f"): W13 tanpa blok concurrency"
+    return 0
+  fi
+  cancel=$(awk '/^concurrency:/ { inc=1; next }
+                inc && /^[^[:space:]#]/ { inc=0 }
+                inc && /cancel-in-progress:/ { sub(/.*cancel-in-progress:[[:space:]]*/,""); print; exit }' "$f")
+  case "$cls" in
+    A|B)
+      # an unconditional true cancels the run the deploy waits on
+      if [ "$cancel" = "true" ]; then
+        bad "$(basename "$f"): W13 class $cls cancel-in-progress true tanpa syarat ref (main ikut terbatal)"
+      else
+        ok "$(basename "$f"): W13 concurrency ada, cancel dibatasi ref"
+      fi ;;
+    *)
+      [ -n "$cancel" ] && ok "$(basename "$f"): W13 concurrency ada (cancel-in-progress $cancel)" ||
+        ok "$(basename "$f"): W13 concurrency ada" ;;
+  esac
+}
+
+check_preflight() { # W26
+  local f="$1" cls has
+  cls=$(wf_class "$f")
+  [ "$cls" = "A" ] || return 0
+  has=$(job_lines "$f" | awk -F'\t' '/^JOB\t/ { j=substr($0,5); if (j=="preflight") print j }')
+  if [ -n "$has" ]; then
+    ok "$(basename "$f"): W26 preflight ada"
+  else
+    warn "$(basename "$f"): W26 belum ada job preflight (merah ketahuan di akhir, bukan menit pertama)"
+  fi
+}
+
+check_cross_file_gates() {
+  local d="$1" wf pairs dup
+  wf=$(ls "$d"/.github/workflows/*.y*ml 2>/dev/null)
+  [ -n "$wf" ] || return 0
+  pairs=$(for f in $wf; do
+    [ "$(wf_class "$f")" = "A" ] || continue
+    job_lines "$f" | awk -F'\t' -v file="$(basename "$f")" -v c="$GATE_COMPOSITE" -v p="$GATE_PRIM" '
+      /^JOB\t/ { next }
+      $2 ~ /^[[:space:]]*-?[[:space:]]*run:[[:space:]]*/ && ($2 ~ c || $2 ~ p) {
+        cmd=$2; sub(/^[[:space:]]*-?[[:space:]]*run:[[:space:]]*/,"",cmd)
+        gsub(/[[:space:]]+/," ",cmd); sub(/[[:space:]]+$/,"",cmd)
+        print cmd "\t" file }'
+  done)
+  if [ -z "$pairs" ]; then
+    note "W15 tidak ada gate command di file class A"
+    return 0
+  fi
+  dup=$(printf '%s\n' "$pairs" | sort -u | awk -F'\t' '
+    { files[$1]=files[$1] " " $2; n[$1]++ }
+    END { for (c in files) if (n[c] > 1) print c " ->" files[c] }')
+  [ -n "$dup" ] && while IFS= read -r l; do
+    [ -n "$l" ] && bad "W15 gate yang sama di dua file class A: $l"
+  done <<EOF
+$dup
+EOF
+  [ -z "$dup" ] && ok "W15 satu graf gate per push (tidak ada gate ganda antar file)"
+}
+
+# ------------------------------------------------- W19/W20/W22/W24 (v1.5) ---
+# 19 a third-party action is pinned to a full commit SHA; actions/* may keep a
+#    major tag. A moving tag on a third-party action is unreviewed code inside
+#    the pipeline that builds the image the host deploys.
+# 20 a runner label carries its version: `ubuntu-latest` moves under the build.
+# 22 an uploaded artifact declares its retention; the default is 90 days.
+# 24 actionlint parses the workflow, when the binary is installed. Reported, not
+#    gated: no repo installs it yet, so a red here would be an unverified verdict.
+unpinned_third_party() { # <file> -> "owner/action@ref" per line
+  awk '
+    /^[[:space:]]*(-[[:space:]]*)?uses:[[:space:]]*/ {
+      l=$0
+      sub(/^[[:space:]]*(-[[:space:]]*)?uses:[[:space:]]*/,"",l)
+      sub(/[[:space:]]+#.*$/,"",l); sub(/[[:space:]]+$/,"",l)
+      if (l ~ /^\.\//) next
+      n=split(l, a, "@"); if (n < 2) next
+      if (a[2] ~ /^[0-9a-f]{40}$/) next
+      if (a[1] ~ /^actions\//) next
+      print a[1] "@" a[2]
+    }' "$1" | sort -u
+}
+
+check_action_pinning() { # W19 (warn), W20 (fail), W22 (warn), W24 (warn)
+  local f="$1" unpinned lax uploads retentions missing lint
+  unpinned=$(unpinned_third_party "$f")
+  if [ -n "$unpinned" ]; then
+    warn "$(basename "$f"): W19 action pihak ketiga tidak dipin ke SHA -> $(printf '%s ' $unpinned)"
+  else
+    ok "$(basename "$f"): W19 semua action pihak ketiga dipin ke SHA"
+  fi
+
+  lax=$(grep -nE 'runs-on:.*-latest[[:space:]]*$' "$f" | sed 's/^[0-9]*://; s/^[[:space:]]*//')
+  [ -n "$lax" ] && bad "$(basename "$f"): W20 runner label -latest -> $(echo $lax | tr '\n' ' ')" ||
+    ok "$(basename "$f"): W20 tidak ada runner -latest"
+
+  # counting steps, not blocks: every upload-artifact step should own a
+  # retention-days line. A file may pair them any way it likes as long as the
+  # count matches, which is enough to catch the 90-day default.
+  uploads=$(grep -cE 'uses:[[:space:]]*[^ ]*upload-artifact' "$f")
+  retentions=$(grep -cE '^[[:space:]]+retention-days:' "$f")
+  if [ "${uploads:-0}" -gt "${retentions:-0}" ]; then
+    missing=$((uploads - retentions))
+    warn "$(basename "$f"): W22 $missing dari $uploads upload-artifact tanpa retention-days (default 90 hari)"
+  elif [ "${uploads:-0}" -gt 0 ]; then
+    ok "$(basename "$f"): W22 semua upload-artifact punya retention-days"
+  else
+    note "$(basename "$f"): W22 tidak ada upload-artifact"
+  fi
+
+  if command -v actionlint >/dev/null 2>&1; then
+    lint=$(actionlint -no-color -shellcheck= "$f" 2>&1 | head -5)
+    [ -z "$lint" ] && ok "$(basename "$f"): W24 actionlint bersih" ||
+      warn "$(basename "$f"): W24 actionlint -> $(echo "$lint" | tr '\n' ' | ')"
+  else
+    note "$(basename "$f"): W24 actionlint tidak terpasang, dilewati"
+  fi
+}
+
 # -------------------------------------------------------------- per project ---
 check_repo() {
   local d="$1" name stacks wf deploy
@@ -412,7 +583,9 @@ check_repo() {
       check_timeouts "$f"; check_injection "$f"; check_paths_filter "$f"
       check_gate_skips "$f"; check_build_call "$f"
       check_cross_workflow_poll "$f"; check_duplicate_gates "$f"
+      check_workflow_class "$f"; check_action_pinning "$f"; check_preflight "$f"
     done
+    check_cross_file_gates "$d"
     check_dependabot_guard "$d"
     check_web_container "$d" "$wf"
     check_path_filter_table "$d" "$wf"

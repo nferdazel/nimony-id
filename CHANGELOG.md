@@ -13,6 +13,13 @@ back into this file.
 
 ## [Unreleased]
 
+### Changed
+
+- CI/CD v2.0: one local gate (`./task gate`, `./task gate-full`), one release mechanism
+  (`./task release`, no push without `--push`), the golden contract job renamed to `preflight`
+  and required by every expensive job.
+
+
 ## [0.1.25] - 2026-11-14
 
 Current edition: 24 chapters and Appendices A-D at pin `4ba90a7`, both editions frozen.

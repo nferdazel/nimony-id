@@ -1,3 +1,4 @@
+# class: A
 name: ci
 
 on:
@@ -12,7 +13,8 @@ permissions:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # A class A file must never cancel the run a deploy or a tag waits on.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
 
@@ -20,19 +22,24 @@ jobs:
   # drift fails this repo's own build instead of waiting for a manual audit.
   # The script is a byte-identical copy of the server repo's
   # ops/scripts/contract-check.sh; fix it there and copy it out again.
-  contract:
-    name: "Contract: golden CI/CD rules"
+  # W26: the cheap gate in front of every expensive job. It runs the same script a laptop runs,
+  # so a red run stops here in about a minute instead of at the end of the queue.
+  # `--no-hook` keeps this job free of toolchain installs: the repo-specific static checks run in
+  # the jobs that already have their dependencies, and the security job owns the secret scan.
+  preflight:
+    name: "Preflight: contract, scripts, secret scan"
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: "Contract: check this repo"
-        run: ./ops/scripts/contract-check.sh .
+      - name: "Preflight: ./task gate"
+        run: ./task gate --no-hook
 
   security:
     name: "Security (gitleaks)"
+    needs: [preflight]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -51,6 +58,7 @@ jobs:
 
   book:
     name: "Book: verify samples and render"
+    needs: [preflight]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     # Branch and pull request runs of this job carry the write token too; only
