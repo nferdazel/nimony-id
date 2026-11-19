@@ -6,7 +6,11 @@
 #   ./task verify   compile and run every sample at the pinned toolchain
 #   ./task check    verify then build (the gate before a commit)
 #   ./task version  print the book version from VERSION
-#   ./task release  bump VERSION from the commit log, commit it, and tag
+#   ./task gate     contract + shell syntax + secret scan + tool checks (<= 90 s)
+#   ./task gate-full gate + verify the samples + render the book
+#   ./task release [major|minor|patch] [--skip-check] [--push] [--current]
+#                   bump VERSION from the commit log, run gate-full, commit and tag locally;
+#                   never pushes unless --push is given
 #   ./task help
 #
 # Plain POSIX shell, same pattern as nim-id: no extra tooling.
@@ -28,8 +32,10 @@ usage: ./task <command>
   verify  compile and run every sample at the pinned toolchain
   check   verify then build
   version print the book version (from VERSION)
-  release bump the version from commit messages, then commit and tag
-          (--major / --minor / --patch, --skip-check)
+  gate     golden contract + shell syntax + secret scan + tool checks (<= 90 s)
+  gate-full gate + verify the samples + render the book (needs Quarto + Nimony)
+  release  bump VERSION from the commit log, run gate-full, commit and tag locally
+           (--major / --minor / --patch, --skip-check, --push, --current)
   help    show this message
 
 environment:
