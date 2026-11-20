@@ -95,23 +95,35 @@ log "==> symlink web -> $BARU"
 http_code() {
   curl -sS -o /dev/null -w '%{http_code}' --max-time 15 "$1" 2>/dev/null || echo "000"
 }
+http_size() {
+  curl -sS -o /dev/null -w '%{size_download}' --max-time 15 "$1" 2>/dev/null || echo "0"
+}
 
+# Halaman 404 diuji sebagai perilaku, bukan hanya sebagai berkas: Caddy me-rewrite
+# setiap 404 ke /404.html, jadi jalur yang tidak ada harus menjawab 404 dengan isi.
+# Sebelum 2026-11-20 build tidak pernah menghasilkan berkas itu dan pengunjung
+# menerima 404 kosong tanpa satu pun pesan.
 BASE="${HEALTH_URL%/}"
+PROBE_404="$BASE/halaman-yang-tidak-ada"
 sehat=0
 for i in 1 2 3 4 5; do
   kode_akar=$(http_code "$HEALTH_URL")
   kode_en=$(http_code "$BASE/en/")
   kode_pdf_id=$(http_code "$BASE/Nimony-A-Pinned-Guide.pdf")
   kode_pdf_en=$(http_code "$BASE/en/Nimony-A-Pinned-Guide.pdf")
+  kode_404=$(http_code "$PROBE_404")
+  ukuran_404=$(http_size "$PROBE_404")
   if [ "$kode_akar" = "200" ] && [ "$kode_en" = "200" ] \
       && [ "$kode_pdf_id" = "200" ] && [ "$kode_pdf_en" = "200" ] \
+      && [ "$kode_404" = "404" ] && [ "${ukuran_404:-0}" -gt 0 ] \
+      && [ -s "$BARU/404.html" ] \
       && grep -q "Nimony: A Pinned Guide" "$BARU/index.html" \
       && grep -q "Nimony adalah" "$BARU/index.html" \
       && grep -q "Nimony is" "$BARU/en/index.html"; then
     sehat=1
     break
   fi
-  log "health check percobaan $i gagal (HTTP / $kode_akar, /en/ $kode_en, pdf-id $kode_pdf_id, pdf-en $kode_pdf_en), ulangi 2 detik"
+  log "health check percobaan $i gagal (HTTP / $kode_akar, /en/ $kode_en, pdf-id $kode_pdf_id, pdf-en $kode_pdf_en, 404 $kode_404 ${ukuran_404:-0}B), ulangi 2 detik"
   sleep 2
 done
 

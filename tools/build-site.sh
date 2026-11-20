@@ -128,6 +128,12 @@ mkdir -p "$root/public/en"
 cp -R "$root/.build/id/_book/." "$root/public/"
 cp -R "$root/.build/en/_book/." "$root/public/en/"
 
+# Halaman 404 untuk Caddy `handle_errors`. Bukan milik Quarto: tiap edisi dirender
+# di dalam .build/, jadi tidak ada yang menyalinnya ke akar situs. Tanpa berkas ini
+# handle_errors me-rewrite ke /404.html yang tidak ada dan pengunjung menerima 404
+# tanpa isi. Satu halaman untuk kedua edisi, teksnya dua bahasa.
+cp "$root/assets/404.html" "$root/public/404.html"
+
 for pdf in "$root/public/Nimony-A-Pinned-Guide.pdf" \
            "$root/public/en/Nimony-A-Pinned-Guide.pdf"; do
   [ -f "$pdf" ] || die "PDF tidak ada: ${pdf#"$root/"}"
@@ -135,6 +141,7 @@ done
 
 [ -f "$root/public/index.html" ] || die "render Indonesia tidak menghasilkan index.html"
 [ -f "$root/public/en/index.html" ] || die "render English tidak menghasilkan en/index.html"
+[ -f "$root/public/404.html" ] || die "assets/404.html tidak terpasang di public/"
 
 # Cache busting: nama berkas CSS tetap (Quarto tidak memberi hash), sedangkan
 # Cloudflare menyimpan aset berhari-hari. Sematkan versi di URL supaya rilis baru
@@ -149,12 +156,13 @@ find "$root/public" -name '*.html' -exec perl -pi -e \
 grep -q 'lang="id"' "$root/public/index.html" || die "akar situs bukan edisi Indonesia"
 grep -q 'lang="en"' "$root/public/en/index.html" || die "public/en bukan edisi English"
 
-# Tiap halaman membawa CSS berversi dan skip-link. Satu halaman yang lolos akan
-# mematahkan paritas tanpa kelihatan di beranda.
-if find "$root/public" -name '*.html' ! -exec grep -q "assets/ku.css?v=${versi}" {} \; -print | grep -q .; then
+# Tiap halaman buku membawa CSS berversi dan skip-link. Satu halaman yang lolos akan
+# mematahkan paritas tanpa kelihatan di beranda. `404.html` sengaja dikecualikan: ia
+# halaman berdiri sendiri dengan CSS inline, tidak memakai ku.css maupun sidebar.
+if find "$root/public" -name '*.html' ! -name '404.html' ! -exec grep -q "assets/ku.css?v=${versi}" {} \; -print | grep -q .; then
   die "ada halaman tanpa assets/ku.css?v=${versi}"
 fi
-if find "$root/public" -name '*.html' ! -exec grep -q 'class="quarto-skip-link"' {} \; -print | grep -q .; then
+if find "$root/public" -name '*.html' ! -name '404.html' ! -exec grep -q 'class="quarto-skip-link"' {} \; -print | grep -q .; then
   die "ada halaman tanpa skip link"
 fi
 
