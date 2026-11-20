@@ -224,3 +224,26 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
         run: bash tools/publish-release.sh "$TAG" "$GITHUB_SHA"
+
+  # U4 (docs/CICD_SIMPLIFY_PLAN.md): one check named `Gate`, the same shape the other
+  # repositories carry, so branch protection has a single name to require instead of
+  # three. `skipped` counts as failure; the results arrive through env, never inline.
+  gate:
+    name: "Gate"
+    if: always()
+    needs: [preflight, security, book]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      R_PREFLIGHT: ${{ needs.preflight.result }}
+      R_SECURITY: ${{ needs.security.result }}
+      R_BOOK: ${{ needs.book.result }}
+    steps:
+      - name: "Gate: require every job"
+        shell: bash
+        run: |
+          fail=0
+          for r in "$R_PREFLIGHT" "$R_SECURITY" "$R_BOOK"; do
+            [ "$r" = "success" ] || { echo "required job: $r"; fail=1; }
+          done
+          exit "$fail"
