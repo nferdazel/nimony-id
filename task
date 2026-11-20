@@ -89,10 +89,12 @@ case "${1:-help}" in
   # Standard CI/CD v2.0: one gate and one release implementation, shared byte-identically with
   # every other repo. See task.d/gate.sh and task.d/release.sh.
   gate)
-    sh "$ROOT/task.d/gate.sh" gate
+    shift
+    sh "$ROOT/task.d/gate.sh" gate "$@"
     ;;
   gate-full)
-    sh "$ROOT/task.d/gate.sh" gate-full
+    shift
+    sh "$ROOT/task.d/gate.sh" gate-full "$@"
     ;;
   release)
     if [ "$#" -gt 0 ]; then shift; fi
