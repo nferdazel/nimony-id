@@ -74,7 +74,7 @@ jobs:
           persist-credentials: false
 
       - name: "Install Nim 2.4.0 for the toolchain build"
-        uses: jiro4989/setup-nim-action@efd7b4f2cab6441597916438c4f03425167d453b # v2
+        uses: jiro4989/setup-nim-action@08957181dc5baf5f8446497598f798020a03e66a # v2
         with:
           nim-version: '2.4.0'
 
