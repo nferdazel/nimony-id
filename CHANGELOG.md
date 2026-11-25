@@ -13,6 +13,8 @@ back into this file.
 
 ## [Unreleased]
 
+## [0.1.28] - 2026-11-25
+
 ### Fixed
 
 - Chapter 10 (both editions): one sentence after the runtime index example names the three shapes where
