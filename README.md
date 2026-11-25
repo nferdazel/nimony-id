@@ -19,7 +19,7 @@ documented here on purpose: a newer compiler is a different book.
 
 ## Status
 
-Version `VERSION` at the root, currently 0.1.25, tagged `vX.Y.Z`. Chapters 1 to 24 and Appendices A to
+Version `VERSION` at the root, tagged `vX.Y.Z`. Chapters 1 to 24 and Appendices A to
 D are in the book at pin `4ba90a7`, each with `en.md` and `id.md` and each `frozen`. Nothing is
 drafting and nothing is planned.
 
