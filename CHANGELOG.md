@@ -13,6 +13,26 @@ back into this file.
 
 ## [Unreleased]
 
+## [0.1.27] - 2026-11-25
+
+### Fixed
+
+- `ERRATA.md`: the Chapter 11 (objects) watch row lost a cell because the source signature
+  `[T: tuple|object]` carried an unescaped pipe; it renders as one four-column row again.
+- `README.md`: the status paragraph no longer hardcodes a version number, so it cannot fall a release
+  behind `VERSION`.
+
+### Added
+
+- `ERRATA.md`: a watch row for `nim-lang/nimony#3001` (index checks dropped across `try` handlers,
+  hook-running assignments and `sink` parameters), until now recorded only in
+  `reviews/2026-11-16-corpus-at-head.md`. Chapter 10's runtime index claim is unchanged and the ruling
+  sits with the Head of Engineering.
+
+### Changed
+
+- CI: `jiro4989/setup-nim-action` bumped to 2.5.1 (`08957181`), pinned by full commit SHA as before.
+
 ## [0.1.26] - 2026-11-20
 
 ### Changed
