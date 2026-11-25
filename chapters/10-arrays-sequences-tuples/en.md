@@ -158,6 +158,10 @@ index out of bounds: 5 notin 0..2
 
 Exit code 1, no value printed.
 
+Three shapes at this pin escape the check — a read in an `except` handler after the body rewrote the index,
+a store that runs a side-effecting hook, and a call that passes a value to a `sink` parameter — and
+`ERRATA.md` records them under `nim-lang/nimony#3001`.
+
 Any ordinal type can index an array (`doc/language.md:351`), an enum included:
 
 ```

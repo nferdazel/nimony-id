@@ -13,6 +13,26 @@ back into this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Chapter 10 (both editions): one sentence after the runtime index example names the three shapes where
+  `4ba90a7` drops the bounds check — a read in an `except` handler after the body rewrote the index, a store
+  that runs a side-effecting hook, and a call passing a value to a `sink` parameter — so the paragraph no longer
+  implies the check always holds. Chapter 15 is unchanged: it makes no bounds claim, and `IndexError` appears
+  there only in the `ErrorCode` member list.
+
+### Changed
+
+- `ERRATA.md`: the Chapters 10 and 15 watch row becomes an open erratum dated 2026-11-25 on `0.6.3` / `4ba90a7`.
+  The ruling records that the `try` body is checked and the `except` handler is not; the earlier plan to narrow
+  Chapter 10 to "checked outside a `try` body" is withdrawn as wrong.
+- Appendix C (both editions): the errata index lists two open rows.
+
+### Added
+
+- `reviews/2026-11-25-3001-index-check.md`: the probe set behind the ruling — the two checked controls and the
+  three escaping shapes, run by Engineering at the pin and partly re-run by the editor.
+
 ## [0.1.27] - 2026-11-25
 
 ### Fixed

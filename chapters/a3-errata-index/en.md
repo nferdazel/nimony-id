@@ -29,9 +29,10 @@ wording of this one rests on a single commit.
 
 `ERRATA.md` in the book's repository. It has three parts:
 
-- **Open errata** — breaks found after a chapter froze. One row as of this edition: Chapter 23 said a statement
+- **Open errata** — breaks found after a chapter froze. Two rows as of this edition: Chapter 23 said a statement
   `{.assert: cond.}` is accepted, when at the pin the claim must also be provable, and the sentence was corrected in
-  `v0.1.19`.
+  `v0.1.19`; Chapter 10 said a variable index out of range is always caught at runtime, when at the pin three shapes
+  escape the check (`nim-lang/nimony#3001`), and one sentence was added in `v0.1.28`.
 - **Watch list** — issues known at the pin before any chapter shipped. These are constraints on how a chapter may
   be written, not corrections: a documented behaviour the pin does not have, a message that names the wrong reason,
   a check that does not exist. Each row names the evidence, the sentence the book is therefore allowed to print,

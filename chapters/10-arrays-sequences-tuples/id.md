@@ -160,6 +160,10 @@ index out of bounds: 5 notin 0..2
 
 Exit code 1, tidak ada nilai yang dicetak.
 
+Di pin ini tiga bentuk lolos dari pemeriksaan itu: bacaan di handler `except` setelah badan `try` menulis
+ulang indeksnya, penyimpanan yang menjalankan hook yang berefek samping, dan pemanggilan yang mengirim
+nilai ke parameter `sink`. Ketiganya dicatat di `ERRATA.md` di bawah `nim-lang/nimony#3001`.
+
 Tipe ordinal apa pun boleh mengindeks array (`doc/language.md:351`), termasuk enum:
 
 ```
