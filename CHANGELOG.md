@@ -13,6 +13,8 @@ back into this file.
 
 ## [Unreleased]
 
+## [0.1.29] - 2026-11-27
+
 ### Changed
 
 - Indonesian edition, body prose of the 24 chapters and appendices A–D: one vocabulary pass over the frozen text,
