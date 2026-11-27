@@ -13,6 +13,25 @@ back into this file.
 
 ## [Unreleased]
 
+### Changed
+
+- Indonesian edition, body prose of the 24 chapters and appendices A–D: one vocabulary pass over the frozen text,
+  with every `en.md`, code block, sample and claim untouched. One narrator (`ia` over `dia`), `compiler` over
+  `kompiler`, `berkas` over `file` in prose (`file` survives in code spans, paths and quoted diagnostics), `modul`
+  over `module` in prose, `expression` over `ekspresi` so it matches `statement`, `panggilan` over `pemanggilan`,
+  `hanya`, `mudah` and `buatan` over their colloquial forms, the book's hyphen form for an English stem under an
+  Indonesian prefix (`di-pin`, `ter-compile`, `meng-compile`), 16 calque lines moved off `datang`, and the three
+  headings that carried no translated term now name it. Each pair was consistent inside a chapter and split across
+  chapters, so the pass moved wording and no technical statement.
+- `GLOSSARY.md`: eight vocabulary entries fix those choices, plus the hyphen rule — an English term with an
+  Indonesian suffix keeps its hyphen (`compiler-nya`, `error-nya`), an Indonesian stem closes up (`tipenya`,
+  `modulnya`, `babnya`).
+
+### Added
+
+- `ERRATA.md`: one editorial-corrections row for the Indonesian pass, dated 2026-11-27, which also records the
+  id-only process ruling so a later reader can tell a language correction from an erratum.
+
 ## [0.1.28] - 2026-11-25
 
 ### Fixed
