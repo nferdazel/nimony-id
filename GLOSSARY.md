@@ -241,7 +241,9 @@ with. "Replacement" is what the book uses instead, not a like-for-like swap.
 
 The Indonesian edition (`id.md`) keeps a term in English when the reader meets the same word in a path, a
 command or a file name. These are fixed for every chapter; a new term is added here in the same change that
-introduces it.
+introduces it. An English term that takes an Indonesian suffix keeps a hyphen (`compiler-nya`, `error-nya`);
+an Indonesian word takes it closed up (`tipenya`, `modulnya`, `babnya`). An Indonesian prefix on an English
+stem keeps its hyphen too (`di-import`, `meng-compile`, `meng-include`).
 
 | English | Indonesian edition | Fixed where |
 | --- | --- | --- |
@@ -255,3 +257,12 @@ introduces it.
 | Nim 2 delta (section) | `## Nim 2 delta` | heading, same as `en.md` |
 | Chapter checklist (section) | `## Chapter checklist` | source-only; stripped by `tools/strip-status.py`, do not rename |
 | the reader | kamu | one voice; no *lo*, *lu*, *kau*, *Anda*, *kalian*, and no first-person narrator |
+| the narrator (a value, a routine, the compiler) | ia | third person without exception; never *dia*. Owner's call, 2026-11-27 |
+| compiler | compiler | English, as the term table above spells it; never *kompiler* |
+| file (the noun) | berkas | prose; `file` stays only inside a code span, a path or a quoted diagnostic (`file not found`). The verb *di-file* (to file an issue) keeps its form |
+| module (the unit of source) | modul | prose; `module` stays in code spans and in the glossary-defined compounds `module-of-origin`, `module plugin`, and the printed `module init` |
+| expression | expression | English, matching `statement`; never *ekspresi*. Headings that name the term keep it English |
+| statement | statement | English; never *pernyataan* |
+| call site | call site | English; never *titik panggilan* |
+| script (the noun, a shell script) | skrip | prose; `script` stays in a code span or a file name |
+| an English term with `-nya`, `-mu`, `-ku` | hyphen kept: compiler-nya, error-nya, `proc`-nya | prose; an Indonesian stem closes up (`tipenya`, `modulnya`, `babnya`), and an Indonesian prefix on an English stem keeps its hyphen (`di-import`, `meng-compile`, `meng-include`) |
