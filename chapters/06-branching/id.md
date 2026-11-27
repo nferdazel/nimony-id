@@ -17,12 +17,12 @@ glossary_added: ["if expression", "case expression", "when", "exhaustive case", 
 
 ## Untuk apa bab ini
 
-Di banyak bahasa, cabang adalah statement: dia menjalankan kode lalu selesai. Di Nimony keyword yang sama juga
+Di banyak bahasa, cabang adalah statement: ia menjalankan kode lalu selesai. Di Nimony keyword yang sama juga
 menghasilkan **nilai**, jadi `if` dan `case` bisa berdiri di kanan `let`. Itu menghapus satu kelas kode
 "deklarasikan dulu, isi di tiap cabang".
 
 Ada dua aturan yang ikut fitur ini, dan keduanya ditegakkan compiler, bukan konvensi: `if` expression wajib
-punya `else`, dan `case` atas tipe ordinal wajib menutup setiap nilai yang bisa dia tampung.
+punya `else`, dan `case` atas tipe ordinal wajib menutup setiap nilai yang bisa ia tampung.
 
 Bab ini juga membahas dua cara keluar dari loop lebih awal, karena default-nya berubah dari Nim 2: `break`
 tanpa label hanya keluar dari loop terdalam, jadi keluar dari dua loop bersarang butuh `block` berlabel.
@@ -47,7 +47,7 @@ satu cabang tidak terlihat di cabang lain.
 
 ## `if` sebagai expression
 
-Taruh konstruksi yang sama di tempat yang mengharapkan nilai, dan dia mengembalikan nilai cabang yang berjalan
+Taruh konstruksi yang sama di tempat yang mengharapkan nilai, dan ia mengembalikan nilai cabang yang berjalan
 (`doc/language.md:2069-2081`):
 
 ```
@@ -57,10 +57,10 @@ echo label        # pass
 ```
 
 Di bentuk ini `else` tidak opsional. Expression harus menghasilkan nilai di setiap jalur, dan compiler
-menegakkannya lewat definite assignment, bukan lewat sintaks — errornya datang dari checker yang melacak apakah
+menegakkannya lewat definite assignment, bukan lewat sintaks — error-nya datang dari checker yang melacak apakah
 sebuah variabel sudah ditulis sebelum dibaca (`src/nimony/contracts_fir.nim:4165`).
 
-Diagnostiknya layak dilihat sekali, karena dia sama sekali tidak menyebut `else`:
+Diagnostiknya layak dilihat sekali, karena ia sama sekali tidak menyebut `else`:
 
 ```
 let y = if false: 9
@@ -70,10 +70,10 @@ let y = if false: 9
 Error: cannot prove that `x has been initialized
 ```
 
-Nama `x` di pesan itu bukan punyamu; sumber di atas tidak mendeklarasikan `x`. Dia tetap mencetak `x` apa pun
+Nama `x` di pesan itu bukan punyamu; sumber di atas tidak mendeklarasikan `x`. Ia tetap mencetak `x` apa pun
 nama binding-nya: `let z = if false: 9` memberi baris yang sama, begitu juga kode yang sama di dalam proc. `x`
 adalah temporary yang dibaca expression itu. Arti pesannya: nilai `y` tidak terbukti di jalur ketika kondisinya
-salah. Tambahkan `else` dan dia compile:
+salah. Tambahkan `else` dan ia compile:
 
 ```
 let y = if false: 9 else: 0
@@ -108,10 +108,10 @@ Cabang `of` menerima daftar nilai yang dipisah koma, dan entri rentang menutup s
 cabang `of` harus constant expression — compiler memeriksa exhaustiveness, dan pemeriksaan itu perlu tahu
 himpunannya lebih dulu.
 
-Cabang `else` adalah fallback. Untuk selector ordinal dia opsional **hanya** kalau cabang-cabangnya sudah
+Cabang `else` adalah fallback. Untuk selector ordinal ia opsional **hanya** kalau cabang-cabangnya sudah
 menutup setiap nilai yang bisa ditampung tipe itu (`doc/language.md:1800-1804`).
 
-## Exhaustiveness
+## Kelengkapan cabang
 
 Tutup semua nilai dan `else` tidak dibutuhkan:
 
@@ -136,7 +136,7 @@ of green: "g"
 Error: not all cases are covered; missing: {blue}
 ```
 
-Pesan itu hadiah: tambahkan nilai yang dia sebut dan bab soal fall-through tak sengaja tidak pernah terjadi.
+Pesan itu hadiah: tambahkan nilai yang ia sebut dan bab soal fall-through tak sengaja tidak pernah terjadi.
 Ketika selector-nya bukan enum — `int`, `char` — compiler tidak bisa mendaftar apa yang absen, jadi pesannya
 telanjang (`src/nimony/sem.nim:2748`):
 
@@ -180,7 +180,7 @@ ketika cabangnya memang ada untuk menjalankan kode.
 
 ## Tidak ada `elif` di dalam `case`
 
-Nim 2 mengizinkan `elif` setelah cabang `of` sebuah `case`. Nimony tidak, dan ini perlu diketahui sebelum kamu
+Nim 2 mengizinkan `elif` setelah cabang `of` di dalam `case`. Nimony tidak, dan ini perlu diketahui sebelum kamu
 menyalin contoh dari dokumentasi lama:
 
 ```
@@ -197,7 +197,7 @@ Error: this branch in a `case` is not supported; use `else:` with a nested `if`
 ```
 
 Baris pertama efek samping: `elif` yang ditolak tidak dihitung sebagai cakupan, jadi `case` yang sama juga
-terlihat tidak exhaustive. Baris kedua dan ketiga adalah aturan yang sama menyala dua kali, pada `elif` dan pada
+terlihat tidak exhaustive. Baris kedua dan ketiga adalah aturan yang sama berlaku dua kali, pada `elif` dan pada
 `else` yang mengikutinya. Selector string hanya menghasilkan dua baris itu. Obatnya yang disebut pesannya —
 `if` bersarang biasa di dalam `else`, yang membersihkan ketiganya:
 
@@ -267,7 +267,7 @@ else:
   echo "not 64-bit"
 ```
 
-Cabang yang tidak diambil tidak diperiksa secara semantik sama sekali, jadi dia boleh menyebut nama dan tipe yang
+Cabang yang tidak diambil tidak diperiksa secara semantik sama sekali, jadi ia boleh menyebut nama dan tipe yang
 tidak ada:
 
 ```
@@ -276,7 +276,7 @@ when false:
 echo "compiled"    # compiled
 ```
 
-Begitulah program membawa kode khusus platform untuk platform yang tidak sedang dia bangun. Kondisinya sendiri
+Begitulah program membawa kode khusus platform untuk platform yang tidak sedang ia bangun. Kondisinya sendiri
 selalu diperiksa; kondisi yang tidak konstan ditolak, bukan ditunda:
 
 ```
@@ -346,7 +346,7 @@ Bentuk itu menjaga variabel bantu tetap di luar scope sekitarnya: `sum` hanya ad
 ## Label: `break` default-nya keluar dari satu loop
 
 Ini bagian yang menggigit kode Nim 2. `break` tanpa label hanya keluar dari loop terdalam
-(`doc/language.md:1975-1990`), dan dia tidak pernah meninggalkan `block` (`doc/language.md:1963`;
+(`doc/language.md:1975-1990`), dan ia tidak pernah meninggalkan `block` (`doc/language.md:1963`;
 `doc/differences.md:23`):
 
 ```

@@ -21,11 +21,11 @@ Bab 8 memberi satu routine satu nama. Di sini satu nama membawa beberapa routine
 dimaksud sebuah panggilan. Itu mekanisme di balik sebagian besar yang tampak seperti perilaku bawaan di buku ini:
 `$` pada angka dan `$` pada tuple adalah dua deklarasi dengan satu nama
 (`lib/std/system/formatint.nim:104`, `lib/std/system/dollars.nim:41`). Tidak semua yang tampak overload memang
-overload: `echo` cuma satu deklarasi, `template echo*() {.varargs.}` (`lib/std/syncio.nim:465`), yang menerima
+overload: `echo` hanya satu deklarasi, `template echo*() {.varargs.}` (`lib/std/syncio.nim:465`), yang menerima
 argumen berapa pun jumlahnya.
 
 Bab ini punya dua paruh. Pertama, bagaimana sebuah nama dengan beberapa kandidat diselesaikan, termasuk
-kasus ketika resolusinya gagal dan mengatakannya. Kedua, sintaks pemanggilan yang menaruh argumen pertama di
+kasus ketika resolusinya gagal dan mengatakannya. Kedua, sintaks panggilan yang menaruh argumen pertama di
 depan nama — `x.f(y)` untuk `f(x, y)` — yang bukan fitur bahasa kedua, melainkan panggilan yang sama dengan
 penulisan lain.
 
@@ -69,7 +69,7 @@ echo twice(4, 1)
 ```
 
 Tipe hasil bukan bagian dari daftar parameter, dan tidak membedakan dua kandidat. Menulis daftar parameter yang
-sama dua kali dengan hasil berbeda diterima di deklarasi dan ditolak di pemanggilan:
+sama dua kali dengan hasil berbeda diterima di deklarasi dan ditolak di panggilan:
 
 ```
 proc g(x: int): int = 1
@@ -90,7 +90,7 @@ itu bukan bug di kode kamu, itu cara tipe argumen dirender.
 
 ## Bagaimana compiler memilih
 
-`doc/language.md:1318` menggambarkan pemanggilan sebagai *symbol choice*: nama bisa merujuk ke lebih dari satu
+`doc/language.md:1318` menggambarkan panggilan sebagai *symbol choice*: nama bisa merujuk ke lebih dari satu
 kandidat, dan resolusi overload mengubahnya jadi satu simbol. Pekerjaannya dilakukan dalam percobaan berurutan,
 dan percobaan pertama yang memisahkan dua kandidat yang memutuskan di antaranya. Percobaan pertama adalah
 pencocokan kategori (`doc/language.md:1328-1347`), yang memeringkat tiap argumen terhadap tiap parameter formal
@@ -141,10 +141,10 @@ proc (x: int32): string (declared in v4.nim(2, 1))
 proc (x: float64): string (declared in v4.nim(3, 1))
 ```
 
-Jadi aturan literal cuma membawa kamu sejauh itu. Lewat `int`, sebutkan tipe yang kamu maksud dengan konversi atau
-variabel bertipe di call site; jangan harap literalnya melebar sendiri.
+Jadi aturan literal hanya membawa kamu sejauh itu. Lewat `int`, sebutkan tipe yang kamu maksud dengan konversi atau
+variabel bertipe di call site; jangan harap literal-nya melebar sendiri.
 
-Satu jebakan di pin ini berhak dapat paragrafnya sendiri. `int` adalah `int64` di sini, bukan lebar tersendiri:
+Satu jebakan di pin ini perlu paragraf sendiri. `int` adalah `int64` di sini, bukan lebar tersendiri:
 
 ```
 func show(x: int64): string = "int64"
@@ -164,7 +164,7 @@ Jadi di target 64-bit `int` dan `int64` adalah tipe yang sama dengan dua penulis
 `src/nimony/builtintypes.nim:160-163` membangun `int` sebagai `(i configBits)`, `:197-199` membangun `int64`
 sebagai `(i 64)`, dan `src/nimony/semmain.nim:652` memberi bit target. Di target 32-bit pasangan itu akan
 berbeda; setiap target yang dibangun buku ini 64-bit. Himpunan dengan satu kandidat `int` dan satu kandidat
-`int64` karena itu himpunan dengan dua kandidat identik: ia tercompile, dan setiap panggilan ke sana ambigu.
+`int64` karena itu himpunan dengan dua kandidat identik: ia ter-compile, dan setiap panggilan ke sana ambigu.
 Kalau kamu port kode Nim 2 yang meng-overload dua lebar itu, gabungkan pasangannya jadi satu routine.
 
 Kalau dua kandidat datang dari modul berbeda, yang dideklarasikan di modul pemanggil yang dipilih. Panduan
@@ -197,9 +197,9 @@ echo 5.twice(1)
 `5.twice(1)` menunjukkan seluruh aturannya sekaligus: receiver jadi argumen pertama, sisanya menyusul
 berurutan, dan himpunan overload-nya sama dengan yang dipakai panggilan biasa.
 
-Ia juga jalan keluar dari batas satu argumen pada bentuk command yang dibahas di Bab 8. Di posisi ekspresi
+Ia juga jalan keluar dari batas satu argumen pada bentuk command yang dibahas di Bab 8. Di posisi expression
 bentuk itu menerima tepat satu argumen dan parser berhenti di koma; di posisi statement ia memang menerima dua
-dan terparse sebagai satu panggilan, tapi hasilnya tidak ada tempatnya, jadi `add 1, 2` gagal dengan
+dan ter-parse sebagai satu panggilan, tapi hasilnya tidak ada tempatnya, jadi `add 1, 2` gagal dengan
 `expression of type int64 must be discarded`. `1.add(2)` satu panggilan di posisi mana pun.
 
 Receiver harus parameter pertama, dan compiler mengatakannya dalam istilah tipe:
@@ -220,7 +220,7 @@ pertama. Receiver tidak dicocokkan ke semacam tipe receiver; ia dicocokkan ke pa
 lain.
 
 Instansiasi generic eksplisit tidak selamat dari penulisan ulang itu. Panduan memperingatkan bahwa `p[T](x)`
-tidak bisa ditulis `x.p[T]`, karena itu terparse sebagai `(x.p)[T]` (`doc/language.md:2855-2866`). Kedua paruh
+tidak bisa ditulis `x.p[T]`, karena itu ter-parse sebagai `(x.p)[T]` (`doc/language.md:2855-2866`). Kedua paruh
 peringatan itu kelihatan di pin:
 
 ```
@@ -245,7 +245,7 @@ echo 3.count[:int](4)
 
 `[: ]` tidak punya syntax tree sendiri: parser menulis ulang jadi `count[int](3, 4)` sebelum apa pun
 melihatnya (`doc/language.md:2862-2866`). Diprobe, bukan dikutip: bentuk panggilan telanjang `count[:int](3, 4)`
-tidak terparse di pin ini — gagal dengan `invalid indentation` di bracket — jadi escape `[: ]` hanya bisa
+tidak ter-parse di pin ini — gagal dengan `invalid indentation` di bracket — jadi escape `[: ]` hanya bisa
 dipakai di sisi receiver. Tulis `count[int](3, 4)` kalau kamu tidak memakai receiver.
 
 ## Nim 2 delta: `var T` bukan lagi dimensi overloading
@@ -286,7 +286,7 @@ func (b: Box, i: int64): int64 (declared in r5.nim(5, 1))
 **Hasil `var` butuh jalur yang boleh ia pinjam.** Accessor sederhana di delta itu ada, tapi lintasan borrow
 harus melihat ada tempat untuk hasilnya menunjuk. Field inline milik parameter by-value tidak memberi itu: field
 itu duduk di dalam salinan pemanggil, jadi tidak ada jalur kembali. Menulis baris panduan itu dengan parameter
-biasa ditolak di definisi, bukan di pemanggilan:
+biasa ditolak di definisi, bukan di panggilan:
 
 ```
 func `[]`(b: Box, i: int): var int = b.v
@@ -300,9 +300,9 @@ Pemeriksaannya `trReturn` di `src/nimony/derefs.nim:466-468`, yang memanggil `va
 (`src/nimony/derefs.nim:258-314`).
 
 Ini lintasan borrow, bukan aturan resolusi. Overload yang dihapus menentukan routine mana yang dipilih sebuah
-panggilan; `validBorrowsFrom` membatasi ke mana hasil `var` boleh menunjuk. Dengan `b: var Box` accessornya
+panggilan; `validBorrowsFrom` membatasi ke mana hasil `var` boleh menunjuk. Dengan `b: var Box` accessor-nya
 terbangun dan pembacaan lewat situ bekerja. Parameter `lent` juga diterima, dan indireksi juga — field `seq`
-yang dibaca lewat parameter biasa tercompile, karena jalurnya lewat penyimpanan heap alih-alih field inline:
+yang dibaca lewat parameter biasa ter-compile, karena jalurnya lewat penyimpanan heap alih-alih field inline:
 
 ```
 type Container = object
@@ -329,7 +329,7 @@ b[0] = 9
 
 Assignment meminta `[]=`, dan tanpa `[]=` milikmu sendiri ia hanya bisa mencoba yang bawaan; header
 `Type mismatch at [position]` datang dari `src/nimony/semcall.nim:1436`, dan kandidat bawaan pertama adalah
-`lib/std/system.nim:32`. Deklarasikan setter-nya dan baris yang sama tercompile:
+`lib/std/system.nim:32`. Deklarasikan setter-nya dan baris yang sama ter-compile:
 
 ```
 func `[]`(b: Box, i: int): int = b.v
@@ -351,9 +351,9 @@ Apa yang Nim 2 lakukan → apa yang Nimony lakukan → apa yang rusak kalau kamu
 - **Nimony:** satu accessor `[]`, yang boleh mengembalikan `var` kalau ia punya jalur untuk dipinjam —
   parameter `var`, `out` atau `lent`, atau indireksi seperti field `seq`; penulisan lewat `[]=` terpisah yang
   kamu deklarasikan.
-- **Yang rusak:** container hasil port yang meng-overload `var T` tercompile sebagai dua kandidat yang tampak
+- **Yang rusak:** container hasil port yang meng-overload `var T` ter-compile sebagai dua kandidat yang tampak
   identik dan setiap panggilannya ambigu; accessor hasil port yang mengembalikan `var` dari field inline milik
-  parameter by-value berhenti tercompile dengan `cannot borrow from b.v`; dan tipe hasil port yang mengandalkan
+  parameter by-value berhenti ter-compile dengan `cannot borrow from b.v`; dan tipe hasil port yang mengandalkan
   write-through implisit mulai gagal di assignment dengan daftar kandidat bawaan.
 
 Ini bab yang deltanya bukan catatan kaki. Baca `doc/differences.md:31-43` sebelum mem-port tipe container
@@ -362,7 +362,7 @@ apa pun.
 ## Samples
 
 `samples/09-overloading/overloading.nim` — himpunan overload, kedua bentuk panggilan, dan index setter, di
-commit yang dipin:
+commit yang di-pin:
 
 ```
 $ nimony c -r samples/09-overloading/overloading.nim

@@ -17,23 +17,23 @@ glossary_added: []
 
 ## Untuk apa lampiran ini
 
-Buku pemrograman adalah klaim tentang sebuah kompiler. Buku ini membuat klaim itu dalam satu bentuk saja: setiap
+Buku pemrograman adalah klaim tentang sebuah compiler. Buku ini membuat klaim itu dalam satu bentuk saja: setiap
 sample di `samples/` dikompilasi dan dijalankan oleh satu skrip terhadap satu toolchain, dan sebuah bab tidak beku
-sebelum run itu hijau. Lampiran ini adalah catatan arti "hijau", perintahnya, dan bentuk outputnya di pin — hal
+sebelum run itu hijau. Lampiran ini adalah catatan arti "hijau", perintahnya, dan bentuk output-nya di pin — hal
 yang sama yang dibutuhkan pembaca untuk memeriksa buku alih-alih memercayainya.
 
 ## Pin
 
 | Item | Nilai |
 | --- | --- |
-| Kompiler | `nimony` 0.6.3 |
+| Compiler | `nimony` 0.6.3 |
 | Commit | `4ba90a781b0b22d0821efaa153c129c37cef6143` (2026-11-12) |
 | Path toolchain | `~/.local/opt/nimony/4ba90a7`, tetap; `$NIMONY_HOME` menimpanya dan diperiksa terhadap pin yang sama |
-| Kompiler host | Nim 2.4.0, tarball resmi, sha256 `93a1e638289077b972b684e6e71cb11b2029602ccac4f8fd8dfa70f193fac7df` |
+| Compiler host | Nim 2.4.0, tarball resmi, sha256 `93a1e638289077b972b684e6e71cb11b2029602ccac4f8fd8dfa70f193fac7df` |
 | Backend yang dipakai | Hanya `nimony c`; `nimony n` tidak ada di pin ini dan di luar cakupan |
 
 Path-nya tetap dengan sengaja. Toolchain di direktori sementara, Nim dari Homebrew, atau checkout kedua dari commit
-yang sama bukan pin: skrip menolak kompiler yang versi atau commit-nya tidak cocok, dan menolaknya sebelum
+yang sama bukan pin: skrip menolak compiler yang versi atau commit-nya tidak cocok, dan menolaknya sebelum
 mengompilasi apa pun.
 
 ## Perintahnya
@@ -47,7 +47,7 @@ Dari akar repositori buku:
 `./task check` menjalankan verifier yang sama lalu merender kedua edisi; itulah gerbang sebelum commit. Kedua
 perintah mencari toolchain lewat `$NIMONY_HOME` dan jatuh ke `~/.local/opt/nimony/4ba90a7`.
 
-## Arti outputnya
+## Arti output-nya
 
 Verifier membaca setiap `samples/*/*.nim`, mengompilasi masing-masing dengan `nimony c -r`, dan mencetak satu baris
 per sample diikuti ringkasan:
@@ -62,7 +62,7 @@ SUMMARY 23/23 passed, 0 failed
 Tiga exit code, dan ketiganya tidak bisa ditukar:
 
 - **0** — semua sample kompil dan jalan.
-- **1** — ada sample yang gagal; baris yang gagal menyebut samplenya dan exit code-nya.
+- **1** — ada sample yang gagal; baris yang gagal menyebut sample-nya dan exit code-nya.
 - **2** — toolchain tidak ada atau bukan pin. Ini bukan putusan tentang sample, dan ringkasan yang tampak hijau
   mustahil: skrip berhenti sebelum mengompilasi.
 
@@ -70,7 +70,7 @@ Tiga exit code, dan ketiganya tidak bisa ditukar:
 tercetak di bab itu, byte per byte, oleh editor dan independen oleh reviewer; verifier sendiri hanya menilai status
 exit, karena nilai tercetak yang sekadar masuk akal justru hal yang tidak boleh diterima buku.
 
-Cakupan gate ini perlu disebut di tarikan napas yang sama: dia menjalankan satu program per bab — 23 berkas untuk
+Cakupan gate ini perlu disebut di tarikan napas yang sama: ia menjalankan satu program per bab — 23 berkas untuk
 24 bab, karena Bab 1 tidak menampilkan kode — bukan setiap listing yang tercetak di halaman, jadi run hijau
 berarti program-program itu kompil dan keluar 0, bukan bahwa setiap blok di buku ini akan begitu.
 
@@ -120,7 +120,7 @@ itu yang mengatakan apa itu Nimony, dan sample di sana berarti harus jalan sebel
 | --- | --- | --- |
 | 2 | `samples/02-pinned-toolchain/hello.nim` | Membuktikan build dan run, bukan apa pun tentang bahasanya. |
 | 3 | `samples/03-values-names-mutability/values.nim` | |
-| 4 | `samples/04-numbers-types-conversion/numbers.nim` | Wrap adalah poin ajarnya, jadi samplenya menjalankan wrap. |
+| 4 | `samples/04-numbers-types-conversion/numbers.nim` | Wrap adalah poin ajarnya, jadi sample-nya menjalankan wrap. |
 | 5 | `samples/05-strings/strings.nim` | |
 | 6 | `samples/06-branching/branching.nim` | |
 | 7 | `samples/07-loops-ranges/loops.nim` | |

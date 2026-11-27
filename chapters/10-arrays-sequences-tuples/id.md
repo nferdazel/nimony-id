@@ -133,7 +133,7 @@ for x in row:
 ```
 
 Konstruktornya tetap mengisi dari posisi pertama array, bukan dari indeks 1, dan loop `for` tetap mengunjungi
-elemennya berurutan. Mengindeks dengan 0 adalah error compile, karena compiler tahu nilainya di luar rentang:
+elemennya berurutan. Mengindeks dengan 0 adalah compile error, karena compiler tahu nilainya di luar rentang:
 
 ```
 type Row = array[1..3, int]
@@ -161,7 +161,7 @@ index out of bounds: 5 notin 0..2
 Exit code 1, tidak ada nilai yang dicetak.
 
 Di pin ini tiga bentuk lolos dari pemeriksaan itu: bacaan di handler `except` setelah badan `try` menulis
-ulang indeksnya, penyimpanan yang menjalankan hook yang berefek samping, dan pemanggilan yang mengirim
+ulang indeksnya, penyimpanan yang menjalankan hook yang berefek samping, dan panggilan yang mengirim
 nilai ke parameter `sink`. Ketiganya dicatat di `ERRATA.md` di bawah `nim-lang/nimony#3001`.
 
 Tipe ordinal apa pun boleh mengindeks array (`doc/language.md:351`), termasuk enum:
@@ -245,7 +245,7 @@ echo xs.high
 `add` menambahkan satu elemen (`lib/std/system/seqimpl.nim:213`), `pop` membuang dan mengembalikan yang terakhir
 dan mensyaratkan sequence-nya tidak kosong (`lib/std/system/seqimpl.nim:363`). Tidak ada operator konkatenasi di
 pin ini: `xs & ys` tidak punya kandidat untuk `seq`, dan `xs.add ys` gagal karena `add` menerima satu `sink T`,
-bukan sequence. Overload `&` yang ada cuma untuk string dan char
+bukan sequence. Overload `&` yang ada hanya untuk string dan char
 (`lib/std/system/stringimpl.nim:1034-1063`). Untuk tumbuh dari sequence lain, tambahkan elemennya dalam loop.
 
 Cara lain mendapat storage adalah `newSeq`, yang mengisi elemennya dengan nilai default (`0` untuk `int`,
@@ -447,7 +447,7 @@ echo letters[1]
 
 Menulis lewat view mengubah array-nya. `let` mengikat view-nya, bukan storage-nya: view adalah pointer plus
 panjang (`lib/std/system/openarrays.nim:6-9`), dan `[]`-nya mengembalikan `var T`
-(`lib/std/system/openarrays.nim:10`). Pemeriksaan read-only setuju, lewat aturan khusus: sebuah `let` itu
+(`lib/std/system/openarrays.nim:10`). Pemeriksaan read-only setuju, lewat aturan khusus: `let` itu
 readonly kecuali tipenya view, dan di situ compiler memeriksa ulang dari apa view itu dibangun
 (`src/nimony/derefs.nim:399-407`, komentar di `:406`). Jadi ini jalan di atas storage `var` dan ditolak di atas
 array `let`. Ini satu-satunya tempat di bab ini di mana nama `let` masih berujung ke penulisan, dan itu
@@ -523,7 +523,7 @@ Bob
 ```
 
 Konstruksi posisional dan bernama adalah tuple yang sama: tipe yang dideklarasikan menyediakan namanya, jadi
-`q.name` jalan walau literalnya tidak punya nama. Urutan tidak opsional — `(36, "Ada")` untuk `Person` ditolak
+`q.name` jalan walau literal-nya tidak punya nama. Urutan tidak opsional — `(36, "Ada")` untuk `Person` ditolak
 dengan type mismatch yang mencetak kedua tuple, `got: tuple[int64, string] but wanted: tuple[name: string,
 age: int64]`.
 

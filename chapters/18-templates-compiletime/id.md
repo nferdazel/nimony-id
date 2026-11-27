@@ -20,7 +20,7 @@ glossary_added: [template, hygienic template, injection, constant expression, co
 Ada dua cara menulis sesuatu sekali saja, dan keduanya bukan alat yang sama. Template menghapus pengulangan di
 sumber: compiler mengganti body-nya di tiap call site, dengan nama di dalamnya terikat ke tempat nama itu ditulis.
 `const` menghapus pengulangan di nilai: compiler mengerjakan nilainya sebelum program mulai, dan program membawa
-hasilnya. Template bisa mengubah kode mana yang ada; `const` cuma bisa menghasilkan nilai. Pembagian itu yang
+hasilnya. Template bisa mengubah kode mana yang ada; `const` hanya bisa menghasilkan nilai. Pembagian itu yang
 menentukan pilihan: template kalau bentuknya berulang, `const` kalau angka atau string-nya berulang.
 
 ## Template itu diganti, bukan dipanggil
@@ -36,10 +36,10 @@ echo twice(3)      # 6
 ```
 
 Di program hasil kompilasi tidak ada panggilan di sini, tidak ada slot parameter, tidak ada frame. `twice(3)`
-menjadi `3 + 3`. Itu sebabnya tipe parameternya bukan tipe: `x` adalah `untyped`, jadi argumennya datang sebagai
+menjadi `3 + 3`. Itu sebabnya tipe parameternya bukan tipe: `x` adalah `untyped`, jadi argumennya masuk sebagai
 sumber dan diganti di tempat parameter itu ditulis.
 
-Tiap ekspansi diperiksa sendiri. Kasih template tipe yang tidak bisa ia penuhi, dan error-nya datang di dalam body,
+Tiap ekspansi diperiksa sendiri. Kasih template tipe yang tidak bisa ia penuhi, dan error-nya muncul di dalam body,
 dengan trace ke call site:
 
 ```
@@ -123,11 +123,11 @@ withValue(5):
   echo local      # Error: undeclared identifier: local
 ```
 
-Pesannya datang dengan dua baris Trace, satu untuk panggilan `withValue(5)` dan satu untuk block-nya, lalu
+Pesannya muncul dengan dua baris Trace, satu untuk panggilan `withValue(5)` dan satu untuk block-nya, lalu
 `undeclared identifier: local`. `local` milik template tidak pernah ada di scope block itu.
 
 Contoh manual untuk bagian ini (`doc/language.md:4566-4583`) bilang block-nya jalan kalau parameternya `untyped` dan
-gagal kalau `typed`. Di commit yang dipin, versi `untyped` juga gagal, dengan `undeclared identifier: 'p'`, karena
+gagal kalau `typed`. Di commit yang di-pin, versi `untyped` juga gagal, dengan `undeclared identifier: 'p'`, karena
 `proc p` yang dipanggil block itu dideklarasikan di dalam template dan karena itu higienis seperti local lain. Versi
 `typed` gagal lebih dulu dan beda lagi, dengan `expression of type ``typed`` must be discarded`. Tidak ada dari dua
 bentuk itu yang jadi jalan menuju nama tersebut; injection yang jadi jalan.
@@ -160,13 +160,13 @@ pilihan terakhir, bukan sebagai cara mengeluarkan nama dari template.
 
 ## Tipe parameter mana yang ditulis
 
-`untyped` adalah pilihan yang bekerja untuk sebuah block atau untuk ekspresi apa pun yang mau kamu ganti, dan itulah
+`untyped` adalah pilihan yang bekerja untuk sebuah block atau untuk expression apa pun yang mau kamu ganti, dan itulah
 yang dipakai sample. Alternatifnya masing-masing punya satu tugas:
 
 - **Tipe sungguhan** kalau argumen harus diperiksa sebelum penggantian. `template addOne(x: int): int = x + 1`
   menerima `addOne(41)` dan menolak `addOne("s")` dengan `[1] expected: int64 but got: string (declared in
   main.nim(2, 1))`, yang menamai daftar parameter template itu sendiri sebagai asal ketidakcocokannya. Pilih ini
-  kalau argumennya ekspresi dengan tipe yang sudah diketahui: error-nya datang di argumen, bukan di dalam body.
+  kalau argumennya expression dengan tipe yang sudah diketahui: error-nya muncul di argumen, bukan di dalam body.
 - **`var`** kalau template harus menulis balik lewat parameter: `template bump(x: var int) = x = x + 2` meninggalkan
   variabel pemanggil di `7`.
 - **Arity** membedakan template yang memakai nama sama, persis seperti pada routine: `tag` satu argumen dan `tag` dua
@@ -193,7 +193,7 @@ Dua bentuk terlihat tersedia dan ternyata tidak:
 Template yang body-nya tidak menghasilkan nilai adalah statement, dan memakainya di tempat yang mengharapkan nilai
 adalah error di pemakaiannya, bukan di template-nya: `let v = note("hi")` memberi `expression 'note("hi")' has no
 type (or is ambiguous)`, lalu error kedua dari `echo` atas `v` karena `v` bertipe `void`. Template yang berakhir
-dengan ekspresi adalah nilai dan bisa menginisialisasi `const` (`const Six = twice(3)` adalah `6`).
+dengan expression adalah nilai dan bisa menginisialisasi `const` (`const Six = twice(3)` adalah `6`).
 
 Panggilan selalu pakai tanda kurung. Nama telanjang bukan panggilan dan juga bukan nilai proc: `greet` tanpa `()`
 adalah `undeclared identifier: greet`, bagaimanapun template itu dideklarasikan. `doc/porting.md:255-262`
@@ -259,7 +259,7 @@ main.nim(2, 15) Error: undeclared field: 'len' for type seq[int64]
 bernama, bukan seq versus array. Seq-nya sendiri konstanta yang baik-baik saja: `Table.len` dan `Table[1]` jalan saat
 runtime pada nilai yang sama. Cuma fold-nya yang tidak ada.
 
-Saat evaluator tidak bisa menghasilkan nilai, pesannya menamai ekspresi yang ia lepaskan
+Saat evaluator tidak bisa menghasilkan nilai, pesannya menamai expression yang ia lepaskan
 (`src/nimony/expreval.nim:147-155`). Indeks di luar array konstanta salah satu kasusnya: `const Bad = [10, 20,
 30][5]` melaporkan `cannot evaluate expression at compile time: [10, 20, 30][5]`, tanpa pesan bounds: evaluator tidak
 punya pemeriksaan bounds, jadi ia menolak fold alih-alih gagal seperti indeks saat runtime. Aritmetika yang meluap
@@ -270,9 +270,9 @@ Panggilan yang tidak bisa ditangani folder in-process diserahkan ke sub-compilat
 (`src/nimony/expreval.nim:283-320`, `forwardToExecute`), dan begitulah panggilan routine bisa bekerja sama sekali.
 Routine yang mencetak saat dievaluasi tidak mencetak apa pun dan hanya nilainya yang kembali, karena sub-compilation
 menangkap stdout untuk mengambil nilainya. Itu bukan janji bahwa sisa body-nya diam: `writeFile` di dalam routine
-yang sedang di-fold benar-benar menulis file selama kompilasi. Konstanta itu `40`, terminalnya tetap kosong.
+yang sedang di-fold benar-benar menulis berkas selama kompilasi. Konstanta itu `40`, terminalnya tetap kosong.
 
-Di tempat bahasa menuntut konstanta alih-alih ekspresi, nilai hasil fold diterima: panjang array yang ditulis
+Di tempat bahasa menuntut konstanta alih-alih expression, nilai hasil fold diterima: panjang array yang ditulis
 `array[Width, int]` untuk `const Width = 4` build, dan `array[Slots, int]` juga build, dengan `Slots` berasal dari
 panggilan routine.
 
@@ -285,7 +285,7 @@ untuk dua template yang ditolak pin ini. `macro` adalah cara biasa untuk membang
 *Apa yang Nimony lakukan.* Template adalah alat pengulangan yang didukung, diperiksa per call site, dengan nama di
 body terikat di tempat ia ditulis. Parameter `typed` diterima dan tidak bisa dipakai, jadi `untyped` atau tipe
 sungguhan adalah jalurnya. `macro` dengan parameter `untyped` masih build dan jalan di pin ini, sementara
-`doc/differences.md` mendaftar macro sebagai digantikan plugin: permukaan kompatibilitas, bukan teknik yang diajarkan
+`doc/differences.md` mendaftar macro sebagai digantikan plugin: cakupan kompatibilitas, bukan teknik yang diajarkan
 buku ini (Bab 19). `const` dihitung oleh evaluator yang batasnya tidak didokumentasikan manual, jadi jaga
 constant expression pada bentuk-bentuk di atas.
 
@@ -297,7 +297,7 @@ alih-alih aturan.
 
 ## Samples
 
-`samples/18-templates-compiletime/templates.nim`, dikompilasi dan dijalankan di commit yang dipin:
+`samples/18-templates-compiletime/templates.nim`, dikompilasi dan dijalankan di commit yang di-pin:
 
 ```
 $ nimony c -r samples/18-templates-compiletime/templates.nim

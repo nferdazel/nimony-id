@@ -20,7 +20,7 @@ glossary_added: [assert, assertionsEnabled, assumeSync, sample verifier]
 Klaim soal compiler nilainya sebesar reproducer-nya. Setiap bab di buku ini diperiksa dengan menjalankan
 sesuatu, dan bab ini tempat kebiasaan itu jadi berkas yang bisa kamu jalankan ulang: test yang gagal berisik
 kalau perilakunya berubah, dan verifier kecil yang mengompilasi serta menjalankan setiap sample di repo terhadap
-satu commit yang dipin.
+satu commit yang di-pin.
 
 Pin membuat ini lebih sederhana sekaligus lebih aneh daripada Nim 2. Lebih sederhana, karena toolchain-nya satu
 dan perintahnya satu. Lebih aneh, karena perabot testing yang biasa diambil programmer Nim 2 tidak semuanya ada
@@ -30,8 +30,8 @@ utuh dan exit code proses, dan itu cukup untuk menulis pemeriksaan yang berarti.
 
 ## `assert` tidak ada di `system`
 
-Kejutan pertama ada di import. Di Nim 2, `assert` sudah tersedia sebelum kamu menulis apa pun. Di pin dia template
-di `std/assertions` (`lib/std/assertions.nim:23`), jadi program yang cuma mengimpor `syncio` dapat:
+Kejutan pertama ada di import. Di Nim 2, `assert` sudah tersedia sebelum kamu menulis apa pun. Di pin ia template
+di `std/assertions` (`lib/std/assertions.nim:23`), jadi program yang hanya mengimpor `syncio` dapat:
 
 ```
 main.nim(2, 1) Error: undeclared identifier: 'assert'
@@ -83,12 +83,12 @@ Itu mencetak `7`.
 ## Harness yang kamu tulis sendiri
 
 Tidak ada `std/unittest` di pin. `import std / [unittest]` gagal di parser dengan
-`file not found: …/src/lib/std/unittest.nim`, bentuk yang sama dengan modul yang hilang di Bab 20: errornya
+`file not found: …/src/lib/std/unittest.nim`, bentuk yang sama dengan modul yang hilang di Bab 20: error-nya
 menyebut path yang dicari compiler, bukan fitur yang tidak ada. `doAssert` juga tidak dideklarasikan, jadi
 kebiasaan Nim 2 memakai assertion kedua yang tidak bisa dicabut tidak punya padanan di sini.
 
 Yang kamu tulis sebagai gantinya adalah procedure dengan nama, kondisi, dan dua counter. Versi pertamanya yang
-paling sering ditulis orang tidak terkompilasi, dan errornya pelajaran bagus:
+paling sering ditulis orang tidak terkompilasi, dan error-nya pelajaran bagus:
 
 ```nim
 var checks = 0
@@ -102,12 +102,12 @@ Error: unsynchronized access to global variable 'checks'; pass it to a `.sync` r
 `{.cast(assumeSync).}`
 ```
 
-Di pin variabel module-level yang mutable tidak boleh disentuh lewat namanya dari dalam routine
-(`src/nimony/contracts_fir.nim:4120-4127`). Pemeriksaannya soal state bersama, dan dia menyala bahkan di program
+Di pin variabel level modul yang mutable tidak boleh disentuh lewat namanya dari dalam routine
+(`src/nimony/contracts_fir.nim:4120-4127`). Pemeriksaannya soal state bersama, dan ia berlaku bahkan di program
 single-threaded yang tidak punya thread sama sekali. Pesannya menawarkan dua jalan keluar, dan bagian `.sync`
 artinya lebih sedikit daripada kelihatannya: mendeklarasikan routine-nya `{.sync.}` tidak membuat akses langsung
 itu sah, karena klausa itu soal global yang diserahkan ke routine sebagai parameter `var` atau `ptr`. Menyerahkan
-counter lewat parameter begitu adalah bentuk pertama, dan itu menjaga routine-nya jujur soal apa yang dia ubah:
+counter lewat parameter begitu adalah bentuk pertama, dan itu menjaga routine-nya jujur soal apa yang ia ubah:
 
 ```nim
 proc check(name: string; cond: bool; checks, failures: var int) =
@@ -129,16 +129,16 @@ proc bump() =
     inc checks
 ```
 
-Bagian `.sync` dari pesan itu bukan izin untuk mendeklarasikan routine harness-nya `{.sync.}`. Dia menjelaskan
+Bagian `.sync` dari pesan itu bukan izin untuk mendeklarasikan routine harness-nya `{.sync.}`. Ia menjelaskan
 rute parameter `var` di atas; bloknya adalah cara menyatakan janji yang sama untuk baris yang menyebut global
 secara langsung.
 
-`{.feature: "assumeSync".}` di level modul adalah bentuk ketiga: dia menandai setiap global di modul itu sebagai
+`{.feature: "assumeSync".}` di level modul adalah bentuk ketiga: ia menandai setiap global di modul itu sebagai
 single-threaded, dan itu yang dilakukan source compiler sendiri untuk state internalnya
 (`src/nimony/programs.nim:9`). Itu janji, dan compiler menerimanya.
 
 Counter sebagai parameter adalah bentuk yang bab ini ajarkan, karena janjinya tetap lokal di routine yang
-membuatnya. `check` tidak pernah menyebut global, jadi dia tidak butuh `{.sync.}` sendiri; driver-nya adalah
+membuatnya. `check` tidak pernah menyebut global, jadi ia tidak butuh `{.sync.}` sendiri; driver-nya adalah
 statement biasa di body modul, di mana global mutable diperbolehkan:
 
 ```nim
@@ -157,10 +157,10 @@ job CI, atau verifier buku ini.
 ## Pemeriksaan yang jalan saat compile
 
 Sebagian klaim lebih murah diperiksa sambil mengompilasi, dan pin punya satu cara yang andal, satu pragma yang
-cuma jalan di satu posisi, dan satu bentuk statement yang ditolak.
+hanya jalan di satu posisi, dan satu bentuk statement yang ditolak.
 
 `static:` bukan statement yang diterima compiler. `static: assert 1 + 1 == 3` berhenti di sem dengan
-`unsupported statement: staticstmt` (`src/nimony/sem.nim:5873`), untuk body apa pun, bukan cuma assertion.
+`unsupported statement: staticstmt` (`src/nimony/sem.nim:5873`), untuk body apa pun, bukan hanya assertion.
 
 Yang berhasil adalah `when` plus pragma `{.error.}`, yang dinilai saat modul dianalisis dan mencetak pesan kamu
 dengan posisi sumber:
@@ -175,7 +175,7 @@ main.nim(3, 5) Error: arithmetic broke
 ```
 
 Bentuk ketiga adalah `{.assert.}`, dan ada dua hal yang menentukan berhasil atau tidak: posisinya, dan apakah
-prover bisa membuktikan klaimnya. Sebagai statement di dalam body dia diterima, tapi klaimnya harus terbukti di
+prover bisa membuktikan klaimnya. Sebagai statement di dalam body ia diterima, tapi klaimnya harus terbukti di
 situ dari apa yang sudah ditetapkan kode, itu sebabnya setiap assertion di
 `tests/nimony/contracts/tassertpragma.nim` duduk di belakang guard. `{.assert: x mod 2 == 0.}` di awal body proc
 yang dipanggil dengan `4` menghentikan build dengan
@@ -217,12 +217,12 @@ echo assertionsEnabled
 Dua konsekuensi mengikuti. Gate yang jalan dengan `-d:danger` tidak membuktikan apa pun soal assertion, jadi
 verifier buku ini jalan tanpa flag. Dan pemeriksaan yang kamu tulis sendiri tidak terpengaruh: `check`, `quit`, dan
 counter-nya adalah kode biasa, jadi harness yang dikompilasi dengan `-d:danger` tetap mencetak `ok - …` dan tetap
-mengembalikan `1` saat gagal. Yang hilang cuma `assert`.
+mengembalikan `1` saat gagal. Yang hilang hanya `assert`.
 
 ## Menjalankan program dan membaca exit code-nya
 
 `nimony c -r` mengompilasi, menjalankan binernya, dan mencetak baris `FAILURE:` kalau programnya keluar
-non-nol. Dia tidak meneruskan kodenya. Program yang berakhir dengan `quit 3` menghasilkan:
+non-nol. Ia tidak meneruskan kodenya. Program yang berakhir dengan `quit 3` menghasilkan:
 
 ```
 before
@@ -234,33 +234,33 @@ penting saat test membedakan jenis kegagalan: driver-nya meratakan, binernya tid
 
 Layout cache di pin itulah yang membuat path-nya bisa ditemukan. Binernya mendarat di bawah direktori sumber,
 `nimcache/c/<hash>/main`, dan hash-nya diturunkan dari path modul seperti dilihat compiler — relatif ke working
-directory atau ke search path — jadi dia berubah tergantung cara kamu memanggil build-nya. Script yang butuh exit
+directory atau ke search path — jadi ia berubah tergantung cara kamu memanggil build-nya. Skrip yang butuh exit
 code asli men-glob `nimcache/c/*/main` setelah compile biasa lalu menjalankannya, bukan mengunci satu hash.
-Bab 21 sudah memakai trik itu untuk probe soal exit code; di sini dia bedanya antara "ada yang gagal" dan
+Bab 21 sudah memakai trik itu untuk probe soal exit code; di sini ia bedanya antara "ada yang gagal" dan
 "ini yang gagal".
 
 ## Verifier buku ini
 
-`tools/verify-samples.sh` adalah gate yang dilalui sample setiap bab. Dia script bash sekitar sembilan puluh
+`tools/verify-samples.sh` adalah gate yang dilalui sample setiap bab. Ia skrip bash sekitar sembilan puluh
 baris, dan bentuknya adalah bentuk kontraknya:
 
-- Dia menolak jalan di toolchain yang salah. `nimony --version` harus dimulai `0.6.3` (`tools/verify-samples.sh:33-40`),
+- Ia menolak jalan di toolchain yang salah. `nimony --version` harus dimulai `0.6.3` (`tools/verify-samples.sh:33-40`),
   dan direktori toolchain-nya harus checkout git yang `HEAD`-nya `4ba90a781b0b22d0821efaa153c129c37cef6143`
-  (`:42-52`). Dua kegagalan itu keluar `2`, kode script untuk "masalah toolchain, bukan masalah sample".
-- Dia men-glob `samples/*/*.nim` (`:55`), jadi sample adalah berkas satu direktori di bawah `samples/`, dan
+  (`:42-52`). Dua kegagalan itu keluar `2`, kode skrip untuk "masalah toolchain, bukan masalah sample".
+- Ia men-glob `samples/*/*.nim` (`:55`), jadi sample adalah berkas satu direktori di bawah `samples/`, dan
   direktori berisi berkas pendukung di sebelahnya adalah input, bukan sample, seperti plugin di Bab 19.
-- Dia mengompilasi dan menjalankan setiap berkas dari root repo dengan `nimony c -r` (`:67`), itu sebabnya
+- Ia mengompilasi dan menjalankan setiap berkas dari root repo dengan `nimony c -r` (`:67`), itu sebabnya
   sample yang membaca path relatif membacanya dari root, bukan dari direktorinya sendiri.
-- Dia menulis setiap transkrip ke `tools/verify-samples.log`, satu blok per berkas dengan exit code di
-  header-nya (`:70-74`), dan mencetak `PASS`/`FAIL` plus baris `SUMMARY` (`:76-87`). Status exit script-nya
+- Ia menulis setiap transkrip ke `tools/verify-samples.log`, satu blok per berkas dengan exit code di
+  header-nya (`:70-74`), dan mencetak `PASS`/`FAIL` plus baris `SUMMARY` (`:76-87`). Status exit skripnya
   sendiri adalah test terakhir (`:88`).
 
 Itu seluruh kontraknya: satu berkas per bab di bawah `samples/`, tanpa argumen, tanpa flag, exit `0` kalau
-sukses, dan output yang bab cetak apa adanya. CI menjalankan script yang sama lewat `./task check`
+sukses, dan output yang bab cetak apa adanya. CI menjalankan skrip yang sama lewat `./task check`
 (`.github/workflows/ci.yml:73`) dengan batas job lima belas menit, jadi sample yang hang adalah build gagal, bukan
 build macet.
 
-Aturan yang mengikutinya membosankan dan gampang dilanggar: sample tidak boleh bergantung pada apa pun yang tidak
+Aturan yang mengikutinya membosankan dan mudah dilanggar: sample tidak boleh bergantung pada apa pun yang tidak
 dibawa repo. Menulis berkas itu boleh asal ke direktori temp yang sample-nya bersihkan sendiri; sample Bab 21
 melakukan tepat itu. Membaca path relatif ke direktori sample sendiri tidak boleh, karena working directory
 verifier-nya adalah root.
@@ -282,7 +282,7 @@ pertama pada global di dalam helper jadi error `unsynchronized access` yang tida
 
 ## Samples
 
-`samples/23-testing/testing.nim`, dijalankan di commit yang dipin:
+`samples/23-testing/testing.nim`, dijalankan di commit yang di-pin:
 
 ```
 nimony c -r samples/23-testing/testing.nim
@@ -304,11 +304,11 @@ dibaca verifier.
 
 ## Cek
 
-1. Impor cuma `std/syncio` lalu tulis `assert 1 == 1`. Harapan: `undeclared identifier: 'assert'`.
+1. Impor hanya `std/syncio` lalu tulis `assert 1 == 1`. Harapan: `undeclared identifier: 'assert'`.
 2. Tambahkan `std/assertions` dan buat assertion-nya gagal. Harapan: `[Assertion Failure] ` di stdout, exit `1`.
 3. Jalankan program yang sama dengan `-d:danger`. Harapan: tidak ada output dari assertion, exit `0`.
 4. Cetak `assertionsEnabled` tanpa flag dan dengan `-d:noAssertions`. Harapan: `true`, lalu `false`.
-5. Taruh `inc counter` untuk `var` module-level di dalam proc. Harapan: error `unsynchronized access`.
+5. Taruh `inc counter` untuk `var` level modul di dalam proc. Harapan: error `unsynchronized access`.
 6. Bungkus baris yang sama dengan `{.cast(assumeSync).}:`. Harapan: terkompilasi.
 7. Tulis `static: assert 1 == 1`. Harapan: `unsupported statement: staticstmt`.
 8. Tulis `when 1 + 1 != 3: {.error: "broke".}`. Harapan: build berhenti dengan pesan kamu dan nomor baris.

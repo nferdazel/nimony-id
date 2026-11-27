@@ -18,8 +18,8 @@ glossary_added: ["nominal type", "enum type", "borrow"]
 ## Untuk apa bab ini
 
 Bab 10 memilih container berdasarkan apa yang harus dilakukan data. Bab ini memberi nama pada datanya
-sendiri. Sebuah `object` memberi satu nama untuk sekumpulan field yang berhubungan, jadi routine bisa menerima
-`Point` alih-alih dua integer dengan urutan yang harus diingat. Sebuah `enum` menamai sekumpulan nilai tetap dan
+sendiri. `object` memberi satu nama untuk sekumpulan field yang berhubungan, jadi routine bisa menerima
+`Point` alih-alih dua integer dengan urutan yang harus diingat. `enum` menamai sekumpulan nilai tetap dan
 mengurutkannya, jadi `Color` bukan pengganti `int`. Tipe `distinct` mempertahankan satu representasi dan menolak
 bercampur dengan base-nya, jadi jarak dalam meter tidak bisa dijumlahkan dengan durasi dalam detik secara tidak
 sengaja.
@@ -29,7 +29,7 @@ apa yang diizinkan compiler untuk kamu campur. Object itu nominal, jadi dua obje
 tipe. Nilai enum terurut dan bisa diiterasi. Tipe distinct berbagi byte dengan base-nya dan tidak berbagi apa pun
 selain itu.
 
-## Objects
+## Object
 
 Object adalah kumpulan field bernama, masing-masing dengan tipenya sendiri (`doc/language.md:476`). Mendeklarasikan
 satu berarti menamai tipe baru; tidak ada hubungan antara dua object yang kebetulan mirip.
@@ -68,8 +68,8 @@ Dua kesalahan layak dikenali dari pesannya. Menyebut field yang tidak dimiliki t
 `P(z: 1)` memberi `undeclared field: 'z' for type P`. Melewati sebuah field bukan kesalahan sama sekali — itu
 default.
 
-Sebuah field bisa dijangkau dari module lain hanya kalau ditandai `*` (`doc/language.md:546-549`). Dari luar
-module, field tanpa tanda terbaca sebagai `undeclared field: 'hidden' for type Widget` — compiler tidak
+Sebuah field bisa dijangkau dari modul lain hanya kalau ditandai `*` (`doc/language.md:546-549`). Dari luar
+modul, field tanpa tanda terbaca sebagai `undeclared field: 'hidden' for type Widget` — compiler tidak
 membedakan "disembunyikan" dari "tidak ada", dan itulah intinya.
 
 ### Copy saat assignment
@@ -174,7 +174,7 @@ object memang sengaja tidak punya `$` generik — definisikan satu untuk tipe ob
 > *Apa yang rusak kalau kebiasaannya dibawa* → `echo` pada object gagal dengan `write stdout, P(x: 1)` plus
 > daftar kandidat, dan perbaikannya bukan mendefinisikan `$` tapi menerapkannya.
 
-## Enums
+## Enum
 
 Enum menamai sekumpulan nilai tetap dan memberi mereka urutan (`doc/language.md:182`). Urutannya adalah urutan
 deklarasi, dan `ord` mengembalikan posisinya:
@@ -278,7 +278,7 @@ var i: int = Meters(4)   # Error: type mismatch: got: Meters but wanted: int64
 
 `int64` di pesan-pesan itu bukan salah tulis — di pin ini `int` dan `int64` adalah tipe yang sama, yang sudah
 ditetapkan Bab 9 dan ditunjukkan lagi oleh `ch11-probes/d1.nim` dan `d12.nim`. Nama yang dipakai sebuah pesan
-mengikuti ekspresinya, bukan base tipe distinct-nya: literal `int` menamai `int64` bahkan untuk
+mengikuti expression-nya, bukan base tipe distinct-nya: literal `int` menamai `int64` bahkan untuk
 `distinct int32` (`rv7.nim`), sementara nilai yang sudah bertipe `int32` menamai `int32` (`rv8.nim`). Baca pesan
 yang kamu dapat; jangan menganggapnya selalu `int64`.
 
@@ -337,7 +337,7 @@ PASS samples/11-objects-enums-distinct/objects.nim exit=0
 SUMMARY 10/10 passed, 0 failed
 ```
 
-Outputnya, berurutan:
+Output-nya, berurutan:
 
 ```
 1
@@ -410,7 +410,7 @@ pembacaan field lewat konversi distinct.
 13. Bangun `Meters(4)`, cetak `int(m)`, `sizeof(Meters)` dan `sizeof(int)`. Harapan: `4`, `8`, `8`.
 14. Tulis `var m: Meters = 5`. Harapan: `got: int64 but wanted: Meters`.
 15. Tulis `Meters(2) + Meters(3)` tanpa operator yang didefinisikan. Harapan: type error. Tambahkan
-    `{.borrow.}` ke sebuah `+` dan cetak `int(...)`. Harapan: `5`.
+    `{.borrow.}` ke `+` dan cetak `int(...)`. Harapan: `5`.
 
 ## Checklist chapter
 

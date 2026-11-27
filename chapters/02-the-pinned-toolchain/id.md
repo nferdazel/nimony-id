@@ -99,7 +99,7 @@ FAILURE nim c ... -o:bin/nifler src/nifler/nifler.nim
 ```
 
 Sebabnya pengemasan, bukan ketidakcocokan versi. `nifler` mengimpor `ast2nif.nim` dari host compiler, dan
-module itu butuh pohon `dist/checksums` di sebelahnya. Formula Homebrew tidak menyertakannya; tarball resmi
+modul itu butuh pohon `dist/checksums` di sebelahnya. Formula Homebrew tidak menyertakannya; tarball resmi
 menyertakannya, bersama `dist/nimony` yang di-vendor.
 
 Kenapa ini lebih penting dari kelihatannya: `build all` berhenti di tool pertama yang gagal, dan parser
@@ -151,7 +151,7 @@ diketahui sekarang, karena keduanya menjelaskan kejutan-kejutan berikutnya. `std
 eksplisit — Nimony tidak menaruh `echo` di scope secara gratis. Dan `echo` menulis satu baris; Bab 4 sampai
 ke pertanyaan apa itu `string` di pin ini, yang bukan seperti yang diasumsikan kode Nim 2.
 
-## Verifikasi seluruh buku, bukan cuma bab-mu
+## Verifikasi seluruh buku, bukan hanya bab-mu
 
 Buku ini menyimpan sample di `samples/NN-slug/` dan membuktikannya dengan satu skrip, supaya klaim di Bab
 14 tidak bergantung pada bab mana yang kebetulan kamu baca:
@@ -174,7 +174,7 @@ Skrip memeriksa commit sebelum mengompilasi apa pun, mengompilasi dan menjalanka
 pemasanganmu; ringkasan hijau adalah satu-satunya bukti yang diterima buku ini bahwa sebuah sample bekerja.
 
 Satu batas yang jujur: verifier membuktikan compile, run, dan exit code. Ia tidak membandingkan stdout. Di
-tempat sebuah bab mengajarkan output yang bisa diamati, bab-nya menyebutkan output yang diharapkan dan
+tempat sebuah bab mengajarkan output yang bisa diamati, babnya menyebutkan output yang diharapkan dan
 pemeriksaan yang membuktikannya.
 
 ## Samples

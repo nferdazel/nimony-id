@@ -22,7 +22,7 @@ sebuah nama dan signature, supaya bagian lain buku ini bisa memanggilnya alih-al
 dua deklarasi untuk itu: `proc`, yang boleh melakukan apa saja, dan `func`, yang tidak boleh menyentuh apa pun di
 luar argumen dan hasilnya sendiri.
 
-Pekerjaan bab ini adalah seluruh batas sebuah pemanggilan — bagaimana argumen datang, bagaimana hasil keluar,
+Bab ini mengurus seluruh batas sebuah panggilan — bagaimana argumen masuk, bagaimana hasil keluar,
 dan bentuk parameter mana yang dipakai. Overloading dan method dispatch ada di Bab 9; bab ini
 mengasumsikan satu routine per nama.
 
@@ -57,19 +57,19 @@ deklarasinya ditolak — `proc bad(a; b: int)` gagal dengan `type or init value 
 parameternya.
 
 Tipe kembalian ditulis setelah tanda kurung penutup. Body-nya lalu bisa ditulis dalam dua bentuk. Bentuk blok
-yang dipakai `greet`. Bentuk satu ekspresi menulis nilainya di baris yang sama:
+yang dipakai `greet`. Bentuk satu expression menulis nilainya di baris yang sama:
 
 ```
 proc triple(x: int): int = x * 3
 ```
 
 `triple(5)` adalah `15`. Ini bukan bentuk deklarasi kedua yang dipilih sesuai selera — ini routine yang sama
-dengan body satu ekspresi, dan kedua bentuk ada di standard library: `lib/std/colors.nim:21` menulis satu dengan
+dengan body satu expression, dan kedua bentuk ada di standard library: `lib/std/colors.nim:21` menulis satu dengan
 cara ini, `lib/std/syncio.nim:293` memakai blok.
 
-## Ekspresi terakhir body adalah hasil
+## Expression terakhir body adalah hasil
 
-Body blok adalah statement list expression, dan statement list expression bernilai ekspresi terakhirnya
+Body blok adalah statement list expression, dan statement list expression bernilai expression terakhirnya
 (`doc/language.md:1552-1560` mendefinisikan bentuk berkurung `(stmt1; stmt2; …; ex)`; menerapkannya ke body proc
 adalah probe p33). Jadi ini compile dan mengembalikan `5`:
 
@@ -80,8 +80,8 @@ proc f(): int =
 ```
 
 `echo` adalah statement yang jalan lebih dulu; `5` adalah nilai yang dihasilkan body. Tidak ada penanda bahwa
-baris terakhir istimewa, dan itulah kenapa ekspresi sisa di routine yang sudah mengisi `result` layak
-diwaspadai: ekspresi itu menjadi hasil meskipun `result` sudah diisi. `proc f(): int = result = 1` yang diikuti
+baris terakhir istimewa, dan itulah kenapa expression sisa di routine yang sudah mengisi `result` layak
+diwaspadai: expression itu menjadi hasil meskipun `result` sudah diisi. `proc f(): int = result = 1` yang diikuti
 `5` mengembalikan `5`, bukan `1`. Tulis `discard` kalau itu bukan maksudmu.
 
 ## `result` adalah variabel
@@ -119,7 +119,7 @@ untuk `result` dan untuk parameter dengan cara yang sama).
 ## `return`
 
 `return expr` itu gula, dan guide mengatakannya dengan jelas: artinya `result = expr` lalu `return`
-(`doc/language.md:1915-1921`). `return` tanpa ekspresi adalah singkatan dari `return result`
+(`doc/language.md:1915-1921`). `return` tanpa expression adalah singkatan dari `return result`
 (`doc/language.md:1924-1926`), yang hanya berguna setelah ada yang sudah mengisi `result`:
 
 ```
@@ -133,7 +133,7 @@ proc sign(n: int): int =
 `sign(4)` adalah `1`, `sign(-4)` adalah `0`. `return` telanjang itu keluar di baris tersebut dengan apa pun yang
 sedang dipegang `result`.
 
-Dengan nilai, dia keluar lebih awal dan melewati sisa body:
+Dengan nilai, ia keluar lebih awal dan melewati sisa body:
 
 ```
 proc grade(n: int): string =
@@ -144,8 +144,8 @@ proc grade(n: int): string =
 ```
 
 `grade(70)` adalah `pass` dan tidak mencetak apa pun lagi; `grade(10)` mencetak `checked 10` lalu mengembalikan
-`fail` lewat ekspresi terakhir body. Keluar lebih awal itu alat kontrol alur, bukan gaya — pakai `result` plus
-ekspresi terakhir kalau routine-nya terbaca dari atas ke bawah.
+`fail` lewat expression terakhir body. Keluar lebih awal itu alat kontrol alur, bukan gaya — pakai `result` plus
+expression terakhir kalau routine-nya terbaca dari atas ke bawah.
 
 ## Nilai default
 
@@ -172,7 +172,7 @@ proc scaled(x: int; factor: int = x): int = x * factor
 ```
 
 Itu bukan diagnostik. Front end menerimanya dan build mati di backend C dengan `[Bug] could not find symbol:
-x.0`, exit 1. Bentuk itu tercatat di `ERRATA.md`; aturan bukunya: default adalah literal atau ekspresi yang tidak
+x.0`, exit 1. Bentuk itu tercatat di `ERRATA.md`; aturan bukunya: default adalah literal atau expression yang tidak
 menyebut parameter mana pun dari routine yang sama.
 
 ## Argumen bernama
@@ -192,8 +192,8 @@ adalah `21`. Namanya diperiksa — `pad(count = 1)` gagal dengan `named argument
 `pad(1, 2, 3)` gagal dengan `too many arguments`. Keduanya dilaporkan di call site dengan deklarasinya disebut di
 bawahnya, dan itu bagian yang berguna ketika sebuah default membuatmu mengirim satu argumen lebih banyak.
 
-Pakai nama kalau pemanggilan punya dua argumen bertipe sama dan urutannya tidak jelas dari nama fungsinya.
-`pad(2, 7)` adalah `14` dan `pad(7, 2)` adalah `21`; bentuk bernama `pad(width = 2, n = 7)` juga `14`, tapi dia
+Pakai nama kalau panggilan punya dua argumen bertipe sama dan urutannya tidak jelas dari nama fungsinya.
+`pad(2, 7)` adalah `14` dan `pad(7, 2)` adalah `21`; bentuk bernama `pad(width = 2, n = 7)` juga `14`, tapi ia
 mengatakan angka mana yang mana, dan pembaca yang salah menebak urutannya tidak bisa salah membacanya.
 
 ## Parameter `var`
@@ -224,7 +224,7 @@ penyimpanan. `let` juga tidak bisa.
 
 ## Parameter `out`
 
-`out T` adalah saudara yang hanya menulis (`doc/language.md:2765-2790`). Dia ada untuk kasus di mana routine
+`out T` adalah saudara yang hanya menulis (`doc/language.md:2765-2790`). Ia ada untuk kasus di mana routine
 harus menghasilkan lebih dari satu hasil dan nilai kembalian saja tidak cukup:
 
 ```
@@ -237,7 +237,7 @@ split(8, 5, q, r)
 echo q, " ", r
 ```
 
-`1 3`. Compiler memeriksa routine-nya, bukan tiap pemanggilan: setiap jalur sebelum return harus mengisi setiap
+`1 3`. Compiler memeriksa routine-nya, bukan tiap panggilan: setiap jalur sebelum return harus mengisi setiap
 parameter `out` (`doc/language.md:2782-2790`). Buang pengisian di dalam `if`-nya dan routine berhenti bisa di-build
 dengan `cannot prove that y has been initialized` — kalimat yang sama dengan variabel lokal yang mungkin
 dilewati sebuah cabang tanpa diisi.
@@ -248,11 +248,11 @@ lebih dulu. Yang dibaca adalah nilai pemanggil saat itu, bukan nilai baru: `var 
 yang meng-echo parameternya sebelum mengisinya mencetak `before 9`. Variabel yang baru saja dideklarasikan
 pemanggil kebetulan bernilai `0`, dan itu sebabnya bentuk ini terlihat aman di percobaan pertama. Yang ditegakkan
 adalah pemeriksaan setiap jalur pada routine-nya, bukan penghalang baca. Jangan tulis routine yang membaca
-parameter `out` sebelum mengisinya — dia tetap bisa di-build, dan yang dibacanya adalah isi penyimpanan pemanggil.
+parameter `out` sebelum mengisinya — ia tetap bisa di-build, dan yang dibacanya adalah isi penyimpanan pemanggil.
 
 ## Lebih dari satu hasil, dua cara
 
-Parameter `var` dan `out` adalah satu cara mengembalikan beberapa nilai. Tuple cara lainnya, dan dia menaruh
+Parameter `var` dan `out` adalah satu cara mengembalikan beberapa nilai. Tuple cara lainnya, dan ia menaruh
 hasilnya di tipe kembalian tempat pemanggil bisa melihatnya (`doc/language.md:2386-2394`):
 
 ```
@@ -262,7 +262,7 @@ let t = divmod(8, 5)
 echo t[0], " ", t[1]
 ```
 
-`1 3`. Tuple-nya dibangun di body ekspresi dan di-index di call site. Bab 10 membahas akses tuple dengan
+`1 3`. Tuple-nya dibangun di body expression dan di-index di call site. Bab 10 membahas akses tuple dengan
 benar; yang penting di sini adalah pilihannya: parameter kalau routine-nya juga punya efek samping yang harus
 dilaporkan, tuple kalau nilainya adalah seluruh jawabannya.
 
@@ -284,21 +284,21 @@ sink got abc
 sink after abc
 ```
 
-Variabel pemanggil masih berisi `abc` setelah pemanggilan, jadi di pin ini `sink` pada `string` adalah izin, bukan
-perpindahan yang terlihat: dia memberitahu compiler bahwa callee boleh menyimpan penyimpanan argumennya alih-alih
+Variabel pemanggil masih berisi `abc` setelah panggilan, jadi di pin ini `sink` pada `string` adalah izin, bukan
+perpindahan yang terlihat: ia memberitahu compiler bahwa callee boleh menyimpan penyimpanan argumennya alih-alih
 menyalinnya, dan tidak ada yang berubah di call site. Tulis kalau routine-nya memang menyimpan apa yang
-diberikan — kode container di standard library melakukannya — dan jangan berharap dia mengosongkan variabelmu
-atau membuat pemanggilan lebih murah dengan cara yang bisa kamu ukur.
+diberikan — kode container di standard library melakukannya — dan jangan berharap ia mengosongkan variabelmu
+atau membuat panggilan lebih murah dengan cara yang bisa kamu ukur.
 
 ## `func` adalah proc tanpa efek samping
 
 `func` mendeklarasikan routine yang diperlakukan `noSideEffect` secara default, sementara `proc` diperlakukan
 punya efek samping (`doc/language.md:3115-3119`). Bebas efek samping berarti, dalam kata-kata guide, tidak ada
-akses ke variabel global atau thread-local, tidak ada pemanggilan routine yang punya efek samping, dan tidak ada
+akses ke variabel global atau thread-local, tidak ada panggilan routine yang punya efek samping, dan tidak ada
 mutasi lewat `ref` atau `ptr`.
 
-Aturan praktisnya pendek: kalau routine-nya hanya membaca argumen dan menghitung, tulis `func`. Kalau dia
-meng-echo, menulis file, atau mengubah sesuatu yang bisa dilihat pemanggil, tulis `proc`.
+Aturan praktisnya pendek: kalau routine-nya hanya membaca argumen dan menghitung, tulis `func`. Kalau ia
+meng-echo, menulis berkas, atau mengubah sesuatu yang bisa dilihat pemanggil, tulis `proc`.
 
 Mencoba menipu akan tertangkap. `func` yang meng-echo gagal di-build:
 
@@ -306,9 +306,9 @@ Mencoba menipu akan tertangkap. `func` yang meng-echo gagal di-build:
 Error: cannot call a routine with side effects from a `.noSideEffect` context
 ```
 
-Errornya menunjuk ke dalam `syncio`, karena `echo` adalah routine berefek samping yang dipanggil. Kalau efeknya
+Error-nya menunjuk ke dalam `syncio`, karena `echo` adalah routine berefek samping yang dipanggil. Kalau efeknya
 memang disengaja, deklarasinya bisa mengatakan itu — `{.sideEffect.}` pada `func` mengembalikan perilaku `proc`
-dan pemanggilannya compile lalu jalan.
+dan panggilannya compile lalu jalan.
 
 Satu nuansa yang guide sebutkan dan compiler tegakkan: `func` boleh menulis parameter `var`-nya sendiri —
 variabel yang disebut pemanggil — tapi tidak apa pun di balik `ref` atau `ptr` (`doc/language.md:3121`). `func`
@@ -339,17 +339,17 @@ Tulis `discard add(1, 2)` kalau nilainya memang tidak diinginkan (`doc/language.
 membuat routine void tidak bisa dipakai sebagai nilai: `let x = greet("a")` tidak bisa di-build, karena tidak ada
 yang bisa diikat.
 
-## Bentuk pemanggilan
+## Bentuk panggilan
 
-Tiga bentuk, pemanggilan yang sama (`doc/language.md:2261-2272`).
+Tiga bentuk, panggilan yang sama (`doc/language.md:2261-2272`).
 
 **Posisional**, dengan tanda kurung: `add(1, 2)`, `5.add(6)`.
 
 **Bentuk dot**, di mana receiver menjadi argumen pertama (`doc/language.md:2836-2866`): `5.add(6)` adalah
-`add(5, 6)` dan mencetak `11`. Dia berpadu dengan default: `1.optarg optarg 8` memanggil `optarg(1, optarg(8))`
+`add(5, 6)` dan mencetak `11`. Ia berpadu dengan default: `1.optarg optarg 8` memanggil `optarg(1, optarg(8))`
 dan mencetak `9`, persis seperti contoh di guide.
 
-**Bentuk command**, tanpa tanda kurung, hanya di tempat pemanggilannya berupa statement
+**Bentuk command**, tanpa tanda kurung, hanya di tempat panggilannya berupa statement
 (`doc/language.md:2868-2875`):
 
 ```
@@ -359,11 +359,11 @@ proc note(msg: string) =
 note "no parens"
 ```
 
-Di posisi ekspresi, bentuk command hanya menerima satu argumen: `let single = singlearg 2` compile. Dua argumen
+Di posisi expression, bentuk command hanya menerima satu argumen: `let single = singlearg 2` compile. Dua argumen
 di posisi itu adalah syntax error di pin ini — `let r = add 1, 2` melaporkan `invalid indentation`, sementara
-contoh di guide sendiri memperkirakan `too many arguments`. Tulis tanda kurungnya kalau di posisi ekspresi.
+contoh di guide sendiri memperkirakan `too many arguments`. Tulis tanda kurungnya kalau di posisi expression.
 
-Dan pemanggilan tanpa argumen selalu butuh tanda kurungnya: nama telanjang adalah routine-nya sendiri, sebuah
+Dan panggilan tanpa argumen selalu butuh tanda kurungnya: nama telanjang adalah routine-nya sendiri, sebuah
 nilai bertipe routine itu. `echo f` di mana `f` tidak butuh argumen adalah type mismatch; pesannya mendaftar
 delapan kandidat overload `echo` dan satu baris di daftar itu adalah `expected: int64 but got: proc (): int64`
 (`doc/language.md:2891-2893`).
@@ -380,10 +380,10 @@ proc fact(n: int): int =
     n * fact(n - 1)
 ```
 
-`fact(5)` adalah `120`. Rekursinya adalah pemanggilan biasa, bukan bentuk khusus; base case-nya adalah `if` yang
+`fact(5)` adalah `120`. Rekursinya adalah panggilan biasa, bukan bentuk khusus; base case-nya adalah `if` yang
 kembali tanpa memanggil dirinya lagi.
 
-Urutan deklarasi tidak penting di level modul. Pemanggilan boleh muncul di atas deklarasi yang jadi tujuannya —
+Urutan deklarasi tidak penting di level modul. Panggilan boleh muncul di atas deklarasi yang jadi tujuannya —
 ini hasil probe di pin, bukan kutipan, karena guide tidak punya kalimat tentangnya:
 
 ```
@@ -394,7 +394,7 @@ proc later(x: int): int = x + 1
 
 Itu mencetak `5`. Seluruh modul ada dalam cakupan resolusi nama, jadi `proc` tidak butuh forward declaration
 seperti prototype di C. Nama yang tidak ada di mana pun adalah error lain, dilaporkan sebagai `undeclared
-identifier` — pencarian seluruh modul itulah yang membuat pemanggilan di atas deklarasinya bekerja.
+identifier` — pencarian seluruh modul itulah yang membuat panggilan di atas deklarasinya bekerja.
 
 ## Samples
 
@@ -426,13 +426,13 @@ later 5
 ```
 
 Tiga baris membawa pelajarannya sendiri. `late checked 10` dan `fail` sesudahnya adalah satu routine: `echo`-nya
-jalan, lalu ekspresi terakhir body menjadi hasilnya, jadi label dan nilainya mendarat di baris terpisah.
+jalan, lalu expression terakhir body menjadi hasilnya, jadi label dan nilainya mendarat di baris terpisah.
 `override ran` sebelum `override 1` adalah `func` ber-`{.sideEffect.}` yang mencetak sebelum nilainya dipakai.
 `sink after abc` adalah parameter `sink` yang meninggalkan variabel pemanggil apa adanya.
 
 ## Cek
 
-1. Tulis `proc double(x: int): int` dengan body blok `x * 2`, lalu bentuk satu ekspresi dari routine yang sama.
+1. Tulis `proc double(x: int): int` dengan body blok `x * 2`, lalu bentuk satu expression dari routine yang sama.
    Harapan: nilai yang sama dari keduanya.
 2. Tulis body blok yang meng-echo `body` lalu punya `5` sebagai baris terakhirnya. Harapan: `body`, lalu `5`.
 3. Tulis `proc counter(): int` dengan body `discard`. Harapan: `cannot prove that result has been

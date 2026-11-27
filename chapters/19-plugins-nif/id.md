@@ -22,11 +22,11 @@ semacam itu: `doc/differences.md:19` bilang macro diganti compiler plugin. Plugi
 yang dikompilasi compiler, dijalankan sebagai subprocess, dan dikirimi satu pohon, lalu menjawab dengan pohon.
 Semua yang bisa dilihat plugin dan semua yang bisa ia hasilkan adalah NIF, representasi yang sama dengan yang
 dipakai fase-fase compiler sendiri untuk saling bicara. Itu inti desainnya, dan itu juga yang membuat plugin
-lebih gampang dinalar daripada macro: input dan outputnya adalah file yang bisa kamu buka.
+lebih mudah dinalar daripada macro: input dan output-nya adalah berkas yang bisa kamu buka.
 
 ## Plugin itu template tanpa body
 
-Deklarasinya kelihatan seperti template. Body-nya adalah pragma yang menunjuk file lain:
+Deklarasinya kelihatan seperti template. Body-nya adalah pragma yang menunjuk berkas lain:
 
 ```nim
 # main.nim
@@ -58,11 +58,11 @@ Dikompilasi dan dijalankan, itu mencetak `Hello, world!`. `doc/language.md:5307-
 plugin adalah template yang tidak punya body dan membawa pragma `{.plugin.}` berisi program Nim yang
 mengimplementasikannya.
 
-Baca file kedua sebagai program biasa, karena memang itu. Ia mengimpor satu module, `plugins`, yang API-nya
-berupa cursor NIF untuk membaca dan builder untuk menulis. `loadPluginInput()` membuka file yang dikirim
-compiler sebagai argumen pertama. `saveTree` menulis hasilnya ke file yang disebut argumen kedua. Tidak ada
-yang menghubungkan dua proses itu selain file. Compiler menulis input, menjalankan executable, membaca output,
-lalu menyisipkan hasilnya ke module yang sedang ia periksa (`doc/design.md:86-90`, `src/nimony/semos.nim:973-1020`).
+Baca berkas kedua sebagai program biasa, karena memang itu. Ia mengimpor satu modul, `plugins`, yang API-nya
+berupa cursor NIF untuk membaca dan builder untuk menulis. `loadPluginInput()` membuka berkas yang dikirim
+compiler sebagai argumen pertama. `saveTree` menulis hasilnya ke berkas yang disebut argumen kedua. Tidak ada
+yang menghubungkan dua proses itu selain berkas. Compiler menulis input, menjalankan executable, membaca output,
+lalu menyisipkan hasilnya ke modul yang sedang ia periksa (`doc/design.md:86-90`, `src/nimony/semos.nim:973-1020`).
 
 Dua konsekuensi ikut dari kalimat "program biasa". Plugin dikompilasi ke kode native oleh Nimony sendiri
 dengan `-d:nimonyPlugin`, jadi plugin yang tidak bisa dibangun sudah gagal sebelum kode yang memakainya
@@ -70,10 +70,10 @@ diperiksa. Dan plugin jalan di ruang alamatnya sendiri: ia tidak bisa meraih tab
 sebabnya bagian menarik dari API-nya adalah soal meminta apa yang belum ia punya, bukan menelusuri struktur
 yang tidak bisa ia lihat.
 
-## Yang datang tergantung parameternya
+## Yang diterima tergantung parameternya
 
-Argumen panggilan yang sama bisa datang ke plugin dalam dua bentuk. Deklarasikan parameter `untyped` dan ia
-datang sebagai sumber, sebelum name resolution. Deklarasikan `typed` dan ia datang setelah semantic analysis,
+Argumen panggilan yang sama bisa masuk ke plugin dalam dua bentuk. Deklarasikan parameter `untyped` dan ia
+masuk sebagai sumber, sebelum name resolution. Deklarasikan `typed` dan ia masuk setelah semantic analysis,
 sudah di-lower dan di-resolve.
 
 ```nim
@@ -89,10 +89,10 @@ typedShape(a + 1)
 ```
 
 Plugin yang mencetak tag argumen pertama melaporkan `infix` untuk panggilan pertama dan `add` untuk yang kedua.
-Bedanya ada di file input yang di-cache, dan compiler menyimpannya: tiap invocation menulis inputnya ke file
+Bedanya ada di berkas input yang di-cache, dan compiler menyimpannya: tiap invocation menulis input-nya ke berkas
 `.in.nif` di bawah `nimcache`, dalam bentuk biner NIF dengan ekstensi yang biasa. `tools/niftools bif2nif`
 men-decode-nya di tempat. Input `untyped` untuk panggilan di atas berbunyi, dengan path dan indeks dihilangkan
-dan `+` di-escape jadi `\2B` sebagaimana file menyimpannya:
+dan `+` di-escape jadi `\2B` sebagaimana berkas menyimpannya:
 
 ```
 (stmts shape (infix \2B a 1))
@@ -104,8 +104,8 @@ Input `typed` untuk sumber yang sama berbunyi:
 (stmts typedShape (add (i 64)a.0.<build id> 1))
 ```
 
-Tiga hal berubah. Gula operatornya hilang: `a + 1` tadinya node `infix` dengan token operator, sekarang
-node `add`. Identifier `a` menjadi simbol, `a.0.<build id>`, dengan suffix berupa id module build itu. Dan
+Tiga hal berubah. Gula operator-nya hilang: `a + 1` tadinya node `infix` dengan token operator, sekarang
+node `add`. Identifier `a` menjadi simbol, `a.0.<build id>`, dengan suffix berupa id modul build itu. Dan
 simbolnya membawa tipe, `(i 64)`, jadi tipe sebuah argumen bisa dibaca tanpa meminta deklarasi ke compiler. Itu
 arti "NIF yang sudah diperiksa dan di-lower" dalam praktik.
 
@@ -125,7 +125,7 @@ tetap bisa dibangun kalau plugin tetap membuangnya, dan itulah pelajarannya: jen
 yang dikirim ke plugin, bukan kapan argumennya diperiksa. Argumen yang diteruskan plugin diperiksa saat output
 plugin diperiksa.
 
-Wrapper-nya perlu dihafal karena setiap plugin menulis terhadapnya. Inputnya node `(stmts <nama template>
+Wrapper-nya perlu dihafal karena setiap plugin menulis terhadapnya. Input-nya node `(stmts <nama template>
 <argumen>...)`, dan `callArgs` ada untuk melewati wrapper sekaligus namanya (`src/nimony/lib/plugins.nim:1095-1105`).
 Plugin dengan dua argumen memanggil `callArgs` sekali lalu mengiterasi dari situ.
 
@@ -164,9 +164,9 @@ var inp = loadPluginInput()
 saveTree transform(inp)
 ```
 
-Plugin itu mengganti `double(21)` dengan panggilan ke `twice(21)`, dan `twice` di-resolve sesudahnya, di module
+Plugin itu mengganti `double(21)` dengan panggilan ke `twice(21)`, dan `twice` di-resolve sesudahnya, di modul
 yang membuat panggilan. Jadi plugin mengeluarkan nama, bukan simbol yang sudah terikat, kecuali ia sengaja
-menyalin simbol dari inputnya.
+menyalin simbol dari input-nya.
 
 Tag ditulis sebagai nilai enum (`StmtsS`, `CallS`, `CallX`, `AddX`), bukan string. Kelima kelasnya, statement,
 expression, type, pragma, dan substruktur yang bukan salah satunya, berbagi satu ruang ordinal dengan tag id
@@ -183,7 +183,7 @@ FAILURE: .../bin/validator --nimcache:nimcache/double_v deps/double.nim
 
 Tiga anak, karena tag aritmetika membawa lebih dari dua operand yang kelihatan di sumber: satu tipe di slot 0,
 lalu operand kiri dan kanan. Input milik compiler untuk `a + 1` menulis `(add (i 64)a.0.<build id> 1)`, tiga
-slot yang sama: tipenya, lalu simbolnya, lalu literalnya. Operator yang dibangun tangan memasok tipenya
+slot yang sama: tipenya, lalu simbolnya, lalu literal-nya. Operator yang dibangun tangan memasok tipenya
 sendiri:
 
 ```nim
@@ -202,8 +202,8 @@ Template plugin jalan di tiap call site. Jenis lainnya jalan di scope berbeda, d
 mendaftarnya: for-loop plugin yang dideklarasikan pada `iterator`, module plugin yang dideklarasikan sebagai
 statement, type plugin yang menempel ke sebuah tipe, dan import plugin yang menempel ke sebuah `import`.
 
-Module plugin menerima seluruh module setelah semantic analysis dan harus mengembalikan seluruh module. Begitulah
-transformasi satu module tetap berupa suntingan pohon, bukan sekumpulan hook per call site:
+Module plugin menerima seluruh modul setelah semantic analysis dan harus mengembalikan seluruh modul. Begitulah
+transformasi satu modul tetap berupa suntingan pohon, bukan sekumpulan hook per call site:
 
 ```nim
 {.plugin: "deps/erase".}
@@ -217,7 +217,7 @@ Dengan plugin yang melewati statement `block` di top level, program mencetak `ke
 hilang sebelum code generation, bukan dilewati saat run time.
 
 For-loop plugin dideklarasikan pada iterator tanpa body, dan ia dipanggil untuk `for` loop yang memanggil
-iterator itu. Inputnya seluruh loop, bukan call site. Variabel loop-nya bertipe sesuai element type yang
+iterator itu. Input-nya seluruh loop, bukan call site. Variabel loop-nya bertipe sesuai element type yang
 dideklarasikan iterator, jadi iterator yang menyebutkannya memberi plugin variabel bertipe dan body yang bersih:
 
 ```
@@ -229,7 +229,7 @@ dideklarasikan iterator, jadi iterator yang menyebutkannya memberi plugin variab
 
 Itu `iterator countTo(n: int): int {.plugin: "deps/peek".}` dengan body berbunyi `discard i + 1`, dan `: int`
 yang dideklarasikan itulah asal `(i@G 64)`. Hilangkan tipe kembaliannya dan element type-nya jadi `void`, jadi
-variabelnya datang tanpa tipe dan body yang menyebut `i` sudah berupa node error saat plugin melihatnya:
+variabelnya muncul tanpa tipe dan body yang menyebut `i` sudah berupa node error saat plugin melihatnya:
 
 ```
 (stmts
@@ -243,21 +243,20 @@ mendaftar jenis ini di satu baris tabel (`doc/plugins.md:8-20`) tanpa aturan mau
 menyebut scope dan syaratnya sekaligus, bukan mengajarkan jenisnya.
 
 Import plugin adalah yang paling lain, dan layak dipisahkan di kepala pembaca. `import (path/foo) {.plugin:
-"v2".}` menyebut module path dan executable yang sudah dibangun, bukan file `.nim` yang di-resolve terhadap
-module pengimpor (`doc/plugins.md:415-437`). Di pin, menulisnya tanpa executable di tempat berhenti di module
-path:
+"v2".}` menyebut path modul dan executable yang sudah dibangun, bukan berkas `.nim` yang di-resolve terhadap
+modul pengimpor (`doc/plugins.md:415-437`). Di pin, menulisnya tanpa executable di tempat berhenti di path modul:
 
 ```
 main.nim(2, 1) Error: file not found: .../src/lib/path/foo.nim
 ```
 
-Path-nya dicari di direktori library toolchain, jadi string import plugin itu nama module di search path biasa,
+Path-nya dicari di direktori library toolchain, jadi string import plugin itu nama modul di search path biasa,
 dan executable-nya harus ada sebelum build mencapainya. Contoh in-tree-nya `src/v2`, yang memanggil compiler Nim
-2 lewat shell dan mengisi cache dengan NIF hasil sem untuk satu module penuh.
+2 lewat shell dan mengisi cache dengan NIF hasil sem untuk satu modul penuh.
 
 ## Di mana plugin tinggal
 
-Path di pragma di-resolve relatif terhadap file yang memuat string-nya, bukan relatif terhadap call site.
+Path di pragma di-resolve relatif terhadap berkas yang memuat string-nya, bukan relatif terhadap call site.
 Perbedaan itu punya akibat yang kelihatan saat template diekspor:
 
 ```
@@ -269,34 +268,34 @@ b/deps/tagger.nim    umpan dengan nama plugin yang sama
 
 Dikompilasi dari `b`, dengan plugin bernama sama duduk di sebelah `b`, program mencetak hasil
 `a/deps/tagger.nim`, dan `b/deps/tagger.nim` tidak pernah dikompilasi. Executable-nya mendarat di cache build
-yang sedang jalan, bukan di cache module yang mendeklarasikan pragma: build ini menulis `b/nimcache/tagger`,
+yang sedang jalan, bukan di cache modul yang mendeklarasikan pragma: build ini menulis `b/nimcache/tagger`,
 dan `a/nimcache` tidak pernah dibuat. Program kedua di dalam `a` mengompilasi sumber yang sama lagi ke cache-nya
 sendiri, dan itu sebabnya cache ini per build, bukan per plugin. `doc/plugins.md:172-191` menyatakan aturan
 resolusinya; probe-nya adalah cek bahwa aturan itu berlaku saat dua kandidat ada.
 
-Build graph memperlakukan plugin sebagai leaf: node module mendaftar executable plugin yang mungkin ia jalankan
+Build graph memperlakukan plugin sebagai leaf: node modul mendaftar executable plugin yang mungkin ia jalankan
 sebagai input, dan executable itu output dari node `pluginbuild`, jadi driver membangunnya lebih dulu dan
-memeriksa ulang module saat salah satunya berubah (`src/nimony/deps.nim:2025-2027`). Itu sebabnya suntingan
-plugin bukan rebuild penuh, dan plugin yang tidak pernah dipanggil module yang berubah juga tidak dibangun ulang.
+memeriksa ulang modul saat salah satunya berubah (`src/nimony/deps.nim:2025-2027`). Itu sebabnya suntingan
+plugin bukan rebuild penuh, dan plugin yang tidak pernah dipanggil modul yang berubah juga tidak dibangun ulang.
 
 ## Cache, dan satu panggilan yang menjaganya jujur
 
-Invocation plugin di-cache berdasarkan checksum pohon inputnya, bukan jam. `runPlugin` menghitung checksum itu,
-menamai file input dan output menurutnya, dan memakai ulang outputnya saat file-file itu masih berlaku
+Invocation plugin di-cache berdasarkan checksum pohon input-nya, bukan jam. `runPlugin` menghitung checksum itu,
+menamai berkas input dan output menurutnya, dan memakai ulang output-nya saat berkas-berkas itu masih berlaku
 (`src/nimony/semos.nim:1000-1015`). Dua call site menghasilkan dua input dan dua kali jalan; call site yang sama
-di build berikutnya menghasilkan satu file dan nol kali jalan.
+di build berikutnya menghasilkan satu berkas dan nol kali jalan.
 
-Itu benar untuk plugin yang jawabannya cuma bergantung pada inputnya, dan salah untuk plugin yang membaca hal
-lain. Plugin yang membaca file skema, tabel konstanta, atau template akan ter-memo selamanya: file-nya berubah,
-inputnya tidak, dan build terus memakai ekspansi lama. Obatnya satu panggilan:
+Itu benar untuk plugin yang jawabannya hanya bergantung pada input-nya, dan salah untuk plugin yang membaca hal
+lain. Plugin yang membaca berkas skema, tabel konstanta, atau template akan ter-memo selamanya: berkasnya berubah,
+input-nya tidak, dan build terus memakai ekspansi lama. Obatnya satu panggilan:
 
 ```nim
 dependsOn "extra.txt"
 ```
 
-`dependsOn` melaporkan pembacaannya, dan compiler menjalankan ulang plugin saat file yang disebut lebih baru
-dari output yang di-cache (`doc/plugins.md:649-687`). Bedanya gampang dilihat dengan plugin yang menggemakan isi
-file:
+`dependsOn` melaporkan pembacaannya, dan compiler menjalankan ulang plugin saat berkas yang disebut lebih baru
+dari output yang di-cache (`doc/plugins.md:649-687`). Bedanya mudah dilihat dengan plugin yang menggemakan isi
+berkas:
 
 ```
              build pertama   setelah extra.txt diubah
@@ -304,17 +303,17 @@ tanpa dependsOn    first                  first
 dependsOn          first                  second
 ```
 
-Ada dua batas saat file-nya bukan satu path. Hanya path yang ada yang dicatat, jadi membuat file yang plugin
-cari dan tidak temukan tidak membatalkan apa pun. Menyebut direktori bukan berarti menyebut isinya: file yang
+Ada dua batas saat berkasnya bukan satu path. Hanya path yang ada yang dicatat, jadi membuat berkas yang plugin
+cari dan tidak temukan tidak membatalkan apa pun. Menyebut direktori bukan berarti menyebut isinya: berkas yang
 dibuat di dalam subdirektori langsung menjalankan ulang plugin walaupun timestamp direktori itu sendiri tidak
-bergerak, sementara mengubah file yang sudah ada di bawah situ tidak mengubah apa pun. Sebut tiap file kalau isi
+bergerak, sementara mengubah berkas yang sudah ada di bawah situ tidak mengubah apa pun. Sebut tiap berkas kalau isi
 sebuah pohon penting.
 
-Sumber plugin itu sendiri satu-satunya file yang tidak jatuh ke perangkap itu. Ia input bagi node module, jadi
-mengubahnya menjalankan ulang plugin dan memeriksa ulang module, sementara file data yang dibaca plugin tetap
+Sumber plugin itu sendiri satu-satunya berkas yang tidak jatuh ke perangkap itu. Ia input bagi node modul, jadi
+mengubahnya menjalankan ulang plugin dan memeriksa ulang modul, sementara berkas data yang dibaca plugin tetap
 tak terlihat sampai `dependsOn` menyebutnya.
 
-Ada satu hal lagi sebelum menulis plugin yang membaca file: di pin, `readFile` dideklarasikan `.raises`
+Ada satu hal lagi sebelum menulis plugin yang membaca berkas: di pin, `readFile` dideklarasikan `.raises`
 (`lib/std/syncio.nim:577`), jadi plugin yang memanggilnya harus menangkapnya:
 
 ```
@@ -323,7 +322,7 @@ deps/note.nim(7, 25) Error: cannot call a routine marked as `.raises` outside of
 
 ## Apa yang NIF beli di sebuah build
 
-Job kedua bab ini adalah alasan desain ini ada, dan versi jujurnya lebih kecil dari "NIF bikin build
+Hal kedua yang dibahas bab ini adalah alasan desain ini ada, dan versi jujurnya lebih kecil dari "NIF bikin build
 cepat". Tiga sifat yang bekerja, dan ketiganya sifat format, bukan sifat sistem plugin.
 
 Deklarasi dan pemakaian adalah token kind yang berbeda (`doc/design.md:75-81`). Compiler bisa menjawab "ini
@@ -332,21 +331,21 @@ dan plugin mendapat informasi yang sama gratis: `symText` dan simbol di pohon ad
 yang harus di-resolve lagi.
 
 Simbol dimuat malas. NIF punya format indeks pendamping yang memungkinkan compiler menarik satu simbol saat
-dibutuhkan, bukan membaca satu module penuh, dan `doc/design.md:81` menyebutnya "most essential for incremental
-compilations". Header sebuah module bisa dibaca tanpa membaca body-nya, jadi perubahan di satu module tidak
-memaksa compiler membaca ulang antarmuka semua module di atasnya.
+dibutuhkan, bukan membaca satu modul penuh, dan `doc/design.md:81` menyebutnya "most essential for incremental
+compilations". Header sebuah modul bisa dibaca tanpa membaca body-nya, jadi perubahan di satu modul tidak
+memaksa compiler membaca ulang antarmuka semua modul di atasnya.
 
-Module adalah node terpisah dalam satu graph. Tiap module punya node pemeriksaan semantiknya sendiri, dan driver
+Modul adalah node terpisah dalam satu graph. Tiap modul punya node pemeriksaan semantiknya sendiri, dan driver
 menjalankan graph, bukan daftar: nifmake adalah "a make-like tool that is used by Nimony to implement parallel
 and incremental compilation" (`src/nifmake/nifmake.nim:7-9`), menjadwalkan dari ready queue (`:458-470`), dan
 baris perintah di build yang gagal berbunyi `nifmake -j run`. Plugin adalah node lain di graph itu. Karena itu
 ia tidak menyerialkan build yang ia ikuti: ia dibangun sekali, di-cache per input, dan dipakai bersama oleh
-setiap module yang memanggilnya. Bagian paralelnya milik build graph, bukan milik plugin. Tidak ada di bab
-ini yang membuat plugin konkuren, dan plugin yang menulis file bersama dari dua module sekaligus adalah bug yang
+setiap modul yang memanggilnya. Bagian paralelnya milik build graph, bukan milik plugin. Tidak ada di bab
+ini yang membuat plugin konkuren, dan plugin yang menulis berkas bersama dari dua modul sekaligus adalah bug yang
 kamu tulis sendiri.
 
 Biaya NIF sama konkretnya. Penulis plugin bekerja dengan tag sebuah IR compiler, bukan dengan AST yang dirancang
-untuk manusia, dan inputnya snapshot yang dibekukan: plugin tidak bisa bertanya ke compiler kecuali dengan
+untuk manusia, dan input-nya snapshot yang dibekukan: plugin tidak bisa bertanya ke compiler kecuali dengan
 meminta deklarasi tipe yang ia butuhkan. Itu pokok bahasan `needTypes`, yang membuat compiler menambahkan
 deklarasi yang disebut plugin ke input kedua dan menjalankan plugin lagi (`doc/plugins.md:226-273`). Plugin yang
 tidak pernah memeriksa tipe tidak membayar apa pun, dan yang memeriksa memintanya satu level sekaligus, bukan
@@ -357,7 +356,7 @@ satu simbol sekaligus.
 Ada empat kegagalan yang perlu dikenali, karena pesannya tidak menyebut "plugin".
 
 Plugin yang menulis pohon kosong menghentikan build dengan `??? Error: expression expected`, menunjuk call site.
-`???` itu posisi sumber yang hilang dari output plugin, bukan diagnostic yang rusak: outputnya tidak punya
+`???` itu posisi sumber yang hilang dari output plugin, bukan diagnostic yang rusak: output-nya tidak punya
 lokasi karena builder-nya tidak menulis satu pun.
 
 Plugin yang ingin melaporkan masalah mengembalikan `errorTree`, dan compiler mencetaknya sebagai error
@@ -367,7 +366,7 @@ compile-time:
 ??? Error: stop here
 ```
 
-Itu cara yang didokumentasikan untuk menolak argumen (`doc/plugins.md:688-702`), dan pesannya datang tanpa file
+Itu cara yang didokumentasikan untuk menolak argumen (`doc/plugins.md:688-702`), dan pesannya muncul tanpa berkas
 dan baris kecuali plugin menyediakannya. Kedua bentuk jalan. Kembalikan sebagai seluruh output, atau tambahkan
 di dalam builder lain (`result.addTree errorTree("must be an integer", arg)`), di mana overload yang menerima
 cursor melaporkan posisi argumennya sebagai `main.nim(4, 11) Error: must be an integer`. Yang benar-benar
@@ -383,8 +382,8 @@ FAILURE: .../nifler2 --portablePaths --deps parse .../src/lib/deps/nothere.nim .
 ```
 
 Baca path di baris itu: ia memberi tahu di mana compiler mencari. Path yang mulai dengan direktori proyek kamu
-adalah yang kamu maksud; path di bawah `src/lib` toolchain berarti string pragmanya di-resolve sebagai module
-library, dan file plugin-nya tidak ada di path yang disebut.
+adalah yang kamu maksud; path di bawah `src/lib` toolchain berarti string pragma-nya di-resolve sebagai modul
+library, dan berkas plugin-nya tidak ada di path yang disebut.
 
 Bentuk keempat tidak punya pesan compiler sama sekali. Plugin yang namanya resolve tapi executable-nya tidak ada
 dijalankan sebagai perintah, dan shell yang mengeluh:
@@ -406,9 +405,9 @@ me-resolve ke sesuatu yang tidak ada di situ.
 subprocess, membaca NIF dan menulis NIF. Tidak ada API pohon in-process, tidak ada `NimNode`, dan tidak ada cara
 menyerahkan callback ke compiler.
 
-*Apa yang rusak kalau kamu mempertahankan kebiasaan itu.* Macro yang diport dan membangun hasilnya dengan memanggil
-proc helper di module yang sama sekarang jadi program yang harus memuat input, mentransformasinya, dan
-menyimpannya, dan helper-nya harus ada di dalam plugin, bukan di module yang memakainya. Macro yang
+*Apa yang rusak kalau kamu mempertahankan kebiasaan itu.* Macro yang di-port dan membangun hasilnya dengan memanggil
+proc helper di modul yang sama sekarang jadi program yang harus memuat input, mentransformasinya, dan
+menyimpannya, dan helper-nya harus ada di dalam plugin, bukan di modul yang memakainya. Macro yang
 mengembalikan `NimNode` tidak akan kompilasi sama sekali. Di pin, `macro` dengan parameter `untyped` masih bisa
 dikompilasi dan dijalankan, yang membuat kebiasaan lama terlihat didukung: `doc/differences.md:19` bilang macro
 diganti, jadi perlakukan macro yang masih hidup sebagai compatibility surface dan tulis transformasi baru sebagai
@@ -434,16 +433,16 @@ keempat yang dicek sample ini.
 ## Cek
 
 1. Tulis template plugin yang menerima satu argumen `untyped` dan mengembalikannya apa adanya, lalu panggil
-   dengan ekspresi yang nilainya kamu cetak. Jelaskan kenapa output program adalah ekspresinya, bukan input
+   dengan expression yang nilainya kamu cetak. Jelaskan kenapa output program adalah expression-nya, bukan input
    plugin-nya.
 2. Ubah parameternya ke `typed` dan decode kedua input yang di-cache dengan `tools/niftools bif2nif`. Sebutkan
    tiga perbedaan di antara keduanya, satu di antaranya harus berupa simbol.
-3. Tulis plugin yang membaca file teks dan mengeluarkan isinya sebagai string literal. Build dua kali dengan file
-   diubah di antaranya, catat bahwa outputnya tidak berubah, lalu tambahkan `dependsOn` dan build lagi.
+3. Tulis plugin yang membaca berkas teks dan mengeluarkan isinya sebagai string literal. Build dua kali dengan berkas
+   diubah di antaranya, catat bahwa output-nya tidak berubah, lalu tambahkan `dependsOn` dan build lagi.
 4. Buat plugin mengeluarkan `(add ...)` dengan tangan dan dua anak, lalu catat pesan validator-nya. Sesudah itu
    taruh node tipe di slot pertama dan dua int literal sesudahnya, dan catat apa yang dicetak programnya. Coba
    juga mengirim argumen bertipe di tempat tipe itu seharusnya.
-5. Pindahkan sumber plugin ke direktori kedua dan tinggalkan umpan bernama sama di direktori module pemanggil.
+5. Pindahkan sumber plugin ke direktori kedua dan tinggalkan umpan bernama sama di direktori modul pemanggil.
    Catat mana yang jalan, dan di mana executable-nya ditulis.
 
 ## Chapter checklist

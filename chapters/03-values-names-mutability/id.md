@@ -17,7 +17,7 @@ glossary_added: ["let variable", "case-sensitive identifier", "scope (of a name)
 
 ## Untuk apa bab ini
 
-Nimony memberimu tiga cara menempelkan nama pada sebuah nilai, dan ketiganya cuma berbeda di satu pertanyaan:
+Nimony memberimu tiga cara menempelkan nama pada sebuah nilai, dan ketiganya hanya berbeda di satu pertanyaan:
 *bisakah nama ini ditulis lagi setelah baris yang mendeklarasikannya lewat?* `const` bilang tidak, dan nilainya
 ditetapkan sebelum program berjalan. `let` bilang tidak, dan nilainya ditetapkan saat deklarasinya dijalankan.
 `var` bilang bisa.
@@ -30,8 +30,8 @@ sendiri yang berbeda dari Nim 2: ejaannya harus persis, dan sebuah nama hanya hi
 
 ### `const`: ditetapkan sebelum program berjalan
 
-Sebuah `const` terikat pada constant expression. `doc/language.md` di pin membatasinya ke literal, operator
-bawaan, konstanta yang sudah dideklarasikan sebelumnya, dan pemanggilan routine yang semua argumennya bisa
+`const` terikat pada constant expression. `doc/language.md` di pin membatasinya ke literal, operator
+bawaan, konstanta yang sudah dideklarasikan sebelumnya, dan panggilan routine yang semua argumennya bisa
 dievaluasi saat compile time (`doc/language.md:24-31`). Nilainya selesai saat kompilasi, jadi ketika programmu
 mulai berjalan tidak ada lagi yang perlu dihitung.
 
@@ -40,7 +40,7 @@ const Language = "nimony"
 const Banner = Language & " / names and values"
 ```
 
-Penyambungan string itu terjadi saat kompilasi. Pemanggilan routine juga, asal tidak ada bagian yang membutuhkan
+Penyambungan string itu terjadi saat kompilasi. Panggilan routine juga, asal tidak ada bagian yang membutuhkan
 program yang sedang berjalan:
 
 ```
@@ -68,9 +68,9 @@ Menulis ke sana adalah compile error, bukan error saat runtime:
 Error: invalid reassignment to `let` variable
 ```
 
-`doc/language.md:1640-1655` menambahkan dua konsekuensi yang layak kamu tahu sebelum kaget. Sebuah `let`
+`doc/language.md:1640-1655` menambahkan dua konsekuensi yang layak kamu tahu sebelum kaget. `let`
 bukan l-value, jadi ia tidak bisa dilewatkan ke parameter `var` dan alamatnya tidak bisa diambil. Dan karena
-nilainya immutable sejak awal, sebuah `let` wajib punya initializer — satu-satunya pengecualian adalah deklarasi
+nilainya immutable sejak awal, `let` wajib punya initializer — satu-satunya pengecualian adalah deklarasi
 yang mengambil nilainya dari kode native lewat pragma bergaya `importc`.
 
 ### `var`: yang boleh ditulis ulang
@@ -84,7 +84,7 @@ for i in 1 .. limit:
   total = total + i
 ```
 
-Sebuah `var` di level module mulai dari zero value tipenya, ditulis atau tidak ditulis: `int` terbaca `0`,
+`var` di level modul mulai dari zero value tipenya, ditulis atau tidak ditulis: `int` terbaca `0`,
 `string` terbaca `""`, dan object yang tersusun dari keduanya terbaca serba nol.
 
 Di dalam routine, aturannya yang tertulis di guide (`doc/language.md:1591-1630`): sebuah local harus terbukti
@@ -93,7 +93,7 @@ sudah ditulis sebelum dibaca. `var chosen: int` yang tidak ditulis di jalur mana
 satu cabang saja tidak.
 
 Pemeriksaannya soal bukti, bukan soal tipe: `int` juga gagal di situ. Kasus yang berbeda adalah `var` di level
-module dengan tipe yang tidak punya default value — itu langsung ditolak di deklarasinya:
+modul dengan tipe yang tidak punya default value — itu langsung ditolak di deklarasinya:
 
 ```
 Error: 'base' is of type 'ref int64 not nil', which has no default value (it contains a not-nil pointer): give it an initial value
@@ -104,7 +104,7 @@ apa pun yang kebetulan ada di memori, bukan `0`.
 
 ## Nama peka huruf besar-kecil
 
-Ini perbedaan pertama yang nyata dari Nim 2, dan perbedaannya cuma di ejaan.
+Ini perbedaan pertama yang nyata dari Nim 2, dan perbedaannya hanya di ejaan.
 
 Nimony case-sensitive: dua identifier yang beda huruf besar-kecil adalah dua identifier (`doc/language.md:7`;
 `doc/differences.md:22`). Jadi ini ter-compile, dan kedua nama tetap hidup:
@@ -126,7 +126,7 @@ padahal deklarasinya `let myValue = 1`. Alasan perubahan ini disebut terus teran
 kesederhanaan implementasi — dan bisa berubah di masa depan, yang justru jadi alasan buku ini menyebutnya di pin,
 bukan sebagai kebenaran permanen.
 
-Kalau kamu mem-port sebuah module dan butuh aturan Nim 2 kembali, jalan keluarnya ada dan sifatnya per module:
+Kalau kamu mem-port sebuah modul dan butuh aturan Nim 2 kembali, jalan keluarnya ada dan sifatnya per modul:
 
 ```
 {.feature: "ignoreStyle".}
@@ -150,7 +150,7 @@ echo step       # 2 — the outer let, untouched
 ```
 
 Dua aturan membuat ini tidak jadi teka-teki. Sebuah identifier tidak bisa dideklarasikan ulang di block yang
-*sama*, hanya di block yang bersarang — compilernya bilang `Error: attempt to redeclare: step`. Dan nama khusus
+*sama*, hanya di block yang bersarang — compiler-nya bilang `Error: attempt to redeclare: step`. Dan nama khusus
 `_` tidak pernah masuk ke scope sama sekali, jadi `let _ = 123` dievaluasi lalu dibuang, dan kamu boleh menulisnya
 ulang sesering yang kamu mau.
 
@@ -161,20 +161,20 @@ ulang sesering yang kamu mau.
 > terbatas.
 >
 > **Yang dilakukan Nimony.** Identifier harus persis (`doc/language.md:7`), dengan `{.feature: "ignoreStyle".}`
-> tersedia per module untuk kode hasil port. `const` dievaluasi oleh mesin compile-time yang menerima pemanggilan
+> tersedia per modul untuk kode hasil port. `const` dievaluasi oleh mesin compile-time yang menerima panggilan
 > routine asal semua argumennya bisa dievaluasi saat kompilasi (`doc/language.md:24-31`). Itulah sebabnya
 > `const Twice = double(4)` bekerja.
 >
 > **Apa yang rusak kalau kebiasaannya dipertahankan.** Kode hasil port berhenti di `undeclared identifier` pada
 > varian ejaan yang dulu diterima Nim 2 — perbaikannya mekanis, tapi datangnya sebagai seratus error, bukan satu.
-> Dan `const` yang nilainya bergantung pada sebuah `var` tetap compile error, jadi menghitung "konstanta" dari
+> Dan `const` yang nilainya bergantung pada `var` tetap compile error, jadi menghitung "konstanta" dari
 > data runtime tetap mustahil; obatnya `let`, bukan pragma.
 
 ## Samples
 
 - `samples/03-values-names-mutability/values.nim` — satu program yang mendeklarasikan ketiga bentuk, menghitung
-  `const` lewat pemanggilan routine, menjaga dua nama yang beda huruf besar-kecil tetap hidup, membayangi salah
-  satunya di block bersarang, dan mendeklarasikan `var` di level module tanpa nilai yang kemudian ditulis oleh
+  `const` lewat panggilan routine, menjaga dua nama yang beda huruf besar-kecil tetap hidup, membayangi salah
+  satunya di block bersarang, dan mendeklarasikan `var` di level modul tanpa nilai yang kemudian ditulis oleh
   kedua cabang. Dibuktikan oleh `tools/verify-samples.sh`:
 
   ```
@@ -208,7 +208,7 @@ ulang sesering yang kamu mau.
    `const` tidak boleh bergantung pada data runtime.
 5. Tulis `var chosen: int` di dalam sebuah proc tanpa menulisnya di jalur mana pun, lalu baca. Harapan:
    `cannot prove that chosen has been initialized`. Lalu pastikan setiap jalur menulis lebih dulu, dan build lagi:
-   harapan, ia ter-compile. Perhatikan bahwa blok yang sama di level module tidak gagal — di sana nilainya `0`.
+   harapan, ia ter-compile. Perhatikan bahwa blok yang sama di level modul tidak gagal — di sana nilainya `0`.
 
 ## Checklist chapter
 

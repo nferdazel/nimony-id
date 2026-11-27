@@ -78,7 +78,7 @@ lewat pointer. Sisa bab ini soal satu hal yang *akan* dicek compiler untuk kamu,
 `ref`, `ptr`, `pointer`, `cstring` dan tipe prosedural tidak bisa memuat `nil` kecuali tipenya bilang begitu
 (`doc/language.md:839`, dan pembahasan lebih penuh di `doc/lenientnils.md:7-19`). Compiler mencetak tipe seperti
 itu dengan faktanya dieja — `ref Node.Obj not nil` — jadi pesan yang terlihat aneh pada awalnya sebenarnya
-sedang mengutip tipe balik ke kamu.
+sedang mengutip ulang tipe itu di pesannya.
 
 Tiga error berbeda menjaga tiga cara berbeda untuk salah, dan layak dikenali satu per satu, karena masing-masing
 punya perbaikan sendiri.
@@ -87,8 +87,8 @@ punya perbaikan sendiri.
 (`src/nimony/contracts.nim:280`, dicapai dari `checkNilMatch`). Tidak ada yang dianalisis: nil memang bukan nilai
 dari tipe itu.
 
-**Tidak ada yang bisa dianalisis.** `cannot analyze expression is not nil: g` berarti akar ekspresinya bukan
-place yang mau compiler pertimbangkan. Di pin ini kasusnya satu: variabel module-level. `analysableRoot`
+**Tidak ada yang bisa dianalisis.** `cannot analyze expression is not nil: g` berarti akar expression-nya bukan
+place yang mau compiler pertimbangkan. Di pin ini kasusnya satu: variabel level modul. `analysableRoot`
 (`src/nimony/contracts.nim:249-275`) menelusuri dot, subscript dan dereference turun ke simbol dasarnya, lalu
 menolak simbol itu kalau ia global, karena global diasumsikan dibagi antar thread, jadi
 `if glob != nil: use glob[]` tidak bisa dibuktikan benar. Dereference tidak dikecualikan:
@@ -100,7 +100,7 @@ pada lokal nilable yang belum ditutup guard mana pun. Perbaikannya sebuah guard,
 mana compiler menerima guard.
 
 Yang pertama punya wajah kedua. Tipe yang tidak bisa nil **tidak punya default value**, karena zeroed storage
-terbaca nil dan itu persis yang ditiadakan tipe itu. Jadi deklarasi module-level tanpa nilai awal ditolak:
+terbaca nil dan itu persis yang ditiadakan tipe itu. Jadi deklarasi level modul tanpa nilai awal ditolak:
 
 ```
 Error: 'base' is of type 'ref Node.Obj not nil', which has no default value
@@ -115,7 +115,7 @@ range yang mengecualikan nol, dan enum tanpa anggota berordinal 0 — dan keduan
 **Lokal** diperlakukan berbeda, dan sumbernya menyebut alasannya: lokal tidak berutang apa pun pada
 deklarasinya, karena flow analysis membiarkan `var r: ref int` berdiri selama sebuah penulisan mencapainya
 sebelum pembacaan apa pun, yang lebih permisif dan sama amannya (`src/nimony/contracts_fir.nim:5805-5811`).
-Baca terlalu cepat dan errornya berubah jadi lain — `cannot prove that r has been initialized`
+Baca terlalu cepat dan error-nya berubah jadi lain — `cannot prove that r has been initialized`
 (`src/nimony/contracts.nim:357`).
 
 ```nim
@@ -185,7 +185,7 @@ Tipe `m` adalah `nil Node`; fact set tidak punya apa pun untuk dikatakan tentang
 yang dibangun sebuah perbandingan, bukan apa yang jadi initialiser-nya. Tambahkan guard, dan ia compile.
 
 **Narrowing tidak menembus field.** `if p.n != nil: echo p.n.data` ditolak dengan
-`cannot prove expression is not nil: p.n`. `analysableRoot` menelusuri ekspresi dot turun ke simbol dasarnya,
+`cannot prove expression is not nil: p.n`. `analysableRoot` menelusuri expression dot turun ke simbol dasarnya,
 jadi `p.n` dan `p.m` sama-sama place `p` di fact set: fakta yang dicatat `if p.n != nil` adalah fakta tentang
 `p`, yang tidak mengatakan apa pun tentang `p.n`. Ini keterbatasan analisisnya sebagaimana adanya, bukan aturan
 sistem tipe, dan sumbernya menandainya sebagai sementara. Salin field-nya ke lokal, uji lokal itu, lalu pakai
@@ -214,8 +214,8 @@ Tidak ada yang perlu dijaga di sini. `tmp` adalah `ref int` sebelum panggilan da
 jadi `return` menerimanya tanpa pemeriksaan. Yang tidak bisa kamu lakukan adalah berubah pikiran sesudahnya:
 `tmp = nil` ditolak dengan `expected non-nil value`, dan `tmp == nil` dievaluasi jadi `false`.
 
-Deklarasi not-nil di module level adalah kegagalan yang lain, dan itu bukan soal `new`: `var x: ref int` di
-module level tidak punya default value, jadi deklarasinya ditolak sebelum `new` melihatnya.
+Deklarasi not-nil di level modul adalah kegagalan yang lain, dan itu bukan soal `new`: `var x: ref int` di
+level modul tidak punya default value, jadi deklarasinya ditolak sebelum `new` melihatnya.
 
 `boxed` di sample mengambil varian nullable, untuk nilai yang harus dicek saat program berjalan:
 
@@ -228,8 +228,8 @@ proc boxed(v: int): ref int =
   tmp
 ```
 
-Dengan tujuan nullable, `new` tidak membangun fakta apa pun sendiri: mesin fakta belajar dari perbandingan, bukan
-dari pemanggilan, jadi `result = tmp` tepat setelah `new(tmp)` ditolak dengan `cannot prove expression is not
+Dengan tujuan nullable, `new` tidak membangun fakta apa pun sendiri: contracts engine belajar dari perbandingan, bukan
+dari panggilan, jadi `result = tmp` tepat setelah `new(tmp)` ditolak dengan `cannot prove expression is not
 nil: tmp`, di setiap pemakaian `tmp`. Guard-nya menanggung beban, bukan hiasan; `quit` di cabang nil memuaskan
 kedua analisis sekaligus, karena cabang itu tidak berlanjut dan `result` di-assign di satu-satunya jalur yang
 berlanjut.
@@ -262,7 +262,7 @@ bab ini yang menyerahkan jaminan alih-alih memenuhinya.
 ## Nim 2 delta
 
 > **Apa yang Nim 2 lakukan.** Setiap `ref`, `ptr`, `pointer` dan `cstring` bisa memuat nil, dan setiap deklarasi
-> mendapat zeroed storage, jadi `var x: ref int` di module level legal dan diam-diam nil. Membacanya adalah
+> mendapat zeroed storage, jadi `var x: ref int` di level modul legal dan diam-diam nil. Membacanya adalah
 > fault runtime: program yang sama compile lalu mati dengan
 > `SIGSEGV: Illegal storage access. (Attempt to read from nil?)`.
 >
@@ -270,7 +270,7 @@ bab ini yang menyerahkan jaminan alih-alih memenuhinya.
 > dengan pointer not-nil tidak punya default value, dan dereference tanpa guard tidak compile. Bentuk nullable
 > dieja `nil T`.
 >
-> **Apa yang patah kalau kamu pertahankan kebiasaannya.** Buffer module-level, field object dan variabel
+> **Apa yang patah kalau kamu pertahankan kebiasaannya.** Buffer level modul, field object dan variabel
 > prosedural yang dulu mengandalkan zeroing sekarang butuh nilai awal. Helper yang menerima nil berarti
 > "tidak ada" butuh `nil T` di signature-nya. Dan jalan keluarnya jujur soal harganya: di bawah
 > `{.feature: "lenientnils".}` (`doc/lenientnils.md:141-155`) kode lama compile lagi, tanpa satu pun diagnostik
@@ -298,11 +298,11 @@ Lima barisnya adalah counter setelah dua panggilan `bump`, total list, total lis
 
 ## Cek
 
-1. Deklarasikan `var g: nil Node = nil` di module level dan baca `g.data` di dalam proc di bawah `if g != nil:`.
+1. Deklarasikan `var g: nil Node = nil` di level modul dan baca `g.data` di dalam proc di bawah `if g != nil:`.
    Hasil yang diharapkan: ia **tidak** compile, dan pesannya `cannot analyze expression is not nil: g`.
    Menyalin `g` ke lokal di dalam proc tidak menolong — copy itu pembacaan global yang tidak tersinkronisasi,
    ditolak dengan `unsynchronized access to global variable 'g'`. Kirim `g` sebagai parameter, atau ambil
-   copy-nya di module level, dan ia compile.
+   copy-nya di level modul, dan ia compile.
 2. Tulis `let m: nil Node = Node(data: 3)` lalu baca `m.data`. Harapan: `cannot prove expression is not nil:
    m`. Tambahkan `if m != nil:` dan pastikan lolos.
 3. Tulis `type Holder = object` dengan field `n: nil Node`, isi sebuah `Holder` dengan node sungguhan, lalu

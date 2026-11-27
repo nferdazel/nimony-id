@@ -17,7 +17,7 @@ glossary_added: ["references", "daftar pustaka"]
 
 ## Untuk apa lampiran ini
 
-Sebuah kalimat di buku ini bersandar pada salah satu dari tiga hal: apa yang dilakukan kompiler yang di-pin, apa
+Sebuah kalimat di buku ini bersandar pada salah satu dari tiga hal: apa yang dilakukan compiler yang di-pin, apa
 yang dulu dilakukan Nim 2, atau keputusan buku ini tentang bentuknya sendiri. Dua yang pertama bisa kamu periksa
 sendiri dengan repositori dan satu unduhan. Yang ketiga tertulis di `OUTLINE.md` dan `ERRATA.md`. Lampiran ini
 menyebut sumbernya sekali, supaya kamu yang meragukan satu halaman tidak perlu menebak dari mana halaman itu
@@ -25,13 +25,13 @@ datang.
 
 ## Cara buku ini mengutip
 
-Klaim tentang bahasanya membawa path dan rentang baris, relatif terhadap akar repositori kompiler di pin:
+Klaim tentang bahasanya membawa path dan rentang baris, relatif terhadap akar repositori compiler di pin:
 `doc/language.md:126-140`, `src/nimony/sem.nim:3305`, `lib/std/system.nim:123-126`. Alamat satu sitasi adalah
 pohon berkas di commit itu, lalu path-nya, lalu rentangnya:
 
 `https://github.com/nim-lang/nimony/blob/4ba90a781b0b22d0821efaa153c129c37cef6143/doc/language.md#L126-L140`
 
-Kompiler hanya mencetak bentuk pendeknya, `4ba90a7`. Hash lengkapnya ada di frontmatter setiap bab sebagai
+Compiler hanya mencetak bentuk pendeknya, `4ba90a7`. Hash lengkapnya ada di frontmatter setiap bab sebagai
 `nimony_commit`, dan itulah yang dipakai di alamat-alamat ini.
 
 Dua batasnya perlu disebut di halaman yang sama dengan konvensinya:
@@ -39,16 +39,16 @@ Dua batasnya perlu disebut di halaman yang sama dengan konvensinya:
 - Audit di edisi ini memeriksa bahwa setiap path yang dikutip ada di pin dan setiap rentangnya jatuh di dalam
   berkasnya. Audit itu tidak memeriksa bahwa baris tersebut menopang kalimat yang mengutipnya. Itu tugas tabel
   probe `review.md` tiap bab, yang mencetak apa yang dijalankan dan apa yang keluar, satu baris per klaim.
-- Sitasi bukan kutipan. Buku ini memparafrase rujukannya dan mengutip kompilernya. Jadi bukti sebuah bab adalah
+- Sitasi bukan kutipan. Buku ini memparafrase rujukannya dan mengutip compiler-nya. Jadi bukti sebuah bab adalah
   blok output dan sitasinya bersama-sama, tidak pernah sitasinya saja.
 
-## Kompiler yang di-pin
+## Compiler yang di-pin
 
 | Item | Nilai |
 | --- | --- |
 | Repositori | `https://github.com/nim-lang/nimony` |
 | Commit | `4ba90a781b0b22d0821efaa153c129c37cef6143`, 2026-11-12 |
-| Versi | `nimony 0.6.3`, seperti yang dilaporkan kompilernya sendiri |
+| Versi | `nimony 0.6.3`, seperti yang dilaporkan compiler-nya sendiri |
 | Backend | `nimony c`; `nimony n` tidak ada di commit ini |
 | Lisensi | MIT, berkas `LICENSE` di commit itu |
 
@@ -57,7 +57,7 @@ Sumber di dalam pohon itu, diurutkan dari yang paling sering dipakai bab-bab. Hi
 
 | Sumber | Apa itu | Di mana buku ini bersandar padanya |
 | --- | --- | --- |
-| `doc/language.md` | Referensi bahasa yang ikut dalam kompiler; 149 sitasi | Deskripsi yang jadi titik awal hampir semua bab, sebelum sample atau probe membenarkan atau membetulkannya |
+| `doc/language.md` | Referensi bahasa yang ikut dalam compiler; 149 sitasi | Deskripsi yang jadi titik awal hampir semua bab, sebelum sample atau probe membenarkan atau membetulkannya |
 | `lib/std/system.nim` | `system`, termasuk hook yang jadi bahan `move` dan `=wasMoved`; 32 sitasi | Bab 3, 14 dan 20, dan keadaan setelah `move` yang diajarkan Bab 14 |
 | `doc/differences.md` | Semua yang dihapus atau berubah dari Nim 2; 25 sitasi | Setiap kotak "Nim 2 delta", dan baris-baris Lampiran A |
 | `src/nimony/sem.nim` | Pass semantik; 21 sitasi | Saat sebuah bab menjelaskan penolakan yang tidak dijelaskan referensinya, seperti aturan `elif` di Bab 6 |
@@ -68,21 +68,21 @@ Sumber di dalam pohon itu, diurutkan dari yang paling sering dipakai bab-bab. Hi
 
 Path lain di sebuah bab muncul untuk satu pertanyaan dan disebut di tempat pertanyaan itu: `sizeof.nim` untuk
 layout variant di Bab 12, `duplifier.nim` untuk pemeriksaan last usage di Bab 14, `tables.nim` untuk hash map di
-Bab 20, `unicode.nim` untuk rune di Bab 5. Kalau referensi dan kompilernya tidak sependapat, babnya mengatakan
+Bab 20, `unicode.nim` untuk rune di Bab 5. Kalau referensi dan compiler-nya tidak sependapat, babnya mengatakan
 itu dan `ERRATA.md` menyimpan barisnya.
 
-## Kompiler host
+## Compiler host
 
 | Item | Nilai |
 | --- | --- |
-| Kompiler | Nim 2.4.0, tarball resmi |
+| Compiler | Nim 2.4.0, tarball resmi |
 | Unduhan | `https://nim-lang.org/download/nim-2.4.0-macosx_arm64.tar.xz` |
 | sha256 | `93a1e638289077b972b684e6e71cb11b2029602ccac4f8fd8dfa70f193fac7df` |
 | Peran | Pembanding saja |
 
 Nim 2.4.0 tidak pernah jadi sumber tentang apa yang dilakukan Nimony. Ia adalah pembanding kotak "Nim 2 delta",
-dan kompiler yang pesannya dikutip Lampiran A di sisi lain tiap baris. Kalau keduanya berbeda, pin yang jadi
-jawaban dan kompiler host hanya observasi.
+dan compiler yang pesannya dikutip Lampiran A di sisi lain tiap baris. Kalau keduanya berbeda, pin yang jadi
+jawaban dan compiler host hanya observasi.
 
 ## Issue di hulu
 
@@ -100,8 +100,8 @@ bab itu menyimpan reproduksinya. Kedua tautannya hidup di `https://github.com/ni
 IEEE 754 satu-satunya standar luar yang disebut namanya. Bab 4 mengatakan `float` dan `float64` mengikutinya dan
 bahwa pengecualian IEEE tidak dilempar di pin; buku ini tidak mengutip satu pasal pun dari standar itu dan tidak
 mematok revisinya. Di tempat yang sebenarnya bisa mengutip dokumen di luar repositori, babnya mengutip hal yang
-benar-benar ditemui samplenya: Bab 22 menyebut header C yang di-import — `<string.h>`, `<stdio.h>`,
-`<sys/types.h>` — karena kompilernya menulis deklarasi dari situ dan tanpa header sample-nya tidak akan link.
+benar-benar ditemui sample-nya: Bab 22 menyebut header C yang di-import — `<string.h>`, `<stdio.h>`,
+`<sys/types.h>` — karena compiler-nya menulis deklarasi dari situ dan tanpa header sample-nya tidak akan link.
 
 ## Catatan buku ini sendiri
 
@@ -120,10 +120,10 @@ benar-benar ditemui samplenya: Bab 22 menyebut header C yang di-import — `<str
 | --- | --- | --- |
 | Teks buku ini, kedua edisi | CC BY-SA 4.0 | `LICENSE`, dan `https://creativecommons.org/licenses/by-sa/4.0/` |
 | Kode di `samples/` dan di setiap listing | MIT | `LICENSE-CODE`, dan `https://opensource.org/license/mit` |
-| Sumber dan output kompiler yang dikutip | MIT, lisensi Nimony di pin | Disebut dengan berkas dan barisnya di tiap kutipan; teks lengkapnya `LICENSE` di pin |
+| Sumber dan output compiler yang dikutip | MIT, lisensi Nimony di pin | Disebut dengan berkas dan barisnya di tiap kutipan; teks lengkapnya `LICENSE` di pin |
 
 Kutipan sumber ditulis dengan berkas dan baris supaya kamu bisa membandingkannya dengan commit-nya, dan output
-kompiler dikutip sebagai output. Keduanya tidak didistribusikan ulang di sini sebagai berkas.
+compiler dikutip sebagai output. Keduanya tidak didistribusikan ulang di sini sebagai berkas.
 
 ## Cara halamannya dibangun
 

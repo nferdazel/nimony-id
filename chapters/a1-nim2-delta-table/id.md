@@ -24,7 +24,7 @@ mengatakan apa saja yang berpindah. Halaman ini halaman itu.
 Tidak ada yang baru di sini. Setiap baris adalah kotak delta satu bab yang dipadatkan jadi dua klausa
 pertentangan, dan kolom terakhir menyebut bab yang tech review-nya memutuskan baris itu, plus baris sumber yang
 dikutip review tersebut kalau ada. Bab adalah sumber kebenaran untuk kalimatnya; berkas sumber adalah sumber
-kebenaran untuk perilakunya. Kalau kolom sumber cuma menyebut bab tanpa baris, perilakunya sudah dibuktikan
+kebenaran untuk perilakunya. Kalau kolom sumber hanya menyebut bab tanpa baris, perilakunya sudah dibuktikan
 dengan run di pin dan berkas `review.md` bab itu menyimpan probe-nya.
 
 ## Cara membaca baris
@@ -42,7 +42,7 @@ melakukan hal lain, dan yang ini yang mahal.
 | Area | Nim 2.4.0 | Nimony di `4ba90a7` | Ditetapkan oleh |
 | --- | --- | --- | --- |
 | Ejaan identifier (berubah) | Tidak peka gaya: `myValue`, `my_value` dan `myvalue` satu nama. | Ejaan persis; `{.feature: "ignoreStyle".}` mengembalikan bacaan lama per modul. | Bab 3; `doc/language.md:7` |
-| Isi `const` (berubah) | Dievaluasi evaluator compile time yang terbatas. | Pemanggilan rutin diterima selama semua argumennya bisa dievaluasi saat kompilasi, jadi `const Twice = double(4)` bisa dibangun. | Bab 3; `doc/language.md:24-31` |
+| Isi `const` (berubah) | Dievaluasi evaluator compile time yang terbatas. | Panggilan rutin diterima selama semua argumennya bisa dievaluasi saat kompilasi, jadi `const Twice = double(4)` bisa dibangun. | Bab 3; `doc/language.md:24-31` |
 | `const` yang menyebut `var` (dihapus) | Error kompilasi, dilaporkan di baris `const`. | Tetap error, sekarang dilaporkan sebagai `undeclared identifier` terhadap `var` itu. | Bab 3; watch list ERRATA |
 
 ## Angka
@@ -105,7 +105,7 @@ melakukan hal lain, dan yang ini yang mahal.
 
 | Area | Nim 2.4.0 | Nimony di `4ba90a7` | Ditetapkan oleh |
 | --- | --- | --- | --- |
-| Type class di posisi parameter (berubah) | Generic implisit, disubstitusi per pemanggilan. | Diterima front end lalu membuat backend crash pada instansiasi kedua; tulis `[T: Addable]`. | Bab 17; `src/nimony/sigmatch.nim:1825-1827` |
+| Type class di posisi parameter (berubah) | Generic implisit, disubstitusi per panggilan. | Diterima front end lalu membuat backend crash pada instansiasi kedua; tulis `[T: Addable]`. | Bab 17; `src/nimony/sigmatch.nim:1825-1827` |
 | Parameter `typed` pada template (berubah) | Jalan; Nim 2.4.0 mencetak `41` dan `42` untuk dua template yang ditolak pin. | Diterima dan tidak bisa dipakai; tulis `untyped` atau tipe sungguhan. | Bab 18 |
 | Pembangkitan kode (berubah) | `macro` yang mengembalikan `NimNode` dari `std/macros`. | Plugin: program terpisah, NIF masuk dan NIF keluar, tanpa pohon di dalam proses. `macro` dengan parameter `untyped` masih kompil di pin — surface kompatibilitas, bukan jalan yang diajarkan. | Bab 18, Bab 19; `doc/differences.md:19` |
 | `{.dirty.}` (berubah) | Jalan keluar untuk body yang butuh nama pemanggil. | Inert tanpa `{.feature: "untyped".}`, dan setelah itu menyuntik dua arah. | Bab 18; `src/nimony/semdecls.nim:1183` |
@@ -149,11 +149,11 @@ tentang apa yang akan dihapus desain adalah janji yang pin tidak bisa tepati. Se
 yang diamati atau dinyatakan di `4ba90a7`.
 
 **Diagnostik yang tidak ada.** Pemeriksaan yang tidak eksis adalah kandidat cacat di `ERRATA.md`, bukan delta:
-sumber Nim 2-nya kompil di kedua kompiler, dan perbaikan untuk pembaca sama di keduanya. `delay()` tanpa titik
+sumber Nim 2-nya kompil di kedua compiler, dan perbaikan untuk pembaca sama di keduanya. `delay()` tanpa titik
 suspensi adalah contoh hidupnya — assertion dari code generator, bukan diagnostik, sudah di-file ke
 `nim-lang/nimony#2985` dengan perbaikannya di `nim-lang/nimony#2988`.
 
-**Perilaku yang identik di kedua kompiler.** `cstring"a\nb"` juga empat byte di Nim 2.4.0, jadi literal `cstring`
+**Perilaku yang identik di kedua compiler.** `cstring"a\nb"` juga empat byte di Nim 2.4.0, jadi literal `cstring`
 yang mentah adalah celah dokumentasi yang diwarisi pin, bukan delta. Ia ada di `ERRATA.md` dan di teks Bab 22, dan
 tidak punya baris di sini.
 

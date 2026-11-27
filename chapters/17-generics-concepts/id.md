@@ -21,7 +21,7 @@ Sebuah routine generic adalah satu potong sumber yang menjadi beberapa routine, 
 Concept adalah constraint yang menentukan tipe mana yang boleh dipakai sama sekali. Nimony memeriksa keduanya di
 definisi, bukan dengan menempel teks lalu berharap: body generic diperiksa tipenya sekali, terhadap apa yang
 dijanjikan parameternya, dan concept diperiksa sebagai sekumpulan panggilan terhadap tipenya saat instansiasi. Itu
-sebabnya error di bab ini datang sebelum program berjalan, dan sebabnya pesannya menyebut sebuah constraint
+sebabnya error di bab ini muncul sebelum program berjalan, dan sebabnya pesannya menyebut sebuah constraint
 alih-alih hasil ekspansi template.
 
 ## Type parameter pada proc
@@ -169,7 +169,7 @@ echo twice(3)     # 6
 
 Concept dengan type parameter adalah concept container, dan parameternya diikat dari requirement-nya. `Findable[T]`
 dari manual adalah contoh kerjanya: `iterator items(x: Self): T` plus `==` pada `T` memberi generic itu tipe elemen
-sekaligus perbandingan yang dibutuhkannya, jadi collection bikinan sendiri jalan tanpa satu deklarasi pun yang
+sekaligus perbandingan yang dibutuhkannya, jadi collection buatan sendiri jalan tanpa satu deklarasi pun yang
 menyebutnya:
 
 ```nim
@@ -204,7 +204,7 @@ jangan berharap pesannya mendaftar requirement mana yang kurang. Kalimat yang pe
 
 Satu bentuk memang mencetak baris kedua itu, dan itu tipe, bukan panggilan: `Box[NoAdd]` memberi `NoAdd does not
 match constraint Addable` lalu `missing: proc +(a: Self, b: Self)`. Argumen tipe generic yang gagal menamai
-requirement-nya; panggilan routine yang gagal cuma menamai constraint-nya.
+requirement-nya; panggilan routine yang gagal hanya menamai constraint-nya.
 
 ## Pewarisan concept
 
@@ -229,7 +229,7 @@ kamu tulis, bukan yang kamu warisi.
 
 `Self` di sebuah requirement berarti tipe yang sedang diperiksa, dan qualifier-nya mengatakan apa yang boleh
 dilakukan routine itu pada argumennya. Requirement `var Self` adalah yang ditulis untuk routine yang memutasi, dan
-routine yang type parameter-nya `var T` bisa meneruskannya:
+routine yang type parameternya `var T` bisa meneruskannya:
 
 ```nim
 type Bumpable = concept
@@ -268,7 +268,7 @@ f(3)              # took it
 ```
 
 Panggil dengan tipe kedua yang memenuhi dan build-nya mati di backend dengan `Symbol not found in NIF module:
-Addable.0` dan sebuah `AssertionDefect`. Jadi deklarasinya diterima, instansiasi pertamanya jalan, dan programnya
+Addable.0` dan `AssertionDefect`. Jadi deklarasinya diterima, instansiasi pertamanya jalan, dan programnya
 tidak bisa dipakai. Itu defect, bukan fitur untuk dipelajari; bab ini menulis constraint-nya di type parameter,
 `[T: Addable]`, setiap kali.
 
@@ -288,7 +288,7 @@ but got: int64`. Di dalam concept, nama yang ditulis adalah `Self`; di luarnya, 
 *Apa yang Nim 2 lakukan.* Type class di posisi parameter membuat generic implisit: `proc f(x: Addable)` adalah
 singkatan untuk routine yang diinstansiasi per tipe yang memenuhi, dan Nim 2 menyubstitusi tipe argumennya ke body
 tanpa memeriksanya lebih dulu. Template, concept dan generic semuanya berbagi rasa tempel-lalu-coba itu, dan
-sebuah body bisa memuat akses field yang cuma gagal untuk tipe yang tidak memilikinya.
+sebuah body bisa memuat akses field yang hanya gagal untuk tipe yang tidak memilikinya.
 
 *Apa yang Nimony lakukan.* Bentuk kurung siku `[T]` adalah generic-nya, concept ditulis sebagai `[T: Addable]` di
 tempat yang seharusnya, dan body-nya diperiksa di definisi. Concept di posisi parameter biasa diterima front end
@@ -296,7 +296,7 @@ tapi merusak backend pada instansiasi kedua, jadi itu bukan jalur sama sekali. `
 eksplisit untuk kebiasaan tempel-lalu-coba itu.
 
 *Apa yang rusak kalau kebiasaannya dibawa.* `proc f(x: Addable)` memindahkan generic-nya jadi crash runtime
-alih-alih error compile, dan body yang ditulis untuk satu tipe gagal di definisi walau tiap call site-nya
+alih-alih compile error, dan body yang ditulis untuk satu tipe gagal di definisi walau tiap call site-nya
 sebenarnya baik-baik saja. Tulis kurung sikunya, taruh concept di type parameter, dan raih `{.untyped.}` hanya saat
 body-nya benar-benar perlu melihat tipenya.
 

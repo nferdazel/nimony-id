@@ -19,7 +19,7 @@ yang akan kamu pelajari sengaja dibuat berbeda dari Nim yang mungkin kamu temui 
 jawaban Stack Overflow, dan bahasa itu masih bergerak.
 
 Bab ini tidak punya kode. Isinya model yang diasumsikan seluruh buku, plus apa yang harus kamu lakukan
-ketika dunia luar tidak setuju dengan kita.
+ketika dunia luar tidak setuju denganmu.
 
 ## Satu garis bahasa, dua nama
 
@@ -35,7 +35,7 @@ kompatibilitas yang belum terjadi. Tidak ada bagian buku ini yang mengasumsikan 
 jadwal.
 
 Paruh kedua dokumen yang sama berjudul "The present: Nimony (the bad)", dan isinya daftar hal yang belum bisa
-dilakukan compiler. Daftar itu kita bahas sebentar lagi. Pemisahan itu layak dicatat karena jujur dengan cara
+dilakukan compiler. Daftar itu dibahas sebentar lagi. Pemisahan itu layak dicatat karena jujur dengan cara
 yang jarang ditemui di dokumentasi bahasa: rancangan dan kekurangan dicetak berdampingan, oleh orang yang
 memegang keduanya.
 
@@ -58,7 +58,7 @@ Di bawahnya ada **NIF**, interchange format yang dibaca dan ditulis setiap tahap
 menyebutnya format yang dipakai untuk berkomunikasi antar fase compiler, dan tiap pass bekerja pada aliran token
 NIF. Halaman filosofi desain menjabarkan untungnya: dengan NIF, banyak transformasi jadi lebih sederhana dan
 bisa ditulis tanpa rekursi, dan plugin berjalan inkremental serta paralel seperti bagian lain pipeline
-(nim-lang.org/araq/nimony.html, dibaca 2026-11-12). Bacalah itu sebagai argumen desain, bukan sebagai sifat yang
+(nim-lang.org/araq/nimony.html, dibaca 2026-11-12). Baca itu sebagai argumen desain, bukan sebagai sifat yang
 sudah terukur di pin ini — halamannya bertanggal 2025-05-10 dan ditulis dalam bentuk akan datang. Bab 19
 membahas artinya ketika kamu menulis plugin. Untuk sekarang akibatnya lebih kecil dan lebih berguna: tahap-tahap
 compiler bisa dipisahkan, dan itulah sebabnya build berperilaku seperti kata README.
@@ -96,8 +96,8 @@ melacak apakah penulisan diizinkan (Bab 9).
 case-sensitive secara default; `break` tanpa label keluar dari loop dan tidak pernah keluar dari block;
 overflow integer bertanda membungkus alih-alih memunculkan `OverflowDefect`.
 
-Dua di antaranya punya restore switch per-module: `{.feature: "ignoreStyle".}` dan
-`{.feature: "anonBlockBreaks".}` mengembalikan perilaku Nim 2 untuk module yang memakainya. Perubahan `string`
+Dua di antaranya punya restore switch per modul: `{.feature: "ignoreStyle".}` dan
+`{.feature: "anonBlockBreaks".}` mengembalikan perilaku Nim 2 untuk modul yang memakainya. Perubahan `string`
 tidak punya saklar apa pun, dan `{.keepOverflowFlag.}` bukan mode kompatibilitas — itu block yang membuat
 `overflowFlag()` melaporkan `+`, `-`, atau `*` bertanda terakhir yang membungkus, supaya kamu bisa mendeteksi
 pembungkusan yang baru saja terjadi. Deteksi bukan restorasi. Buku ini mengajarkan perilaku default di keempat
@@ -123,13 +123,13 @@ Pada commit yang jadi acuan buku ini, Nimony belum punya (`doc/differences.md`):
 - generic implisit, yaitu routine yang tidak menulis `[T]` dan jadi generic lewat type class seperti `SomeInt`
 
 Dan dua fitur Nim 2 sedang dalam perjalanan keluar, bukan sudah hilang di pin ini. Desainnya menggantikan macro
-dengan plugin dan mengarah ke single dispatch, tetapi `macro` dan `method` masih compile dan jalan untuk
+dengan plugin dan mengarah ke single dispatch, tapi `macro` dan `method` masih compile dan jalan untuk
 kompatibilitas Nim 2; buku ini mengajarkan plugin dan proc, dan memperlakukan `macro` yang berjalan sebagai
-permukaan kompatibilitas, bukan sebagai bukti bahwa desainnya tidak berubah. Plugin yang dideklarasikan dengan
+cakupan kompatibilitas, bukan sebagai bukti bahwa desainnya tidak berubah. Plugin yang dideklarasikan dengan
 parameter `typed` berjalan setelah type checking dan menerima NIF yang sudah diperiksa secara semantik;
 parameter `untyped` melewatkan kode lebih dulu.
 
-Bacalah itu sebagai tepi peta, bukan sebagai daftar tugasmu. Kalau ada teknik yang kamu kenal bergantung pada
+Baca itu sebagai tepi peta, bukan sebagai daftar tugasmu. Kalau ada teknik yang kamu kenal bergantung pada
 salah satu fitur di atas, jawaban di buku ini adalah penggantinya, bukan akal-akalan yang berpura-pura fitur itu
 ada. Satu tempat yang penggantinya benar-benar keterampilan baru, bukan sekadar ganti nama, adalah Bab 19:
 plugin bukan macro dengan nama baru, dan makin cepat kamu berhenti meraih `macro`, makin tidak menyakitkan
@@ -150,7 +150,7 @@ Dua aturan menyusul dari situ, dan keduanya akan kamu temui sambil membaca:
 
 1. Klaim tentang bahasa hanya sekuat sumbernya di pin: berkas di repositori Nimony, sample yang dikompilasi dan
    dijalankan, atau review dari Engineering yang menyebut salah satunya. Di tempat buku ini belum bisa
-   menyelesaikan sebuah pertanyaan, bab-nya tetap terbuka dan mengatakannya.
+   menyelesaikan sebuah pertanyaan, babnya tetap terbuka dan mengatakannya.
 2. Ketika pin bergerak dan bab yang sudah beku rusak, kerusakannya dicatat di errata, bukan ditambal diam-diam.
    Kamu bisa mencocokkan errata dengan bab yang sedang kamu baca dan tahu persis mana yang lebih tua.
 
@@ -162,8 +162,8 @@ layak diketahui sekarang.
 **Delta box.** Di tempat kebiasaan Nim 2 benar-benar menyesatkan, bab memuat box bernama "Nim 2 delta": *apa
 yang dulu dilakukan Nim 2 → apa yang dilakukan Nimony → apa yang rusak kalau kamu mempertahankan kebiasaannya*.
 Box itu hanya muncul di tempat ia berguna, dan tidak pernah jadi jalur utama. Kalau kamu belum pernah menulis
-Nim, lewati saja; bab-nya mengajarkan Nimony tanpanya. Kalau sudah, baca box-nya dulu, lalu kembali dan baca
-bab-nya seolah kamu belum membacanya.
+Nim, lewati saja; babnya mengajarkan Nimony tanpanya. Kalau sudah, baca box-nya dulu, lalu kembali dan baca
+babnya seolah kamu belum membacanya.
 
 **Sample adalah bukti.** Setiap blok kode yang diklaim berjalan sudah dikompilasi dan dijalankan di pin. Di
 tempat sebuah sample hanya ilustrasi dan bukan hasil verifikasi, teksnya mengatakan begitu.

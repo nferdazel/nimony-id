@@ -18,7 +18,7 @@ glossary_added: [importc, exportc, cdecl, header, dynlib, cstring array]
 ## Untuk apa bab ini
 
 Setiap routine di buku ini sampai titik ini ditulis dalam Nimony dan diperiksa Nimony. Fungsi C berbeda: compiler
-cuma melihat signature yang kamu tulis dan tidak melihat body sama sekali, jadi tidak ada apa pun di dalamnya yang
+hanya melihat signature yang kamu tulis dan tidak melihat body sama sekali, jadi tidak ada apa pun di dalamnya yang
 diverifikasi. Bab ini soal mendeklarasikan signature itu dengan jujur, memetakan tipe supaya sisi C membaca
 apa yang kamu maksud, dan menyeberangi batas string tanpa berpura-pura dua model string itu sama.
 
@@ -28,7 +28,7 @@ padahal C membiarkannya null, callback yang daftar parameternya beda satu `const
 
 ## Mendeklarasikan fungsi C
 
-`{.importc.}` menamai simbol C dan `header` menamai file yang harus di-include oleh C yang dihasilkan
+`{.importc.}` menamai simbol C dan `header` menamai berkas yang harus di-include oleh C yang dihasilkan
 (`src/nimony/sempragmas.nim:346` menerima pasangan itu). Deklarasi lengkap terkecil adalah routine libc:
 
 ```nim
@@ -39,10 +39,10 @@ echo strlen(cstring"hello")
 ```
 
 Itu mencetak `5`. Namanya diambil dari identifier Nimony kecuali pragma membawa string, dan header bukan yang
-memunculkan simbolnya: Nimony menulis sendiri prototipe dari deklarasi kamu, dan tanpa header dia memancarkan
+memunculkan simbolnya: Nimony menulis sendiri prototipe dari deklarasi kamu, dan tanpa header ia memancarkan
 prototipe dengan nama C ditempel lewat label assembler, `cstrlen_0(...) __asm__("strlen")`. Yang ditambahkan
-`header` adalah deklarasi aslinya. `major` adalah buktinya — dia mencetak `0` dengan `<sys/types.h>` di pragma,
-dan tanpa header itu link gagal dengan `_major` yang tidak terdefinisi, karena `major` adalah makro di header
+`header` adalah deklarasi aslinya. `major` adalah buktinya — ia mencetak `0` dengan `<sys/types.h>` di pragma,
+dan tanpa header itu link gagal dengan `_major` yang tidak terdefinisi, karena `major` adalah macro di header
 tersebut dan simbol dengan nama itu tidak ada. Sebut header kapan pun sisi C punya header.
 
 `dynlib` memuat library alih-alih menautkannya, dan string-nya adalah nama platform, bukan nama portabel:
@@ -62,9 +62,9 @@ lexer membacanya mentah (`src/nifler2/nimlexer.nim:1061-1064`), jadi `\n` tetap 
 adalah `hi 42\n` dalam satu baris, backslash ikut tercetak. Nim 2.4.0 membacanya dengan cara yang sama, jadi ini
 lubang di manual, bukan perubahan di pin.
 
-Callable yang di C berupa makro bisa dideklarasikan sebagai routine, dan header-nya yang membuat itu jalan:
+Callable yang di C berupa macro bisa dideklarasikan sebagai routine, dan header-nya yang membuat itu jalan:
 compiler C mengembangkan namanya sebelum sempat meminta simbol, itulah sebabnya `major` mengembalikan `0` ketika
-pragma menyebut `<sys/types.h>`. Makro yang bukan pemanggilan fungsi — ekspresi seperti `sizeof`, `offsetof`,
+pragma menyebut `<sys/types.h>`. Macro yang bukan panggilan fungsi — expression seperti `sizeof`, `offsetof`,
 sebuah konstanta — perkara lain: `{.importc: "sizeof(struct stat)".}` dengan header ditolak compiler C sebagai
 `called object type 'unsigned long' is not a function`, dan tanpa header link gagal pada simbol
 `sizeof(struct stat)`.
@@ -102,11 +102,11 @@ let d = cdiv(7, 2)
 
 `d.quot` dan `d.rem` mencetak `3` dan `1`: struct kecil kembali by value dan dibaca field demi field. Pemetaan
 yang sama berlaku untuk parameter output — `stat` POSIX mengisi object `Stat` lewat `ptr Stat` dan mengembalikan
-`0`, dan C yang dihasilkan memuat `struct stat` serta pemanggilan `stat(...)` yang asli. `out Stat` adalah
+`0`, dan C yang dihasilkan memuat `struct stat` serta panggilan `stat(...)` yang asli. `out Stat` adalah
 pointer yang sama dengan aturan inisialisasi dari Bab 8 menempel padanya: deklarasi yang manualnya sendiri
 tunjukkan (`doc/language.md:2778`) memancarkan `stat("main.nim", (&st))` dan mengisi object-nya.
 
-`sizeof` pada tipe seperti itu bertanya ke C, bukan ke Nimony: object `{.importc: "struct stat".}` yang cuma
+`sizeof` pada tipe seperti itu bertanya ke C, bukan ke Nimony: object `{.importc: "struct stat".}` yang hanya
 mendeklarasikan satu field tetap melaporkan `144`, karena emitter C menulis `sizeof(struct stat)`
 (`src/lengc/genexprs.nim:527-533`). Daftar field itu untuk membaca field, bukan untuk memberi tahu compiler
 seberapa besar object C-nya.
@@ -150,7 +150,7 @@ kedua sisi yang boleh melihat melewati terminator.
 ## Pointer null punya tipenya sendiri
 
 Di pin `ptr`, `pointer` dan `cstring` tidak bisa nil kecuali tipenya bilang begitu, dan fungsi C justru tempat
-paling mungkin tipenya salah. `getenv` mengembalikan pointer null untuk nama yang tidak diset, jadi tipe
+paling mungkin tipenya salah. `getenv` mengembalikan pointer null untuk nama yang tidak di-set, jadi tipe
 kembaliannya harus `nil cstring`:
 
 ```nim
@@ -191,8 +191,8 @@ bisa dibuktikan pemeriksaan tadi.
 
 ## Memanggil balik, dan satu hal yang C periksa
 
-`{.exportc.}` memberi routine Nimony nama C, dan `{.compile.}` menambahkan file C ke build, diselesaikan relatif
-terhadap file sumber:
+`{.exportc.}` memberi routine Nimony nama C, dan `{.compile.}` menambahkan berkas C ke build, diselesaikan relatif
+terhadap berkas sumber:
 
 ```nim
 {.compile: "helper2.c".}
@@ -203,9 +203,9 @@ proc helper_call(x: cint): cint {.importc, header: "helper2.h".}
 Dengan `helper2.c` mendeklarasikan `book_cb` dan memanggilnya, `helper_call(41)` mencetak `42`. Simbolnya benar-
 benar ada: `nm` pada binary menunjukkan `_book_add` untuk probe `exportc` biasa, dengan underscore yang
 ditambahkan toolchain C platform ini. `{.cdecl.}` mendarat di C yang dihasilkan sebagai `N_CDECL(int, book_add)(...)`,
-dan di platform ini makronya mengembang jadi kosong karena konvensi default-nya memang C.
+dan di platform ini macro-nya mengembang jadi kosong karena konvensi default-nya memang C.
 
-Satu-satunya tempat compiler C benar-benar memeriksa kamu adalah prototipe callback, dan dia lebih ketat dari sisi
+Satu-satunya tempat compiler C benar-benar memeriksa kamu adalah prototipe callback, dan ia lebih ketat dari sisi
 Nimony. `qsort` meminta `int (*)(const void *, const void *)`; pin memancarkan proc Nimony `{.cdecl.}` dengan
 parameter `pointer` sebagai `int (void *, void *)` — tanpa `const` — dan clang menolaknya dengan
 `incompatible function pointer types`. Mendeklarasikan parameternya `pointer` lalu mengirim `cast[pointer](cmp)`
@@ -221,7 +221,7 @@ salah di tempat C punya `long` ter-compile di kedua sisi dan membaca byte yang s
 parameter lalu dipanggil dengan tiga paling banter jadi error C.
 
 Global C adalah binding, bukan salinan: `var errno {.importc, header: "<errno.h>".}: cint` membaca `7` setelah
-ditulis, dan setelah `open` pada file yang tidak ada mengembalikan `-1`, variabel yang sama membaca `2` — `errno`
+ditulis, dan setelah `open` pada berkas yang tidak ada mengembalikan `-1`, variabel yang sama membaca `2` — `errno`
 yang asli (`src/nimony/contracts_fir.nim:5791`). Mendeklarasikannya `cint` benar di sini; mendeklarasikan `long`
 C sebagai `cint` akan ter-compile dan membaca separuh nilai.
 
@@ -280,7 +280,7 @@ Nimony dengan nol di dalamnya melawan hitungan C (`3 1`); elemen array yang dipe
    `cstring`.
 3. Panggil `toCString` pada `let`. Harapan: `cannot pass … to var/out T parameter`.
 4. Tulis `cstring"a\nb"` dan `"a\nb"` lalu cetak kedua panjangnya. Harapan: `4` dan `3`.
-5. Deklarasikan `getenv` mengembalikan `cstring` biasa, lalu panggil dengan nama yang kamu tahu tidak diset dan
+5. Deklarasikan `getenv` mengembalikan `cstring` biasa, lalu panggil dengan nama yang kamu tahu tidak di-set dan
    cetak `isNil`. Harapan: `true`, tanpa keluhan compiler — pelajarannya, deklarasi tidak bisa membuatnya
    non-null.
 6. Deklarasikan `memset` dan isi tiga byte dari `array[4, char]` dengan `'x'`. Harapan: `xxx` dan byte keempat

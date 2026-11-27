@@ -17,18 +17,18 @@ glossary_added: [proven module, Table, Keyable, HashSet, sequtils, atomic operat
 
 ## Untuk apa bab ini
 
-Sebuah bahasa hanya seberguna kode yang tidak perlu kamu tulis sendiri. Bab ini menyusuri bagian standard
-library yang terbukti jalan di commit yang dipin, dan memberimu tes yang menentukan apakah modul di luar
+Bahasa hanya berguna sejauh kode yang tidak perlu kamu tulis sendiri. Bab ini menyusuri bagian standard
+library yang terbukti jalan di commit yang di-pin, dan memberimu tes yang menentukan apakah modul di luar
 tur itu pantas masuk program kamu. Daftarnya pendek dengan sengaja. Sebuah modul layak diandalkan ketika
-programnya jalan, bukan ketika filenya ada, dan bukan ketika dokumentasi Nim 2 masih mengingatnya.
+programnya jalan, bukan ketika berkasnya ada, dan bukan ketika dokumentasi Nim 2 masih mengingatnya.
 
 ## Aturannya: kehadiran, bukan reputasi
 
 Tiga fakta kelihatan seperti izin, padahal bukan.
 
-File bernama `lib/std/<name>.nim` di checkout pin memberitahumu bahwa modul itu dimaksudkan ada. Itu tidak
+Berkas bernama `lib/std/<name>.nim` di checkout pin memberitahumu bahwa modul itu dimaksudkan ada. Itu tidak
 memberitahumu bahwa fungsi yang kamu mau diekspor dari sana, dan tidak memberitahumu bahwa modulnya
-terkompilasi. `import std / <name>` yang berhasil memberitahumu sedikit lebih banyak: filenya ketemu dan
+terkompilasi. `import std / <name>` yang berhasil memberitahumu sedikit lebih banyak: berkasnya ketemu dan
 level atasnya ter-parse. Itu tidak memberitahumu bahwa bagian yang kamu butuhkan jalan. Hanya run yang
 memberi tahu.
 
@@ -72,19 +72,19 @@ kumpulan overload-nya (`lib/std/syncio.nim:293-331`): `string`, `bool`, `int64`,
 sembarang tipe enum, `char`, dan `float`.
 
 Sembilan itu kumpulan default, bukan daftar tertutup. `seq` tidak ada di dalamnya, begitu juga object
-bikinan kamu sendiri, jadi `echo @[1, 2]` dan `echo p` sama-sama error, dan pesannya adalah seluruh kumpulan
-overload yang dicetak balik ke kamu dengan tipe kamu setelah `expected:` (`lib/std/syncio.nim:468`). Tidak ada
-konversi `$` yang dilihat; Bab 11 sudah bilang `$` bikinan sendiri tidak menolong. Yang ditambahkan
+buatan kamu sendiri, jadi `echo @[1, 2]` dan `echo p` sama-sama error, dan pesannya adalah seluruh kumpulan
+overload yang dicetak ulang di pesan dengan tipe setelah `expected:` (`lib/std/syncio.nim:468`). Tidak ada
+konversi `$` yang dilihat; Bab 11 sudah bilang `$` buatan sendiri tidak menolong. Yang ditambahkan
 bab ini separuhnya lagi: overload `write` yang kamu deklarasikan sendiri tetap ketemu di call site, jadi
 `proc write(f: File; p: P)` membuat `echo p` mencetak teks kamu, dan sembilan yang kamu terima di pesan error
 adalah default modulnya, bukan satu-satunya kemungkinan. Cetak collection elemen per elemen, atau bangun
 string lalu cetak itu.
 
-Sisa modulnya sama literalnya. `write` menulis tanpa newline, `writeLine` menulis string plus newline, dan
+Sisa modulnya sama literal-nya. `write` menulis tanpa newline, `writeLine` menulis string plus newline, dan
 `quit` menghentikan program dan tidak kembali (`lib/std/syncio.nim:538`). Membaca punya dua bentuk:
 `readLine(f, s: var string): bool` mengembalikan apakah ada baris yang terbaca (`lib/std/syncio.nim:506`),
 sedangkan `readLine(f): string` ditandai `{.raises.}` (`lib/std/syncio.nim:511`) karena stream-nya bisa
-gagal. Sisi file dari modul ini, termasuk `readFile` dan `writeFile`, adalah bahan Bab 21.
+gagal. Sisi berkas dari modul ini, termasuk `readFile` dan `writeFile`, adalah bahan Bab 21.
 
 ## `std/strutils`: helper, dan yang bisa gagal
 
@@ -98,14 +98,14 @@ bentuk itu. Signature-nya layak dibaca sekali:
   (`lib/std/strutils.nim:405`, `:409`, `:413`).
 - `strip(s, leading = true, trailing = true, chars: set[char] = Whitespace)` memangkas whitespace kecuali kamu
   menyebut karakternya (`lib/std/strutils.nim:1593`).
-- `join(a: openArray[string], sep = "")` menerima sembarang sequence string, bukan cuma literal sequence
+- `join(a: openArray[string], sep = "")` menerima sembarang sequence string, bukan hanya literal sequence
   (`lib/std/strutils.nim:489`).
 
 Tiga nama tidak total, dan compiler bilang begitu sebelum kamu menjalankan apa pun. `parseInt(s): int` ditandai
 `{.raises.}` (`lib/std/strutils.nim:1733`), begitu juga operator format `%` (`lib/std/strutils.nim:1474`) dan
 `format` (`lib/std/strutils.nim:1588`). Memanggil salah satunya di luar blok `try` ditolak saat compile
 dengan `cannot call a routine marked as `.raises` outside of a `try`..`except` block`, aturan yang sama yang
-Bab 15 ajarkan untuk routine bikinan kamu sendiri. Tangkap `ErrorCode`, karena hanya itu yang dilempar:
+Bab 15 ajarkan untuk routine buatan kamu sendiri. Tangkap `ErrorCode`, karena hanya itu yang dilempar:
 
 ```nim
 proc number(s: string): int =
@@ -161,7 +161,7 @@ pendek, dan pilihan di antara keduanya soal gaya, bukan kemampuan.
 
 ## `std/tables`: key, lookup, dan ketiadaan
 
-Sebuah `Table[K, V]` adalah hash map dengan satu aturan yang membentuk setiap baris yang kamu tulis: membaca
+`Table[K, V]` adalah hash map dengan satu aturan yang membentuk setiap baris yang kamu tulis: membaca
 key yang tidak ada melempar, menulis tidak pernah gagal.
 
 - `initTable[K, V]()` membuat tabel kosong (`lib/std/tables.nim:243`).
@@ -189,7 +189,7 @@ Guide-nya tidak menjanjikan urutan itu, dan penjumlahan atau pengurutan tidak be
 akumulasikan jumlah, urutkan key sendiri, atau cetak satu key yang kamu cari daripada membandingkan tabel yang
 dicetak.
 
-Key harus memenuhi `Keyable`, yang dideklarasikan file yang sama sebagai `concept of Hashable` plus sebuah
+Key harus memenuhi `Keyable`, yang dideklarasikan berkas yang sama sebagai `concept of Hashable` plus sebuah
 `==` atas dua `Self` (`lib/std/tables.nim:6-7`), dengan `Hashable` dideklarasikan di `std/hashes`
 (`lib/std/hashes.nim:13`). `string`, `int` dan tuple adalah key yang jelas. `seq[int]` juga key legal di
 pin — `t[@[1, 2]] = "pair"` menyimpan dan tabelnya melaporkan panjang `1` — karena sequence punya `hash` dan
@@ -197,7 +197,7 @@ pin — `t[@[1, 2]] = "pair"` menyimpan dan tabelnya melaporkan panjang `1` — 
 
 ## `std/sets`: nilai, bukan bitset
 
-Sebuah `HashSet[T]` membungkus `Table[T, bool]` (`lib/std/sets.nim:5-6`), jadi semua yang dikatakan bagian
+`HashSet[T]` membungkus `Table[T, bool]` (`lib/std/sets.nim:5-6`), jadi semua yang dikatakan bagian
 sebelumnya soal key berlaku apa adanya: `Hashable` syaratnya (`lib/std/sets.nim:5-8`), sequence elemen yang
 legal, dan `HashSet[int]` tetap bukan `Table[int, bool]`.
 
@@ -277,7 +277,7 @@ tidak mendaftarkan satu pun, jadi panggilannya sunyi sampai kamu menambahkannya.
 
 Aturan buku ini mengikuti dari situ. Sebuah modul masuk tur ketika ada bab yang membawa run di pin, dan
 pertanyaan terbuka di outline soal permukaan stdlib tetap terbuka: daftarnya tumbuh hanya dengan sample yang
-terverifikasi, tidak pernah dari dokumentasi Nim 2 dan tidak pernah dari keberadaan sebuah file.
+terverifikasi, tidak pernah dari dokumentasi Nim 2 dan tidak pernah dari keberadaan sebuah berkas.
 
 ## Nim 2 delta
 
@@ -287,13 +287,13 @@ atomics berupa tipe wrapper, `var counter: Atomic[int]`, dengan anggota `load()`
 `std/sequtils`, `&` hanya untuk string, dan atomic adalah variabel biasa dengan fungsi bebas yang
 beroperasi padanya.
 *Yang rusak kalau kebiasaannya dibawa:* `import std / strformat` menghentikan build di import, `xs & ys`
-resolvenya ke overload string lalu gagal dengan mismatch, dan `Atomic[int]` ditolak sebagai undeclared
+di-resolve ke overload string lalu gagal dengan mismatch, dan `Atomic[int]` ditolak sebagai undeclared
 identifier. Penggantinya satu panggilan jauhnya di tiap kasus: `%` dari `strutils`, `concat` dari
 `sequtils`, dan `atomicLoad` pada `var` biasa.
 
 ## Samples
 
-`samples/20-stdlib/stdlib.nim`, dijalankan di commit yang dipin:
+`samples/20-stdlib/stdlib.nim`, dijalankan di commit yang di-pin:
 
 ```
 nimony c -r samples/20-stdlib/stdlib.nim

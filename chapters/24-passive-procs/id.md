@@ -98,9 +98,9 @@ start b
 end b
 ```
 
-Itu defaultnya, dan layak dibaca sebagai aturan, bukan kebetulan. `complete` membuat `Join` miliknya sendiri
+Itu default-nya, dan layak dibaca sebagai aturan, bukan kebetulan. `complete` membuat `Join` miliknya sendiri
 sebagai pemanggil coroutine-nya, lalu men-trampoline coroutine itu di thread ini sampai selesai *atau park*, dan
-kalau park dia menunggu yang melanjutkannya (`lib/std/system.nim:340-370`). Coroutine yang park dan tidak pernah
+kalau park ia menunggu yang melanjutkannya (`lib/std/system.nim:340-370`). Coroutine yang park dan tidak pernah
 dilanjutkan apa pun mengubah `complete` jadi tunggu tanpa akhir: program mencetak semuanya sampai park lalu diam.
 Itu bukan deadlock yang bisa dilihat compiler, dan itu cara paling umum program passive pertama kamu hang.
 
@@ -109,7 +109,7 @@ itu bagian berikutnya.
 
 ## Park di titik yang kamu pilih
 
-`delay()` tanpa argumen menangkap sisa proc yang sedang jalan, dari titik panggilannya sampai titik suspend
+`delay()` tanpa argumen menangkap sisa proc yang sedang jalan, dari call site-nya sampai titik suspend
 berikutnya, sebagai continuation (`lib/std/system.nim:272-275`). `suspend()` mem-park coroutine-nya (`:281-283`).
 Pasangan itu jabat tangan: tangkap mau balik ke mana, lalu park.
 
@@ -181,7 +181,7 @@ disimpan: stack frame, variabel, dan posisinya kembali bersama-sama.
 
 ## Dua coroutine, satu thread
 
-Tidak ada apa pun di bahasa yang memilih interleaving. `advance` memanggil scheduler yang aktif, dan defaultnya
+Tidak ada apa pun di bahasa yang memilih interleaving. `advance` memanggil scheduler yang aktif, dan default-nya
 `trivialTick`, yang menjalankan tepat continuation yang diberikan (`lib/std/system.nim:285-286`). Ganti dengan
 `setScheduler` (`:295-298`) dan kamu bisa menghitung atau membelokkan setiap langkah; scheduler penghitung di
 sekitar proc yang echo, suspend, lalu echo lagi melihat dua tick. Yang tidak bisa dilakukan scheduler sendirian
@@ -210,24 +210,24 @@ worker c end
 ```
 
 Dua-duanya dimulai, dua-duanya park, dan paruh kedua masing-masing jalan setelah paruh pertama keduanya. Tukar
-dua `drive` terakhir itu dan `worker c end` datang sebelum `worker b end`. Scheduler yang menentukan, dan di
+dua `drive` terakhir itu dan `worker c end` muncul sebelum `worker b end`. Scheduler yang menentukan, dan di
 sini scheduler-nya adalah kamu.
 
 Pin juga membawa thread pool, `std/threadpool`, dengan `initPool`, `submit(continuation)`, dan `shutdownPool`
 (`lib/std/threadpool.nim:114`, `:198`, `:376`, `:417`). Continuation yang diserahkan ke pool jalan di worker,
-dan begitulah modul IO di-resume dari polling thread. Dia scheduler, bukan janji: dua coroutine yang diserahkan
+dan begitulah modul IO di-resume dari polling thread. Ia scheduler, bukan janji: dua coroutine yang diserahkan
 ke pool dua worker tetap bisa selesai bergantian, seperti probe-nya, karena pekerjaan non-blocking jalan langsung
 sampai habis di worker mana pun yang mengambilnya. Pekerjaan yang benar-benar memblokir itu tempat overlap
 kelihatan — dua task yang masing-masing `sleep(200)` selesai bersamaan dalam waktu sekitar itu, bukan dua kali
 lipat — jadi overlap adalah sifat dari apa yang dikerjakan task-nya, dan bab ini tidak pernah menjanjikannya
-dari pragmanya saja. Halaman passive-procs memperingatkan bahwa scheduler yang men-dispatch continuation tak
+dari pragma-nya saja. Halaman passive-procs memperingatkan bahwa scheduler yang men-dispatch continuation tak
 terkait di dalam trampoline menahan stack frame perantara tetap hidup (`doc/passive_procs.md:149-161`). Buku ini
-tidak mengajarkan bahwa menyerahkan dua proc membuat mereka overlap. Dia mengajarkan di mana keputusannya tinggal.
+tidak mengajarkan bahwa menyerahkan dua proc membuat mereka overlap. Ia mengajarkan di mana keputusannya tinggal.
 
 ## Rantai passive proc
 
 Saat passive proc memanggil yang lain, park di dalamnya merambat ke luar. Continuation yang di dalam harus hidup
-melewati pemanggilnya, jadi dia disimpan di `var` level modul — bentuk yang sama dengan sample-nya, dan alasan
+melewati pemanggilnya, jadi ia disimpan di `var` level modul — bentuk yang sama dengan sample-nya, dan alasan
 `assumeSync`-nya ada di aturan level modul di bawah:
 
 ```nim
@@ -260,7 +260,7 @@ outer 2
 Melanjutkan continuation yang di dalam menyelesaikan proc yang di dalam *dan* melanjutkan yang di luar, karena
 setiap state mengembalikan continuation pemanggilnya saat tidak punya langkah berikutnya
 (`src/hexer/coro_transform.nim:600-608`). Satu `drive` menyelesaikan seluruh rantai: rantainya bukan kumpulan
-task independen, dia satu stack coroutine yang tinggal di heap.
+task independen, ia satu stack coroutine yang tinggal di heap.
 
 ## Apa yang compiler tulis
 
@@ -305,8 +305,8 @@ parameter `x: var int64` would alias a location that is already gone. Take it as
 karena frame pemanggilnya tetap hidup sepanjang panggilan. Ambil parameternya sebagai `sink` kalau coroutine-nya
 harus memiliki nilai itu.
 
-`delay` tidak boleh menerima callee yang mengembalikan nilai atau raise, karena nilainya atau errornya tidak
-punya tempat tujuan setelah ekspresi pembangunnya hilang:
+`delay` tidak boleh menerima callee yang mengembalikan nilai atau raise, karena nilainya atau error-nya tidak
+punya tempat tujuan setelah expression pembangunnya hilang:
 
 ```
 Error: `delay` hands `calc` to a scheduler, which runs it after this expression is gone;
@@ -355,7 +355,7 @@ rantai, termasuk park-nya. Kode yang ditulis seolah panggilannya kembali lebih a
 
 ## Samples
 
-`samples/24-passive-procs/passive.nim`, dijalankan di commit yang dipin:
+`samples/24-passive-procs/passive.nim`, dijalankan di commit yang di-pin:
 
 ```
 nimony c -r samples/24-passive-procs/passive.nim
@@ -378,7 +378,7 @@ done
 
 Baris per baris: passive proc yang dipanggil dari kode biasa mengembalikan nilainya; `delay` membangun tanpa
 menjalankan; `complete` menjalankan coroutine yang tidak pernah park; dua worker mulai lalu park; driver
-melanjutkan mereka dalam urutan yang dia pilih; dan programnya keluar `0`, dan itu yang dibaca verifier.
+melanjutkan mereka dalam urutan yang ia pilih; dan programnya keluar `0`, dan itu yang dibaca verifier.
 Sample-nya memakai `{.feature: "assumeSync".}` karena continuation resume-nya adalah variabel di level modul,
 seperti yang aturan di atas minta.
 

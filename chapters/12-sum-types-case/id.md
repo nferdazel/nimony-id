@@ -52,7 +52,7 @@ type
 `kind` adalah discriminator-nya, dan tipenya harus ordinal — enum, integer, `bool`. Selector `string` ditolak
 dengan `selector must be of an ordinal type` (`ch12-probes/c40.nim`, `src/nimony/sem.nim:3207`). Holey enum,
 yang Bab 11 tunjukkan dengan ordinal eksplisit dan celah, ditolak karena alasan yang sama: tes yang
-menerima tipe di sini menolak tipe bercelah (`src/nimony/typeprops.nim:17-33`), dan barisnya datang terbungkus:
+menerima tipe di sini menolak tipe bercelah (`src/nimony/typeprops.nim:17-33`), dan barisnya muncul terbungkus:
 
 ```
 [Error] c38.nim(8, 5) illformed AST inside object: (err . "selector must be of an ordinal type")
@@ -84,9 +84,9 @@ dengan baris terbungkus (`rv19.nim` adalah deklarasi di atas plus satu konstruks
 [Error] rv19.nim(5, 5) illformed AST inside case object: (err . "not all cases are covered; missing\3A \7BTriangle\7D")
 ```
 
-Bacalah sebagai `not all cases are covered; missing: {Triangle}`. Informasinya ada dan lokasinya baris `case`,
+Baca sebagai `not all cases are covered; missing: {Triangle}`. Informasinya ada dan lokasinya baris `case`,
 tapi compiler melaporkannya sebagai nilai error yang tertinggal di dalam badan tipe: barisnya dimulai
-`illformed AST inside case object:` dan pesannya datang ter-escape (`\3A` untuk `:`, `\7B` dan `\7D` untuk
+`illformed AST inside case object:` dan pesannya muncul ter-escape (`\3A` untuk `:`, `\7B` dan `\7D` untuk
 kurung kurawal). Constructor menemui node error itu saat menyusuri badan tipe (`src/nimony/sem.nim:4705`),
 itulah kenapa bungkusnya butuh konstruksi. Kemasannya jelek, dan itu dicatat di `ERRATA.md`, bukan diajarkan
 sebagai output normal.
@@ -109,7 +109,7 @@ Dua aturan lagi, keduanya ditolak saat deklarasi:
 ## Mengonstruksi varian
 
 Konstruksi menyebut discriminator dan field milik satu alternatif itu. Field alternatif lain tidak ditulis, dan
-yang dilewatkan mengambil default tipe-nya (`doc/language.md:629-641`, `c10.nim`, `c35.nim`):
+yang dilewatkan mengambil default tipenya (`doc/language.md:629-641`, `c10.nim`, `c35.nim`):
 
 ```nim
 let c = Shape(kind: Circle, radius: 1.0)
@@ -165,7 +165,7 @@ func area(s: Shape): float =
 
 `PI` dan `sqrt` berasal dari `std/math`, yang diimpor sample.
 
-Bentuk ekspresi bekerja sama dan menghasilkan nilai (`doc/language.md:2086-2100`):
+Bentuk expression bekerja sama dan menghasilkan nilai (`doc/language.md:2086-2100`):
 
 ```nim
 let label =
@@ -177,8 +177,8 @@ let label =
 
 ### Yang dicek compiler
 
-Di pin ini ceknya adalah `checkExhaustiveness` (`src/nimony/sem.nim:2699-2748`), dan satu pemanggilan melayani
-statement `case`, ekspresi `case`, dan section `case` milik object sendiri (`sem.nim:3290`); hanya tempat ia
+Di pin ini ceknya adalah `checkExhaustiveness` (`src/nimony/sem.nim:2699-2748`), dan satu panggilan melayani
+statement `case`, expression `case`, dan section `case` milik object sendiri (`sem.nim:3290`); hanya tempat ia
 meninggalkan error yang berbeda. Lewatkan satu anggota enum dan build berhenti di kepala `case` dengan nilai
 yang hilang disebut:
 
@@ -352,7 +352,7 @@ a
 ```
 
 Tiga baris pertama adalah `$` pada tiap varian. Lalu tiga luas: lingkaran, persegi `2x3`, dan segitiga `3-4-5`
-lewat rumus Heron. `boxy` adalah ekspresi `case` dengan `else`. `0` dan `4` adalah dua jawaban `sides`. `0.0`
+lewat rumus Heron. `boxy` adalah expression `case` dengan `else`. `0` dan `4` adalah dua jawaban `sides`. `0.0`
 dan `0.0` adalah field persegi yang dilewatkan: `height` saat hanya `width` ditulis, lalu `width` saat keduanya
 tidak. Lalu `2.0` dan `99.0`: salinannya berubah, aslinya tidak, dan `Rectangle` serta `true` adalah
 discriminator salinan dan kesamaan field-per-field. Empat terakhir adalah tree-nya: `Branch`, dua anak, nilai

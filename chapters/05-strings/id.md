@@ -18,7 +18,7 @@ glossary_added: ["string", "null terminator", "cstring", "slice", "escape sequen
 ## Untuk apa bab ini
 
 `string` di Nimony adalah nilai biasa: punya panjang, menyalin dirinya saat kamu assign, dan berupa urutan byte
-yang bisa kamu index. Yang **tidak** dia punya adalah byte nol tak terlihat di ujungnya, dan perubahan tunggal
+yang bisa kamu index. Yang **tidak** ia punya adalah byte nol tak terlihat di ujungnya, dan perubahan tunggal
 itulah yang paling sering membongkar kebiasaan dari bahasa lain.
 
 Bab ini mengajar nilai itu lebih dulu — bangun, index, slice, bandingkan — lalu batasnya, di mana `cstring`
@@ -44,13 +44,13 @@ echo line             # abc
 echo copy             # abcd
 ```
 
-Itu bukan catatan kaki. Ini yang menentukan apa yang dilakukan sebuah procedure terhadap string yang dia terima:
-tanpa parameter `var`, dia bekerja di salinannya sendiri, dan string milik pemanggil tidak tersentuh. (Bab 8
+Itu bukan catatan kaki. Ini yang menentukan apa yang dilakukan sebuah procedure terhadap string yang ia terima:
+tanpa parameter `var`, ia bekerja di salinannya sendiri, dan string milik pemanggil tidak tersentuh. (Bab 8
 membahas parameter selengkapnya.)
 
 ## Membangun string
 
-Operator `&` menyambung (`doc/language.md:303`). `add` menambahkan di tempat dan butuh `var`, jadi dia bentuk
+Operator `&` menyambung (`doc/language.md:303`). `add` menambahkan di tempat dan butuh `var`, jadi ia bentuk
 yang lebih murah ketika kamu menumbuhkan satu string di dalam loop:
 
 ```
@@ -97,7 +97,7 @@ echo "hello"[5]   # runtime: stringimpl.nim(686, 37): i < len(s) [AssertionDefec
 Runner-nya lalu mencetak `FAILURE: nimcache/c/.../probe` dan prosesnya keluar dengan kode non-nol.
 
 Pemeriksaannya terjadi saat program jalan, bukan saat compile: compiler menerima `s[5]` pada string lima karakter
-dan assertion-nya menyala belakangan. Index yang kamu hitung sendiri adalah tanggung jawabmu.
+dan assertion-nya baru jalan belakangan. Index yang kamu hitung sendiri adalah tanggung jawabmu.
 
 Pemeriksaan tetap hidup di bawah `-d:release`; hanya `-d:danger` yang mematikannya (`nimony --help`), dan setelah
 itu `s[5]` membaca byte apa pun yang kebetulan ada setelah payload dan programnya lanjut. Kamu sudah
@@ -137,7 +137,7 @@ echo "ABC" < "abc"      # true
 ```
 
 Baris ketiga layak direnungkan: perbandingannya byte demi byte, dan di ASCII huruf besar urut sebelum huruf kecil
-pasangannya. Jadi `"ABC" < "abc"` adalah `true`, dan kode "urutkan nama-nama ini" mewarisi urutan itu kecuali dia
+pasangannya. Jadi `"ABC" < "abc"` adalah `true`, dan kode "urutkan nama-nama ini" mewarisi urutan itu kecuali ia
 menormalkan huruf dulu.
 
 `case` juga boleh mencocokkan literal string langsung (`doc/language.md:288`, `:290-295`), yang membuat dispatch
@@ -224,7 +224,7 @@ func toCString*(s: var string): cstring not nil =
 (`lib/std/system/stringimpl.nim:1095-1106`)
 
 Kalau string sudah membawa terminator, fungsi itu tidak ada kerjaan. Ini juga menjelaskan signature-nya:
-`toCString` menerima `var string`, karena dia mengubah buffer. `let` tidak bisa dikonversi:
+`toCString` menerima `var string`, karena ia mengubah buffer. `let` tidak bisa dikonversi:
 
 ```
 let s = "hello"
@@ -250,15 +250,15 @@ tidak punya byte seperti itu sampai ada yang menulisnya.
 
 ## Di mana `cstring` masih muncul
 
-`cstring` adalah tipe pointer yang kompatibel dengan C (`doc/language.md:306-314`). Di buku ini dia muncul di
+`cstring` adalah tipe pointer yang kompatibel dengan C (`doc/language.md:306-314`). Di buku ini ia muncul di
 batas C dan hampir tidak di tempat lain: Bab 22 mengikat fungsi C, dan bab itulah yang bersandar padanya.
 
 Aturan yang kamu butuh sebelum itu:
 
 - **Panjang.** `len` pada `cstring` memanggil `strlen` milik C (`lib/std/system/stringimpl.nim:377`, `:369-375`),
-  jadi dia menghitung sampai byte nol pertama. Beda dengan `len` pada `string`, biayanya bergantung pada isi.
+  jadi ia menghitung sampai byte nol pertama. Beda dengan `len` pada `string`, biayanya bergantung pada isi.
 - **Jadi string.** `fromCString` menyalin byte-nya ke `string` baru (`lib/std/system/stringimpl.nim:1108-1109`).
-  Ada juga `$`, tapi dia tinggal di `strutils` (`lib/std/strutils.nim:230`), bukan di `system` — tanpa
+  Ada juga `$`, tapi ia tinggal di `strutils` (`lib/std/strutils.nim:230`), bukan di `system` — tanpa
   `import std/strutils`, `$c` tidak compile.
 - **Mencetak.** `echo` tidak punya overload `cstring`. `echo c` gagal bahkan dengan `strutils` diimpor; tulis
   `echo $c`.
@@ -310,7 +310,7 @@ dengan `&`, `add`, dan slicing, bukan dengan editor in-place.
 > dengan `cannot pass s to var/out T parameter`, karena menulis terminator di tempat butuh string yang mutable.
 > `s[s.len]` yang dipakai sebagai sentinel menghentikan program dengan `i < len(s) [AssertionDefect]` alih-alih
 > membaca nol (dengan pemeriksaan runtime hidup: `-d:danger` mematikan pemeriksaan itu dan kamu membaca byte
-> nyasar). Dan kode yang menyimpan `cstring` melewati perubahan string sumbernya salah dua kali: pointernya
+> nyasar). Dan kode yang menyimpan `cstring` melewati perubahan string sumbernya salah dua kali: pointer-nya
 > mungkin berasal dari salinan, dan nolnya hanya ditulis pada saat konversi.
 
 ## Samples

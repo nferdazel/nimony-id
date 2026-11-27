@@ -18,11 +18,11 @@ glossary_added: []
 ## Aturannya
 
 Bab yang sudah beku tidak ditulis ulang. Bab 1 sampai 24 beku di `4ba90a7`, dan pin tidak bergerak di bawah
-mereka: kalau build kompiler berikutnya mengubah perilaku yang diajarkan buku ini, babnya tetap mengajarkan apa
+mereka: kalau build compiler berikutnya mengubah perilaku yang diajarkan buku ini, babnya tetap mengajarkan apa
 yang benar saat ia terbit, dan perubahannya dicatat sebagai erratum. Pembaca yang memeriksa satu klaim terhadap
 `nimony` yang lebih baru menemukan penjelasannya di halaman yang ia baca, bukan perbedaan yang diam-diam.
 
-Itu biaya yang disengaja. Buku yang menyunting dirinya mengikuti kompiler tidak punya edisi yang bisa
+Itu biaya yang disengaja. Buku yang menyunting dirinya mengikuti compiler tidak punya edisi yang bisa
 diverifikasi, dan seluruh kalimat buku ini berdiri di atas satu commit.
 
 ## Di mana daftarnya
@@ -38,18 +38,18 @@ diverifikasi, dan seluruh kalimat buku ini berdiri di atas satu commit.
   pemeriksaan yang tidak eksis. Setiap baris menyebut buktinya, kalimat yang karena itu boleh dicetak buku, dan
   bab yang terikat.
 - **Editorial corrections** — perubahan pada bab yang sudah beku tanpa menyentuh pin, di mana babnya benar tentang
-  kompiler dan halamannya yang salah: edisinya, tanda kutip pada diagnostik yang dikutip, atau listing yang
+  compiler dan halamannya yang salah: edisinya, tanda kutip pada diagnostik yang dikutip, atau listing yang
   mencetak sesuatu yang tidak dihasilkan sample-nya.
 
 ## Bentuk satu baris
 
 Satu baris per kerusakan, dengan bab dan bagiannya, apa yang rusak, versi atau commit tempat ia rusak, tanggal, dan
-status. Baris membawa baris sumber kalau perilakunya bisa dibaca di kode kompiler, dan run mentah kalau harus
+status. Baris membawa baris sumber kalau perilakunya bisa dibaca di kode compiler, dan run mentah kalau harus
 diamati. Kerusakan tanpa keduanya tidak masuk: "tiba-tiba tidak jalan lagi" bukan erratum sampai ada yang
 menyebutkan apa yang berubah.
 
 Cacat yang ditemukan saat menulis buku dipisahkan dari errata. Celah dokumentasi adalah baris yang mengatakan
-manualnya salah dan kalimat buku berdiri. Cacat kompiler adalah baris yang mengatakan kompilernya salah dan babnya
+manualnya salah dan kalimat buku berdiri. Cacat compiler adalah baris yang mengatakan compiler-nya salah dan babnya
 mengajar di sekitarnya — dan, kalau layak, sebuah issue upstream. Satu cacat seperti itu sudah di-file pada edisi
 ini: `delay()` tanpa titik suspensi setelahnya menghentikan pembangkitan kode dengan assertion alih-alih
 diagnostik, `nim-lang/nimony#2985`, dengan perbaikannya di `nim-lang/nimony#2988`. Babnya tetap mengutip assertion
@@ -58,6 +58,6 @@ itu, karena pin masih menghasilkannya.
 ## Melaporkan satu
 
 Buka issue di repositori buku dengan babnya, kalimatnya, versi dan commit toolchain, serta perintah yang
-output-nya membantah halaman itu. Klaim tentang kompiler butuh berkas sumber atau commit di belakangnya; klaim
+output-nya membantah halaman itu. Klaim tentang compiler butuh berkas sumber atau commit di belakangnya; klaim
 tentang prosa butuh halamannya. Editor memutuskan apakah itu erratum, cacat, atau koreksi editorial, dan menulis
 barisnya pada edisi berikutnya.

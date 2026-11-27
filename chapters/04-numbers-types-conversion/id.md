@@ -20,7 +20,7 @@ glossary_added: ["integer type", "floating-point type", "narrowing conversion", 
 Setiap nilai dalam program Nimony punya tepat satu tipe, dan compiler sudah menyimpulkannya sebelum kamu
 menyebutnya. Untuk angka, kesimpulan itu menentukan tiga hal yang langsung terasa: seberapa banyak ruang yang
 dimiliki nilai itu, apa yang terjadi ketika sebuah perhitungan butuh ruang lebih besar dari itu, dan apakah dua
-nilai bertipe berbeda boleh bertemu dalam satu ekspresi.
+nilai bertipe berbeda boleh bertemu dalam satu expression.
 
 Bab ini membahas tipe numerik, dua tipe non-numerik yang setiap hari kamu pegang di variabel — `bool` dan
 `char` — dan satu tempat di mana tipe bukan sekadar label melainkan bukti: `range`. Konversi dapat bagiannya
@@ -110,7 +110,7 @@ tempat yang kamu maksud `3` adalah cara diam-diam untuk mengakhiri bab berikutny
 
 ## Konversi eksplisit
 
-Konversi ditulis sebagai pemanggilan pada nama tipe (`doc/language.md:2138-2160`):
+Konversi ditulis sebagai panggilan pada nama tipe (`doc/language.md:2138-2160`):
 
 ```
 echo int(3.9)      # 3
@@ -179,12 +179,12 @@ if step >= 0 and step <= 9:
   d = Digit(step)
 ```
 
-Bab 7 memakai range di loop; di sini poinnya cuma bahwa range memindahkan fakta yang biasanya kamu uji saat
+Bab 7 memakai range di loop; di sini poinnya hanya bahwa range memindahkan fakta yang biasanya kamu uji saat
 runtime ke dalam tipe, dan compiler tidak akan membiarkanmu melewati pembuktian itu.
 
 ## Nim 2 delta: overflow wraps
 
-> **Yang dilakukan Nim 2.** Overflow signed melempar `OverflowDefect` ketika overflow check menyala, yang dalam
+> **Yang dilakukan Nim 2.** Overflow signed melempar `OverflowDefect` ketika overflow check aktif, yang dalam
 > praktik berarti build debug crash di tempat build release wrap — sumber yang sama berperilaku dua cara. Penyelamat
 > standarnya adalah menangkap defect itu atau memasang `overflowChecks: off`.
 >

@@ -13,23 +13,23 @@ samples: [samples/16-modules-visibility/modules.nim]
 glossary_added: [module, export marker, attached routine, re-export, include]
 ---
 
-# Module dan Visibilitas
+# Modul dan Visibilitas
 
 ## Untuk apa bab ini
 
-Semua program sampai sekarang cuma satu berkas. Program sungguhan tidak begitu, dan alasannya bukan kerapian:
+Semua program sampai sekarang hanya satu berkas. Program sungguhan tidak begitu, dan alasannya bukan kerapian:
 batas berkas adalah tempat bahasa memutuskan siapa boleh memanggil apa. Keputusan itulah seluruh isi bab ini.
-Nimony tidak punya manifest paket, tidak punya header module, dan tidak punya deklarasi namespace. Sebuah berkas
-adalah module, namanya adalah namanya, dan satu `*` pada deklarasi adalah yang membuat berkas lain bisa melihatnya.
+Nimony tidak punya manifest paket, tidak punya header modul, dan tidak punya deklarasi namespace. Sebuah berkas
+adalah modul, namanya adalah namanya, dan satu `*` pada deklarasi adalah yang membuat berkas lain bisa melihatnya.
 
 Urutan di bawah mengikuti pembaca yang memecah satu berkas jadi dua: bagaimana berkas kedua ikut ter-compile,
 apa yang sebenarnya dibawa `import`, apa yang tetap privat dan apa kata compiler saat kamu meraihnya, lima ejaan
 import dan apa yang disembunyikan masing-masing, lalu aturan yang jarang ditemui pembaca di bahasa lain — sebuah
 panggilan juga melihat routine yang menempel ke tipe argumennya, diimpor atau tidak.
 
-## Module adalah berkas
+## Modul adalah berkas
 
-Nama berkas adalah nama module, tanpa `.nim`. `support/shapes.nim` adalah module `shapes`, dan itulah nama yang
+Nama berkas adalah nama modul, tanpa `.nim`. `support/shapes.nim` adalah modul `shapes`, dan itulah nama yang
 dipakai sebuah import dan sebuah panggilan berkualifikasi, bukan path-nya:
 
 ```nim
@@ -37,13 +37,13 @@ import support/shapes
 echo shapes.describe(square)
 ```
 
-Kedua baris jalan di pin ini: import menerima path dengan `/`, dan bentuk berkualifikasi menerima nama module.
-Subdirektori bukan namespace, jadi dua berkas bernama `shapes.nim` di direktori berbeda adalah dua module yang
+Kedua baris jalan di pin ini: import menerima path dengan `/`, dan bentuk berkualifikasi menerima nama modul.
+Subdirektori bukan namespace, jadi dua berkas bernama `shapes.nim` di direktori berbeda adalah dua modul yang
 sama-sama bernama `shapes`. Mengimpor keduanya lewat path tidak masalah selama panggilannya tanpa kualifikasi;
 `shapes.aval()` yang berkualifikasi lalu gagal dengan `ambiguous identifier`, dan perbaikannya adalah alias pada
 salah satu import.
 
-Statement level module dari module yang diimpor berjalan sebelum body berkas yang mengimpornya, bahkan saat import
+Statement level modul dari modul yang diimpor berjalan sebelum body berkas yang mengimpornya, bahkan saat import
 berada di tengah berkas:
 
 ```nim
@@ -58,11 +58,11 @@ echo "ready ", ready
 ```
 
 Itu mencetak `module init`, `main start`, `ready 1`. Import adalah statement waktu compile yang posisinya di
-sumber tidak mengurutkan apa pun: statement module yang diimpor sudah berjalan saat `main start` muncul.
+sumber tidak mengurutkan apa pun: statement modul yang diimpor sudah berjalan saat `main start` muncul.
 
 ## Apa yang dibawa `import`
 
-`import` membawa nama top-level yang diekspor dari module ke scope, tanpa kualifikasi:
+`import` membawa nama top-level yang diekspor dari modul ke scope, tanpa kualifikasi:
 
 ```nim
 # util.nim
@@ -74,8 +74,8 @@ import util
 greet("ada")
 ```
 
-Tidak ada prelude implisit untuk diwarisi. Tiap module menyebut apa yang dipakainya, termasuk `std/syncio` sebelum
-ia bisa memanggil `echo`, dan itulah sebabnya setiap module di buku ini dimulai dengan import itu.
+Tidak ada prelude implisit untuk diwarisi. Tiap modul menyebut apa yang dipakainya, termasuk `std/syncio` sebelum
+ia bisa memanggil `echo`, dan itulah sebabnya setiap modul di buku ini dimulai dengan import itu.
 
 Import tidak transitif. Kalau `b` dan `c` sama-sama mengimpor `d`, berkas yang mengimpor `b` dan `c` tetap tidak
 bisa memanggil routine `d`; ia harus mengimpor `d` sendiri. Itu disengaja, dan sifat itulah yang menahan perubahan
@@ -83,7 +83,7 @@ di `d` supaya tidak diam-diam melebarkan apa yang dilihat pemanggil `b`.
 
 ## Penanda export
 
-Deklarasi tanpa `*` bersifat privat bagi module-nya. Panggilan ke sana dari berkas lain gagal, dan pesannya tidak
+Deklarasi tanpa `*` bersifat privat bagi modulnya. Panggilan ke sana dari berkas lain gagal, dan pesannya tidak
 memakai kata privat:
 
 ```
@@ -93,7 +93,7 @@ main.nim(3, 1) Error: undeclared identifier: 'secret'
 Itu pesan yang sama dengan nama yang tidak dideklarasikan, dan hanya itu diagnostiknya. Tidak ada baris "declared
 here but not exported" untuk dibaca, jadi pembaca memeriksa deklarasi untuk `*` lebih dulu.
 
-Penanda itu dipasang pada tiap deklarasi yang mau kamu lepaskan dari module: `proc`, `type`, `const`, `let` atau
+Penanda itu dipasang pada tiap deklarasi yang mau kamu lepaskan dari modul: `proc`, `type`, `const`, `let` atau
 `var`. Untuk field object ia dipasang terpisah, dan field adalah tempat aturannya paling mudah dilihat:
 
 ```nim
@@ -114,8 +114,8 @@ echo p.x
 tidak, jadi pemanggil bisa memegang `Point` dan tidak bisa membaca separuhnya. Enum berbeda: mengekspor tipenya
 membuat anggotanya bisa dipakai dengan nama, dan tidak ada penanda untuk mengekspor satu anggota tanpa saudaranya.
 
-Aturan field punya satu sisi lunak yang perlu diketahui sebelum kamu bergantung padanya. Pemanggilan constructor
-dari luar module tidak harus menyebut field privatnya:
+Aturan field punya satu sisi lunak yang perlu diketahui sebelum kamu bergantung padanya. Panggilan constructor
+dari luar modul tidak harus menyebut field privatnya:
 
 ```nim
 let p = Point(y: 2)
@@ -142,7 +142,7 @@ show(h)
 ```
 
 Itu mencetak `hidden 5`. Pemanggil tidak bisa menyebut `Hidden`, tidak bisa mendeklarasikan variabel bertipe itu,
-dan tidak bisa membaca `h.v`; ia bisa memegang nilainya, mengembalikannya, dan membiarkan routine module itu
+dan tidak bisa membaca `h.v`; ia bisa memegang nilainya, mengembalikannya, dan membiarkan routine modul itu
 bekerja padanya. Ini enkapsulasi termurah yang disediakan bahasa, dan harganya satu `*` yang tidak ditulis.
 
 ## Lima ejaan import
@@ -157,31 +157,31 @@ from util import greet  # only greet, unqualified
 from util import nil    # nothing unqualified; util.greet still works
 ```
 
-`import util as u` memberi module nama kedua dan mengambil nama pertamanya: sesudahnya `u.greet("ada")` build dan
+`import util as u` memberi modul nama kedua dan mengambil nama pertamanya: sesudahnya `u.greet("ada")` build dan
 `util.greet("ada")` gagal dengan `undeclared identifier: util`. Yang tidak dilakukannya adalah menyembunyikan nama
-tanpa kualifikasi — `greet("ada")` tetap jalan, karena alias mengganti nama kualifiernya, bukan simbol yang
+tanpa kualifikasi — `greet("ada")` tetap jalan, karena alias mengganti nama qualifier-nya, bukan simbol yang
 diimpor.
 
 `import util except greet` mengimpor semuanya kecuali `greet`, dan memanggil `greet` lalu gagal sebagai identifier
-yang tidak dideklarasikan. Daftarnya tidak diperiksa terhadap apa yang diekspor module: menyebut routine privat di
+yang tidak dideklarasikan. Daftarnya tidak diperiksa terhadap apa yang diekspor modul: menyebut routine privat di
 sana diterima diam-diam, jadi salah ketik di daftar `except` tidak mempersempit apa pun dan tidak melaporkan apa
 pun.
 
-`from util import greet` mengimpor satu nama itu saja dan tidak yang lain; routine kedua yang diekspor dari module
+`from util import greet` mengimpor satu nama itu saja dan tidak yang lain; routine kedua yang diekspor dari modul
 yang sama jadi tidak dideklarasikan. Menyebut routine privat di sana ditolak dengan pesan `undeclared identifier`
 yang sama.
 
 `from util import nil` tidak mengimpor nama apa pun dan mempertahankan bentuk berkualifikasi, yang merupakan cara
-sebuah module dipakai sepenuhnya lewat panggilan `util.name`. Ia berpasangan dengan bagian berikutnya: routine
+sebuah modul dipakai sepenuhnya lewat panggilan `util.name`. Ia berpasangan dengan bagian berikutnya: routine
 yang menempel ke sebuah tipe tetap resolve walau tidak ada yang diimpor tanpa kualifikasi.
 
 ## Routine yang menempel ke tipe argumen
 
 Inilah aturan yang membuat sebuah panggilan ter-compile padahal tidak ada apa pun di scope yang mendeklarasikan
 routine itu. `doc/language.md:1280-1315` menyebutkannya: untuk tiap argumen yang tipenya tipe nominal yang
-dideklarasikan di module lain, routine top-level yang diekspor dari module itu dengan nama panggilan tersebut dan
+dideklarasikan di modul lain, routine top-level yang diekspor dari modul itu dengan nama panggilan tersebut dan
 sebuah parameter bertipe itu ikut jadi kandidat, seolah diimpor. Tipe itu boleh berada di balik `var`, `sink`,
-`lent`, `out`, `ref` atau `ptr`, dan untuk instance generic yang dipakai adalah module yang mendeklarasikan
+`lent`, `out`, `ref` atau `ptr`, dan untuk instance generic yang dipakai adalah modul yang mendeklarasikan
 generic-nya.
 
 Jadi ini ter-compile dengan hanya tipenya diimpor:
@@ -200,17 +200,17 @@ show(t)
 ```
 
 `show` resolve dan `banner` tidak, karena `banner` tidak pernah menyebut `Thing`. Batasnya adalah daftar parameter,
-bukan module-nya: routine dari module yang sama yang mengambil tipe itu bisa diraih, dan yang tidak mengambilnya
-tidak. Ini juga bukan module si argumen secara umum — routine yang dideklarasikan di module ketiga yang kebetulan
+bukan modulnya: routine dari modul yang sama yang mengambil tipe itu bisa diraih, dan yang tidak mengambilnya
+tidak. Ini juga bukan modul si argumen secara umum — routine yang dideklarasikan di modul ketiga yang kebetulan
 mengambil `Thing` tidak menempel, dan tetap tak terlihat kecuali diimpor.
 
-Dua konsekuensi penting dalam praktik. Sebuah module bisa diimpor dengan `from m import nil` dan tetap dipakai
+Dua konsekuensi penting dalam praktik. Sebuah modul bisa diimpor dengan `from m import nil` dan tetap dipakai
 lewat routine tipe-tipenya, berkualifikasi atau tidak. Dan routine yang tidak diekspor tidak pernah menempel, jadi
 menandai routine privat sudah cukup untuk mengeluarkannya dari pencarian ini juga.
 
 ## `export` meneruskan
 
-Module yang membungkus module lain bisa meneruskannya, supaya pemanggilnya tidak perlu mengimpor keduanya:
+Modul yang membungkus modul lain bisa meneruskannya, supaya pemanggilnya tidak perlu mengimpor keduanya:
 
 ```nim
 # support/report.nim
@@ -220,10 +220,10 @@ export shapes
 
 Sesudah itu, berkas yang mengimpor `support/report` melihat `Shape`, `shape` dan `describe` tanpa mengimpor
 `shapes`. Penerusan juga bisa menyebut satu simbol, `export shapes.Shape`, dan tipenya menyeberang sementara
-routine lain module itu tidak — kecuali yang menempel padanya, yang datang lewat aturan bagian sebelumnya.
+routine lain modul itu tidak — kecuali yang menempel padanya, yang datang lewat aturan bagian sebelumnya.
 
-Nama dalam statement `export` adalah nama module, bukan path, dan ia resolve seperti import: relatif terhadap
-berkas yang mengekspornya. Module di dalam subdirektori karena itu mengimpor saudaranya sebagai `import shapes`,
+Nama dalam statement `export` adalah nama modul, bukan path, dan ia resolve seperti import: relatif terhadap
+berkas yang mengekspornya. Modul di dalam subdirektori karena itu mengimpor saudaranya sebagai `import shapes`,
 bukan `import support/shapes`, dan mengekspornya dengan cara yang sama.
 
 Pembedaan terakhir itu bukan soal kerapian. Operand `export` yang bukan nama polos atau `module.name` — path adalah
@@ -233,7 +233,7 @@ ada di statement export itu, bukan di resolusi path, jadi `import` yang benar di
 
 ## `include`
 
-`include` bukan import. Ia menempelkan teks berkas ke module yang mengincludenya, jadi tidak ada yang diekspor dan
+`include` bukan import. Ia menempelkan teks berkas ke modul yang meng-include berkas itu, jadi tidak ada yang diekspor dan
 tidak ada visibilitas yang berlaku:
 
 ```nim
@@ -246,12 +246,12 @@ echo twice(4)
 ```
 
 Itu mencetak `8` tanpa `*` di mana pun, karena `twice` sekarang adalah deklarasi milik `main`. Pakai `include`
-untuk memecah body satu module ke beberapa berkas, jangan untuk berbagi kode antar module: apa yang dideklarasikan
+untuk memecah body satu modul ke beberapa berkas, jangan untuk berbagi kode antar modul: apa yang dideklarasikan
 berkas yang di-include menjadi milik peng-include-nya, termasuk nama privatnya.
 
 ## Siklus
 
-Dua module yang saling mengimpor ditolak:
+Dua modul yang saling mengimpor ditolak:
 
 ```
 Error: import cycle: 'b.nim' imports 'a.nim' without {.cyclic.}; every import on a cycle needs it
@@ -260,7 +260,7 @@ Error: import cycle: 'b.nim' imports 'a.nim' without {.cyclic.}; every import on
 Pragma pada tiap import di siklus itu membuatnya build. Ia opt-in yang disengaja, dan pesannya menyebut berkas dan
 import yang kurang, jadi perbaikannya tertulis jelas: pasang `{.cyclic.}` di keduanya.
 
-## Saat dua module mengekspor nama yang sama
+## Saat dua modul mengekspor nama yang sama
 
 Dua import yang membawa nama sama membuat panggilannya ambigu, dan pesannya mendaftar kedua deklarasi dengan
 berkas dan baris masing-masing:
@@ -276,16 +276,16 @@ berkualifikasi, atau mempersempit kedua sisi, `from one import show` bersama `fr
 sisi saja tidak menyelesaikannya selama sisi lain masih import polos — kedua deklarasi tetap di scope dan
 panggilannya tetap ambigu.
 
-## Global mutable melintasi batas module
+## Global mutable melintasi batas modul
 
 `var` yang diekspor bukan shared state yang diharapkan pembaca. Penulisan langsung ke sana dari body routine
-ditolak, di module-nya sendiri maupun di module lain:
+ditolak, di modulnya sendiri maupun di modul lain:
 
 ```
 util.nim(5, 7) Error: unsynchronized access to global variable 'counter'; pass it to a `.sync` routine or use `{.cast(assumeSync).}`
 ```
 
-Statement level module dikecualikan, karena inisialisasi module berjalan single-threaded, jadi `counter = 9` di
+Statement level modul dikecualikan, karena inisialisasi modul berjalan single-threaded, jadi `counter = 9` di
 atas berkas ter-compile dan bekerja. Body routine butuh pemeriksaan itu dimatikan untuk akses tersebut, dan
 `{.cast(assumeSync).}:` di sekitar blok melakukannya:
 
@@ -298,29 +298,29 @@ proc bump() =
 Saran di pesan itu adalah jalur keempat dan ia nyata: serahkan global itu — atau salah satu field atau elemennya —
 ke parameter `var` atau `ptr` sebuah routine `.sync`, yang boleh routine tulisan kamu sendiri:
 `proc own(p: var int) {.sync.}` lalu `own(counter)` build dan menaikkan nilainya. `.sync` dipercaya, bukan diperiksa.
-Jadi jalurnya adalah statement level module, `{.cast(assumeSync).}:`, `{.feature: "assumeSync".}`, dan routine
+Jadi jalurnya adalah statement level modul, `{.cast(assumeSync).}:`, `{.feature: "assumeSync".}`, dan routine
 `.sync`. Keempatnya janji yang kamu buat, bukan pemeriksaan yang dibuang compiler.
 
 ## Dua tempat manual tidak cocok dengan pin
 
 Statement import diterima di dalam body routine, padahal `doc/language.md` bilang ia hanya boleh di level top, dan
-ia berlaku untuk seluruh module: panggilan sesudah routine yang memuat import itu juga build. Bab ini mengajar
+ia berlaku untuk seluruh modul: panggilan sesudah routine yang memuat import itu juga build. Bab ini mengajar
 bentuk top-level. Yang lain lebih buruk. Operand `export` yang bukan nama memutar front end tanpa output alih-alih
 gagal, seperti yang bagian `export` sebutkan. Keduanya ada di catatan review dan di `ERRATA.md`; tidak satu pun
 mengubah apa yang diajarkan bab ini.
 
 ## Nim 2 delta
 
-*Apa yang Nim 2 lakukan.* Module juga sebuah berkas, `*` berarti ekspor, dan `import x as y`, daftar `except` serta
+*Apa yang Nim 2 lakukan.* Modul juga sebuah berkas, `*` berarti ekspor, dan `import x as y`, daftar `except` serta
 `from ... import` ada dengan ejaan yang sama. Nim 2 juga menyuntikkan `system` ke mana-mana, jadi `echo` tidak
-butuh import, dan resolusi overload-nya tidak mencapai module sebuah tipe untuk panggilan biasa.
+butuh import, dan resolusi overload-nya tidak mencapai modul sebuah tipe untuk panggilan biasa.
 
-*Apa yang Nimony lakukan.* Ejaannya bertahan; dua kebiasaan tidak. Tiap module mengimpor `std/syncio` sebelum ia
-meng-echo, dan sebuah panggilan bisa menemukan routine yang menempel ke tipe argumennya walau module itu diimpor
+*Apa yang Nimony lakukan.* Ejaannya bertahan; dua kebiasaan tidak. Tiap modul mengimpor `std/syncio` sebelum ia
+meng-echo, dan sebuah panggilan bisa menemukan routine yang menempel ke tipe argumennya walau modul itu diimpor
 dengan `from m import nil`. Aturan variabel yang diekspor juga baru dalam praktik: global mutable ditolak dari body
 routine kecuali pemeriksaannya dimatikan untuk akses itu.
 
-*Apa yang rusak kalau kebiasaannya dibawa.* Module yang disalin dari Nim 2 gagal build pada `echo` sampai
+*Apa yang rusak kalau kebiasaannya dibawa.* Modul yang disalin dari Nim 2 gagal build pada `echo` sampai
 `std/syncio` diimpor, dan import yang diganti nama sebagai cara menyembunyikan nama tidak menyembunyikannya —
 `import util as u` tetap membuat `greet` bisa dipanggil. Raih `from` atau `except` saat yang kamu maksud adalah
 mempersempit.
@@ -340,9 +340,9 @@ note: square
 square has 4 sides
 ```
 
-Enam baris, dengan urutan itu. Yang pertama datang lewat module yang diteruskan ulang, yang kedua dari routine yang
-ditambahkan module itu, yang ketiga routine yang sama dipanggil lewat nama module, dan tiga terakhir menunjukkan
-routine module kedua, routine berkas yang di-include, dan pembacaan field. `tools/verify-samples.sh` mengompilasi
+Enam baris, dengan urutan itu. Yang pertama masuk lewat modul yang diteruskan ulang, yang kedua dari routine yang
+ditambahkan modul itu, yang ketiga routine yang sama dipanggil lewat nama modul, dan tiga terakhir menunjukkan
+routine modul kedua, routine berkas yang di-include, dan pembacaan field. `tools/verify-samples.sh` mengompilasi
 dan menjalankannya bersama sisa buku dan tidak membandingkan stdout, jadi enam baris ini yang diperiksa dengan mata.
 
 ## Cek
@@ -350,11 +350,11 @@ dan menjalankannya bersama sisa buku dan tidak membandingkan stdout, jadi enam b
 1. Pecah program satu berkas jadi dua, ekspor hanya routine yang dibutuhkan yang lain. Baca pesan yang kamu dapat
    sebelum menambahkan `*`, lalu tambahkan dan pastikan tidak ada yang lain berubah.
 2. Ambil `Point` dari bab ini dan bangun satu dari `main` tanpa menyebut `x`. Cetak `p.y`, lalu tambahkan
-   routine di module yang mencetak `p.x` dan terangkan kenapa nilai yang kamu lihat adalah `0`.
+   routine di modul yang mencetak `p.x` dan terangkan kenapa nilai yang kamu lihat adalah `0`.
 3. Ubah `import util` jadi `from util import nil` dan buat tiap panggilan berkualifikasi. Lalu hapus kualifikasi
    dari panggilan yang argumennya tipe yang diekspor itu dan terangkan kenapa ia tetap build.
-4. Buat dua module saling mengimpor, baca pesan siklusnya, lalu tambahkan `{.cyclic.}` di tempat yang diminta.
-   Sebutkan apa yang harus kamu ubah di module kedua, bukan cuma yang pertama.
+4. Buat dua modul saling mengimpor, baca pesan siklusnya, lalu tambahkan `{.cyclic.}` di tempat yang diminta.
+   Sebutkan apa yang harus kamu ubah di modul kedua, bukan hanya yang pertama.
 5. Ekspor sebuah `var` dan tulis dari body routine. Baca pesannya, lalu perbaiki dengan `{.cast(assumeSync).}` dan
    tulis apa yang kamu janjikan ke compiler.
 

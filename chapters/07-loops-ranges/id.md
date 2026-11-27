@@ -22,7 +22,7 @@ cara biasa untuk menyusuri rentang angka atau karakter. `while` menjalankan body
 yang kamu mau kalau jumlah putarannya belum diketahui di depan.
 
 Paruh kedua bab ini soal `range`, tipe yang sudah diperkenalkan Bab 4. Loop adalah tempat range paling
-sering muncul: batas index, batas loop, angka kecil yang dikirim ke routine yang cuma menerima digit. Di pin ini
+sering muncul: batas index, batas loop, angka kecil yang dikirim ke routine yang hanya menerima digit. Di pin ini
 compiler membela sebuah range dengan **bukti**, bukan dengan runtime check, dan bukti itu punya cakupan — harus
 terlihat di tempat nilainya dipakai, dan tidak ikut nilainya masuk ke routine lain.
 
@@ -40,7 +40,7 @@ for i in 0..3:
 3
 ```
 
-`0..3` itu iterator, bukan container (`lib/std/system/iterators.nim:14-44`). Dia menghitung naik dan ikut
+`0..3` itu iterator, bukan container (`lib/std/system/iterators.nim:14-44`). Ia menghitung naik dan ikut
 menyertakan kedua ujung. Loop mendeklarasikan variabelnya sendiri, tipenya adalah tipe yang dihasilkan iterator
 (`int` di sini), dan cakupannya berakhir bersama body (`doc/language.md:4041-4056`). Memakai `i` setelah loop
 adalah error: `undeclared identifier: i`.
@@ -111,8 +111,8 @@ for i in 0..<3:
 2
 ```
 
-`a..<b` adalah rentang yang sama dengan batas atas tidak ikut; sebagai nilai dia `a..pred(b)`
-(`system.nim:610-616`), dan sebagai loop dia menghitung naik lalu berhenti sebelum `b` (`iterators.nim:1-12`).
+`a..<b` adalah rentang yang sama dengan batas atas tidak ikut; sebagai nilai ia `a..pred(b)`
+(`system.nim:610-616`), dan sebagai loop ia menghitung naik lalu berhenti sebelum `b` (`iterators.nim:1-12`).
 Batas yang sama besarnya menghasilkan kosong: `for i in 3..<3` tidak pernah jalan.
 
 Bentuk ini berguna saat berhadapan dengan panjang:
@@ -151,7 +151,7 @@ c
 Loop-nya jalan tiga kali dan mencetak `a`, `b`, `c` sebelum mati di index terakhir; di build ini baris abort
 yang muncul duluan, jadi keduanya ditulis di sini dengan urutan itu. Rentang loop-nya menjanjikan `i <= len(word)`, satu nilai lebih banyak dari yang diizinkan index, jadi assertion
 di `[]` (`lib/std/system/stringimpl.nim:686`) menghentikan program di `i == len(word)`. Setengah terbuka bukan
-selera gaya di pola ini; dia yang membedakan bisa dibuktikan dengan crash.
+selera gaya di pola ini; ia yang membedakan bisa dibuktikan dengan crash.
 
 ## Menghitung turun, dan step
 
@@ -185,7 +185,7 @@ gagal dengan `value out of range: -2 notin 1..9223372036854775807`. `countdown` 
 (`V: Ordinal`, `:59`); hanya komentarnya yang bilang step-nya positif (`:64`), dan step negatif tetap compile lalu
 memanjat menjauh dari `b` alih-alih turun — `countdown(5, 1, -1)` mencetak `5 6 7 8 …` dan tidak pernah berhenti.
 `countup` juga membawa syarat `b < high(T)` yang dimiliki `..` (`:77-82`); `countdown` tidak punya `requires`
-seperti itu, cuma catatan bahwa dia gagal kalau `a >= b and b + step > high(T)` (`:66-67`).
+seperti itu, hanya catatan bahwa ia gagal kalau `a >= b and b + step > high(T)` (`:66-67`).
 
 ## `char` juga ordinal
 
@@ -208,7 +208,7 @@ dicetak. Turun butuh bantuan yang sama seperti `int`: `countdown('c', 'a')` dan 
 
 ## Variabel loop adalah variabel
 
-Cakupannya berakhir bersama body, tapi di pin ini dia bukan read-only. Menulisnya menggeser loop:
+Cakupannya berakhir bersama body, tapi di pin ini ia bukan read-only. Menulisnya menggeser loop:
 
 ```
 for i in 0..5:
@@ -248,7 +248,7 @@ for i in 0..5:
 5
 ```
 
-Dia tetap menyasar loop walaupun dipanggil dari dalam `block` telanjang:
+Ia tetap menyasar loop walaupun dipanggil dari dalam `block` telanjang:
 
 ```
 for i in 0..2:
@@ -361,8 +361,8 @@ buktikan ulang nilai hasil hitungan terhadap batas yang benar-benar dijanjikan p
 
 ## Nim 2 delta: bukti range bersifat lokal
 
-> **Apa yang dilakukan Nim 2.** Sebuah `range` dibela saat runtime ketika nilainya mencapai tipe, jadi nilai yang
-> benar pada saat dipakai diterima sejauh apa pun dia sudah berjalan untuk sampai ke sana. Dicek di host
+> **Apa yang dilakukan Nim 2.** `range` dibela saat runtime ketika nilainya mencapai tipe, jadi nilai yang
+> benar pada saat dipakai diterima sejauh apa pun ia sudah berjalan untuk sampai ke sana. Dicek di host
 > compiler, Nim 2.4.0: mengisikan `7` ke `var r: range[0..4]` berhenti dengan `RangeDefect`, begitu juga `70`
 > yang dikirim ke parameter `range[0..9]`.
 >
@@ -374,7 +374,7 @@ buktikan ulang nilai hasil hitungan terhadap batas yang benar-benar dijanjikan p
 > penjagaannya harus terlihat di routine tempat tipe range dibutuhkan. Penjagaan yang ditulis `x in a..b` pada
 > parameter tidak dihitung, jadi baris yang tadinya terbaca sebagai pengecekan sekarang gagal dibangun. Dan
 > hitungan yang dibangun dari nilai terjaga bisa melewati penjagaannya: dengan penjagaan `n <= 9`, `n + 1` butuh
-> `n <= 8`, jadi buktinya harus mencakup hasilnya, bukan cuma nilainya.
+> `n <= 8`, jadi buktinya harus mencakup hasilnya, bukan hanya nilainya.
 
 ## Samples
 
@@ -426,7 +426,7 @@ perbandingan dan menolak `70` di `else`.
 3. Tulis `for i in countup(0, 6, 2)`. Harapan: `0 2 4 6`. Coba `countdown(5, 1, 2)`. Harapan: `5 3 1`. Coba
    `countup(0, 6, -2)`. Harapan: `value out of range: -2 notin 1..9223372036854775807`.
 4. Tulis `for c in 'a'..'c': echo c`. Harapan: `a b c`. Ganti header-nya ke `'c'..'a'`. Harapan: kosong.
-5. Tulis `for i in 0..len("abc"): echo "abc"[i]`. Harapan: dia compile, mencetak `a`, `b`, `c`, lalu berhenti
+5. Tulis `for i in 0..len("abc"): echo "abc"[i]`. Harapan: ia compile, mencetak `a`, `b`, `c`, lalu berhenti
    dengan `i < len(s) [AssertionDefect]`, exit 1. Ganti header ke `0..<len("abc")`. Harapan: tiga baris, exit 0.
 6. Tulis `for i in 0..high(int): echo i`. Harapan: `contract violated:` dengan syarat `b < …`. Ganti batasnya ke
    `high(int) - 1`. Harapan: compile dan jalan (jangan dijalankan sampai habis).

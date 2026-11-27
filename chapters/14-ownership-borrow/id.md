@@ -21,7 +21,7 @@ Bab 13 memberimu dua cara mencapai storage milik nama lain: `ref` yang dikelola 
 ini soal aturan yang datang bersama cara itu. Siapa yang bertanggung jawab atas sebuah nilai, kapan dua nama
 boleh menunjuk storage yang tumpang tindih, dan apa yang compiler tolak sebelum program kamu sempat jalan.
 
-Di pin ini compiler menegakkan tiga aturan, dan cuma tiga. Sebuah panggilan tidak boleh mengirim lokasi yang
+Di pin ini compiler menegakkan tiga aturan, dan hanya tiga. Sebuah panggilan tidak boleh mengirim lokasi yang
 sama sekali sebagai argumen mutable dan sekali sebagai argumen yang membaca storage pemanggil. Sebuah borrow
 tidak boleh hidup lebih lama dari storage yang ia pinjam. Sebuah jalur yang sedang di-borrow tidak boleh
 dimutasi selama borrow-nya berjalan. Sebagian besar yang programmer Nim 2 kelompokkan sebagai "ownership" tidak
@@ -43,7 +43,7 @@ sekali, itu sebabnya memindahkan `int` nanti di bab ini tidak mengubah apa pun.
 `doc/language.md:893-960` mendokumentasikan anotasi `owned` yang opt-in untuk `ref` dan closure di balik
 `{.feature: "ownedRefs".}`. Bab ini tidak memakainya, dan tidak ada aturan di bawah yang bergantung padanya.
 
-## Pemeriksaan aliasing di titik panggilan
+## Pemeriksaan aliasing di call site
 
 Setiap panggilan diperiksa soal argumen yang tumpang tindih. Pemeriksaannya `borrowCheckForCall`, di
 `src/nimony/contracts_fir.nim:4242-4289`, dan ia punya dua paruh.
@@ -55,13 +55,13 @@ pemanggil. Kalau iya, panggilannya ditolak:
 Error: mutable argument aliases with immutable parameter
 ```
 
-Dua argumen mutable juga tidak boleh tumpang tindih, dan paruh itu menyala begitu jalurnya bertumpuk:
+Dua argumen mutable juga tidak boleh tumpang tindih, dan paruh itu berlaku begitu jalurnya bertumpuk:
 
 ```
 Error: mutable argument aliases with mutable parameter
 ```
 
-Kapan paruh kedua menyala mudah dilihat. `swap(x, x)` pada dua parameter `int` ditolak
+Kapan paruh kedua berlaku mudah dilihat. `swap(x, x)` pada dua parameter `int` ditolak
 (`src/nimony/contracts_fir.nim:4282`), karena dua penulisan lewat satu lokasi membuat hasilnya bergantung pada
 urutan callee menulis, dan tidak ada properti tipe yang bisa menyelamatkan itu. Field yang berbeda dari satu
 object aman, dan `swap(p.x, p.y)` jalan — itu blok pertama sample bab ini.
@@ -109,7 +109,7 @@ yang dibaca `passByConstRef` (`src/nimony/sizeof.nim:310-312`), jadi ukuran saja
 Kondisi keempat punya satu titik buta yang disengaja. **Object warisan atau variant selalu dihitung memiliki
 heap**, apa pun field-nya: `ownsNoHeap` mengembalikan false untuk object dengan penanda warisan — komentarnya
 bilang "a derived value may own more" (`src/nimony/contracts_fir.nim:4328-4329`) — dan untuk object `case`, jadi
-parameter by-value dari salah satu bentuk itu adalah pointer untuk pemeriksaan ini, bahkan saat isinya cuma 16
+parameter by-value dari salah satu bentuk itu adalah pointer untuk pemeriksaan ini, bahkan saat isinya hanya 16
 byte data polos. Warisan belum jadi topik buku ini; kalimatnya ada di sini supaya pembaca tidak terkejut oleh
 penolakan yang tidak bisa ia jelaskan dari field-nya.
 
@@ -165,8 +165,8 @@ Error: borrow of 'a' escapes the proc; it does not live long enough
 Error: unsynchronized access to global variable 'g'; pass it to a `.sync` routine or use `{.cast(assumeSync).}`
 ```
 
-Dua error, dan yang kedua sama sekali bukan soal borrow: aturan akses global dari Bab 13 menyala di baris
-yang sama (`src/nimony/contracts_fir.nim:4125`). Pembaca yang cuma membaca baris pertama tidak akan tahu kenapa
+Dua error, dan yang kedua sama sekali bukan soal borrow: aturan akses global dari Bab 13 berlaku di baris
+yang sama (`src/nimony/contracts_fir.nim:4125`). Pembaca yang hanya membaca baris pertama tidak akan tahu kenapa
 assignment biasa ke global jadi masalah; harapkan keduanya.
 
 Aturan yang sama berlaku di dalam satu proc, antar scope:
@@ -195,7 +195,7 @@ menyimpan karakternya inline — dan view atas salinan akan menggantung. Pemerik
 `proc window(s: seq[int]): openArray[int]` di sample legal.
 
 Hasil `var T` mengikuti aturan yang sama, dan dari situ pernyataan Bab 9 berasal. `validBorrowsFrom`
-(`src/nimony/derefs.nim:258-314`) menjawab satu pertanyaan — apakah ekspresi ini diturunkan dari parameter
+(`src/nimony/derefs.nim:258-314`) menjawab satu pertanyaan — apakah expression ini diturunkan dari parameter
 pertama routine, atau dari pointer? — dan `trReturn` (`src/nimony/derefs.nim:461-470`) menolak sisanya:
 
 ```nim
@@ -203,13 +203,13 @@ proc p(a: int; b: var int): var int =
   result = b            # Error: cannot borrow from b
 ```
 
-Pesannya menyebut ekspresinya, bukan aturannya. `cannot borrow from b` itu semua yang kamu dapat; sebabnya, `b`
+Pesannya menyebut expression-nya, bukan aturannya. `cannot borrow from b` itu semua yang kamu dapat; sebabnya, `b`
 adalah parameter kedua. Merantai lewat proc penerus berbunyi sama: `result = forward(x)` gagal dengan
 `cannot borrow from forward(x)`.
 
 `doc/language.md:2448-2472` menyatakan aturan ini dengan pesan `location is derived from x which is not p's
 first parameter and lives on the stack`. Kata-katanya bukan yang dicetak compiler di pin ini; perilakunya sama
-dan errornya lebih pendek.
+dan error-nya lebih pendek.
 
 Membaca nilai lewat borrow menyalinnya, jadi ia bebas keluar. Proc yang menyusuri seq dan mengembalikan elemen
 pertamanya bukan mengembalikan view:
@@ -234,7 +234,7 @@ for x in s:
   addItem(s, x)     # Error: 's' is borrowed and cannot be mutated
 ```
 
-Errornya dibangkitkan di `src/nimony/contracts_fir.nim:621`, dan ia menyebut jalur yang di-borrow, bukan
+Error-nya dibangkitkan di `src/nimony/contracts_fir.nim:621`, dan ia menyebut jalur yang di-borrow, bukan
 callee-nya. Blok kedua sample adalah paruh yang legal: mengiterasi `c.elements` sambil menulis `c.name` compile
 dan jalan, karena `name` adalah saudara dari jalur yang di-borrow. Menyusuri seq yang sama lewat indeks juga
 legal — `for i in 0 ..< s.len: s[i] += 1` tidak pernah mengambil borrow yang diambil bentuk `for x in`.
@@ -284,13 +284,13 @@ proc handover =
 ```
 
 Buang baris terakhir dan proc yang sama compile dan mencetak `text`, jadi beda yang dilihat pembaca persis
-pembacaan kedua itu. Analisisnya `trEnsureMove` (`src/hexer/duplifier.nim:1573`), errornya dibangun di `:1611`,
+pembacaan kedua itu. Analisisnya `trEnsureMove` (`src/hexer/duplifier.nim:1573`), error-nya dibangun di `:1611`,
 dan `doc/language.md:3591-3594` mendokumentasikannya sebagai error statis saat move tidak bisa dibuktikan aman.
 Jadi kalimat yang jujur harus dibatasi: membaca nama setelah `move` compile, membacanya setelah `ensureMove`
 tidak. Pakai `ensureMove` kalau kamu mau compiler memeriksa penyerahannya.
 
 Satu catatan lagi sebelum kamu memakainya: analisisnya hanya berjalan pada nama yang bisa ia lacak — `var`, `let`,
-atau parameter `sink` di scope lokal. Variabel module-level ditolak apa pun yang menyusul, karena `isLastRead`
+atau parameter `sink` di scope lokal. Variabel level modul ditolak apa pun yang menyusul, karena `isLastRead`
 memang sengaja memperlakukan global sebagai tidak bisa dianalisis (`src/hexer/duplifier.nim:124-129`). Jaga
 penyerahannya di dalam proc.
 
@@ -346,7 +346,7 @@ atas adalah output yang diharapkan dan hal yang dicek dengan mata.
    `take(s, s)`. Ia tidak. Sekarang buat `b` bertipe `array[25, uint8]` dan panggil `take(v[0], v)`, yang juga
    gagal. Sebutkan properti parameter kedua yang memutuskan di tiap kasus, satu kalimat masing-masing.
 2. Ambil pasangan `Plain`/`Named` dari bab ini dan tambahkan satu field `string` ke `Plain`. Compile kedua
-   panggilannya lagi dan sebutkan mana yang sekarang gagal, dan kenapa errornya menunjuk `plain.x`, argumen
+   panggilannya lagi dan sebutkan mana yang sekarang gagal, dan kenapa error-nya menunjuk `plain.x`, argumen
    mutable itu.
 3. Tulis ulang loop `addItem(s, x)` sebagai loop indeks. Kedua versi melakukan kerja yang sama; sebutkan apa yang
    tidak diambil versi indeks.

@@ -34,7 +34,7 @@ dihasilkan `tools/gen_errorcodes.nim`. Ia punya 63 anggota di pin ini, dari `Suc
 `OverflowError`, `Failure`, `BugError`, `IndexError`, `SyntaxError`, `IOError`, `KeyError`, `ValueError` dan
 sisanya, ditutup sembilan slot `Reserved` yang disimpan untuk nanti. `sizeof(ErrorCode)` adalah 1.
 
-Karena cuma enum dan tidak lebih, sebuah routine bisa langsung mengembalikannya:
+Karena hanya enum dan tidak lebih, sebuah routine bisa langsung mengembalikannya:
 
 ```nim
 proc classify(ch: char): ErrorCode =
@@ -115,7 +115,7 @@ pesan yang menyatakan aturannya lebih baik daripada manualnya:
 Error: `IOError` is an `ErrorCode` value, not a type; write `except ErrorCode as e:` and test `e == IOError`
 ```
 
-Ujiannya ditaruh di dalam arm, dan `case` atas sebuah `ErrorCode` butuh `else`, karena enum-nya punya 63
+Ujiannya ditaruh di dalam arm, dan `case` atas `ErrorCode` butuh `else`, karena enum-nya punya 63
 anggota dan tidak semuanya menarik:
 
 ```nim
@@ -162,7 +162,7 @@ luar yang sama dan jalan di jalur gagal juga (`doc/language.md:4222-4248`).
 `try` yang hanya punya `finally` dan tanpa `except` **tidak** memenuhi aturan panggilan yang me-raise.
 Pemeriksaannya minta penangkap, dan `finally` bukan penangkap.
 
-### Sebuah `try` adalah ekspresi
+### `try` adalah expression
 
 `try` bisa menghasilkan nilai, dan arm `except`-nya harus sepakat soal tipenya:
 
@@ -202,7 +202,7 @@ ketika routine Nim 2 dikonversi secara mekanis.
 
 ## Keluarga lain: exception `ref`
 
-Sebuah `ErrorCode` tidak membawa payload. Ketika sebuah kegagalan harus mengatakan *kunci mana* yang hilang atau
+`ErrorCode` tidak membawa payload. Ketika sebuah kegagalan harus mengatakan *kunci mana* yang hilang atau
 *di mana* parsing berhenti, tipe yang bisa di-raise adalah objek `ref` yang mewarisi `Exception`:
 
 ```nim
@@ -214,8 +214,8 @@ proc checkAt(s: string; i: int) {.raises: ParseError.} =
 ```
 
 `Exception` dideklarasikan di `lib/std/system.nim:712` dengan satu field, `msg: string`, dan dari situ `.msg`
-datang saat keluarga ini dipakai. Arm-nya filter tipe lagi, dan ia menerima tipe yang di-raise beserta
-subtipe-nya:
+muncul saat keluarga ini dipakai. Arm-nya filter tipe lagi, dan ia menerima tipe yang di-raise beserta
+subtipenya:
 
 ```nim
 try:
